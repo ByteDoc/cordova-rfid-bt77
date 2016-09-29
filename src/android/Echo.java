@@ -24,7 +24,7 @@ public class Echo extends CordovaPlugin {
 			// Start Testing:
 			int i = 1, j = 2;
 			if(i != j){
-				throw new MyOwnException("this doesn't work");
+				throw new ArithmeticException("this doesn't work"); 
 			}
 			// End Testing
 			this.echo(message, callbackContext);
