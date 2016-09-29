@@ -10,7 +10,8 @@
     </js-module>
 	<platform name="android">
 		<config-file target="config.xml" parent="/*">
-			<feature name="Echo">
+<!-- has to be the same name as in echo.js: cordova.exec(successCallback, errorCallback, "EinEcho", "echo", [name]) -->
+			<feature name="EinEcho">
 				<param name="android-package" value="org.apache.cordova.plugin.Echo"/>
 			</feature>
 		</config-file>
