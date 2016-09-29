@@ -2,6 +2,6 @@
 
 module.exports = {
     echo: function (name, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "EinEcho", "echo", [name]);
+        cordova.exec(successCallback, errorCallback, "EinEcho", "testeingabe", [name]);
     }
 };
