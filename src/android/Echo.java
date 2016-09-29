@@ -14,6 +14,11 @@ public class Echo extends CordovaPlugin {
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		/**
+		 * testeingabe has to match with
+		 * cordova.exec(successCallback, errorCallback, "EinEcho", "testeingabe", [name]);
+		 * from the *.js-file
+		 */
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
 			this.echo(message, callbackContext);
