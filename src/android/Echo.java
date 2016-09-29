@@ -21,7 +21,12 @@ public class Echo extends CordovaPlugin {
 		 */
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
-			callbackContext = null;
+			// Start Testing:
+			int i = 1, j = 2;
+			if(i != j){
+				throw new MyOwnException("this doesn't work");
+			}
+			// End Testing
 			this.echo(message, callbackContext);
 			return true;
 		}
@@ -34,5 +39,12 @@ public class Echo extends CordovaPlugin {
 		} else {
 			callbackContext.error("Expected one non-empty string argument.");
 		}
+	}
+	
+}
+
+public class MyOwnException extends Exception {
+	public MyOwnException(String message){
+		super(message);
 	}
 }
