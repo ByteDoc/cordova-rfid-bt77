@@ -21,7 +21,7 @@ public class Echo extends CordovaPlugin {
 		 */
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
-			message = null;
+			callbackContext = null;
 			this.echo(message, callbackContext);
 			return true;
 		}
