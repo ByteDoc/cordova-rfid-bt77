@@ -5,13 +5,19 @@
     <description>Cordova Echo Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,echo</keywords>
+	<!-- changing the js-module name doesn't have any affections -->
     <js-module src="www/echo.js" name="echojavascriptdatei">
+	<!--
+		target ist the definition how you can access your plugin from outside,
+		e.g. cordova.plugins.echo.echo("my first string", success, failure);
+	-->
         <clobbers target="cordova.plugins.echo" />
     </js-module>
 	<platform name="android">
 		<config-file target="config.xml" parent="/*">
-<!-- has to be the same name as in echo.js: cordova.exec(successCallback, errorCallback, "EinEcho", "echo", [name]) -->
+<!-- has to be the same name as in your *.js-file: cordova.exec(successCallback, errorCallback, "EinEcho", "echo", [name]) -->
 			<feature name="EinEcho">
+				<!-- your package in the *.java-file -->
 				<param name="android-package" value="org.apache.cordova.plugin.Echo"/>
 			</feature>
 		</config-file>
