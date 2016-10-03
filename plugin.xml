@@ -22,5 +22,6 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/Echo.java" target-dir="src/org/apache/cordova/plugin/" />
+		<resource-file src="aar/app-release.aar" target="aar/app-release.aar" />
 	</platform>
 </plugin>
