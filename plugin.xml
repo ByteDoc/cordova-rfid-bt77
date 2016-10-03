@@ -22,6 +22,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/Echo.java" target-dir="src/org/apache/cordova/plugin/" />
+		<framework src="src/android/app-release.gradle" custom="true" type="gradleReference" />
 		<resource-file src="aar/app-release.aar" target="aar/app-release.aar" />
 	</platform>
 </plugin>
