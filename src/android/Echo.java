@@ -37,13 +37,13 @@ public class Echo extends CordovaPlugin {
 				throw new ArithmeticException("this doesn't work"); 
 			}
 			// End Testing
-			this.echo(message, callbackContext);
+			this.echo(message, callbackContext, args);
 			return true;
 		}
 		return false;
 	}
 
-	private void echo(String message, CallbackContext callbackContext) {
+	private void echo(String message, CallbackContext callbackContext, JSONArray args) {
 		if (message != null && message.length() > 0) {
 //			callbackContext.success(message);
 			callbackContext.success(args);
