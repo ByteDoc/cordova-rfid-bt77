@@ -7,6 +7,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sevenid.mobile.reader.api.operationresult.InventoryResult;
+import com.sevenid.mobile.reader.api.operationresult.OperationStatus;
+import com.sevenid.mobile.reader.api.operationresult.ReadResult;
+import com.sevenid.mobile.reader.api.operationresult.WriteResult;
+import com.sevenid.mobile.reader.api.parameters.InventoryParameters;
+import com.sevenid.mobile.reader.api.parameters.ReadParameters;
+import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
+import com.sevenid.mobile.reader.api.parameters.WriteParameters;
+import com.sevenid.mobile.reader.bt77.RfidReader;
+
 /**
 * This class echoes a string called from JavaScript.
 */
@@ -35,7 +45,8 @@ public class Echo extends CordovaPlugin {
 
 	private void echo(String message, CallbackContext callbackContext) {
 		if (message != null && message.length() > 0) {
-			callbackContext.success(message);
+//			callbackContext.success(message);
+			callbackContext.success(args);
 		} else {
 			callbackContext.error("Expected one non-empty string argument.");
 		}
