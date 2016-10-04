@@ -32,11 +32,11 @@ public class Echo extends CordovaPlugin {
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
 			// Start Testing:
-			int i = 1, j = 2;
+			/*int i = 1, j = 2;
 			if(i != j){
 				throw new ArithmeticException("this doesn't work"); 
 			}
-			// End Testing
+			*/// End Testing
 			this.echo(message, callbackContext, args);
 			return true;
 		}
