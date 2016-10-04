@@ -20,4 +20,6 @@ module.exports = {
 	scanInventory: function (name, successCallback, errorCallback) {
 		cordova.exec(successCallback, errorCallback, "EinEcho", "scan", [name]);
 	}
+	
+	
 };
