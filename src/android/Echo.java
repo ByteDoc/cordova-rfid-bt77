@@ -17,11 +17,15 @@ import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
 import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
+
+//Testing:
+import com.sevenid.mobile.reader.api.Epc;
+
 /**
 * This class echoes a string called from JavaScript.
 */
 public class Echo extends CordovaPlugin {
-
+	RfidReader reader;
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		/**
@@ -29,7 +33,7 @@ public class Echo extends CordovaPlugin {
 		 * cordova.exec(successCallback, errorCallback, "EinEcho", "testeingabe", [name]);
 		 * from the *.js-file
 		 */
-		RfidReader reader;
+		
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
 			// Start Testing:
@@ -45,7 +49,8 @@ public class Echo extends CordovaPlugin {
 			callbackContext.success("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
-            args = reader.getInventory(p);
+            InventoryResult r = reader.getInventory(p);
+			args = (JSONArray[])r;
 			if(args != null && args.length > 0){
 				callbackContext.success(args);
 			} else {
