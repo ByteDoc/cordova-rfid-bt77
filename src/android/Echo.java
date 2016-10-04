@@ -29,6 +29,7 @@ public class Echo extends CordovaPlugin {
 		 * cordova.exec(successCallback, errorCallback, "EinEcho", "testeingabe", [name]);
 		 * from the *.js-file
 		 */
+		RfidReader reader;
 		if (action.equals("testeingabe")) {
 			String message = args.getString(0);
 			// Start Testing:
@@ -39,8 +40,26 @@ public class Echo extends CordovaPlugin {
 			*/// End Testing
 			this.echo(message, callbackContext, args);
 			return true;
+		}else if (action.equals("start")){
+			this.startRFIDReader();
+		}else if (action.equals("scan")){
+			InventoryParameters p = new InventoryParameters();
+            args = reader.getInventory(p);
+			if(args != null && args.length > 0){
+				callbackContext.success(args);
+			} else {
+			callbackContext.error("Expected one non-empty string argument.");
+			}
+            //OperationStatus s = r.getOperationStatus();
+		}else if (action.equals("read")){
+			//blabla
+		}else if (action.equals("write")){
+			// blabla
+		}else{
+			return false;
 		}
-		return false;
+		reader.close();
+		return true;
 	}
 
 	private void echo(String message, CallbackContext callbackContext, JSONArray args) {
@@ -50,6 +69,13 @@ public class Echo extends CordovaPlugin {
 		} else {
 			callbackContext.error("Expected one non-empty string argument.");
 		}
+	}
+	
+	private void startRFIDReader(){
+		this.reader = new RfidReader();
+		this.reader.open();
+		System.out.println("boolean isBusyStart = reader.isBusy(): "+this.reader.isBusy());
+		System.out.println("boolean isOpenStart = reader.isOpen(): "+this.reader.isOpen());
 	}
 	
 }
