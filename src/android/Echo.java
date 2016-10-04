@@ -50,7 +50,8 @@ public class Echo extends CordovaPlugin {
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
             InventoryResult r = reader.getInventory(p);
-			args = (JSONArray[])r[0];
+			//args = (JSONArray[])r[0];
+			args = new JSONArray(Arrays.asList(r));
 			if(args != null && args.length() > 0){
 				callbackContext.success(args);
 			} else {
