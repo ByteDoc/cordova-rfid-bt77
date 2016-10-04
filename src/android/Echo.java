@@ -51,7 +51,8 @@ public class Echo extends CordovaPlugin {
 			InventoryParameters p = new InventoryParameters();
             InventoryResult r = reader.getInventory(p);
 			//args = (JSONArray[])r[0];
-			args = new JSONArray(Arrays.asList(r));
+			JSONArray test = new JSONArray(Arrays.asList(r));
+			args = test;
 			if(args != null && args.length() > 0){
 				callbackContext.success(args);
 			} else {
