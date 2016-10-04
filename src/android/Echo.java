@@ -42,19 +42,25 @@ public class Echo extends CordovaPlugin {
 			return true;
 		}else if (action.equals("start")){
 			this.startRFIDReader();
+			callbackContext.success("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
             args = reader.getInventory(p);
 			if(args != null && args.length > 0){
 				callbackContext.success(args);
 			} else {
-			callbackContext.error("Expected one non-empty string argument.");
+			callbackContext.error("Scan couldn't be initialized.");
 			}
             //OperationStatus s = r.getOperationStatus();
 		}else if (action.equals("read")){
 			//blabla
 		}else if (action.equals("write")){
 			// blabla
+		}else if (action.equals("end")){
+			reader.close();
+			callbackContext.success("boolean isOpenEnd = reader.isOpen(): "+reader.isOpen()+"_-_and boolean isBusyEnd = reader.isBusy(): "+reader.isBusy());
+			System.out.println("boolean isOpenEnd = reader.isOpen(): "+reader.isOpen());
+			System.out.println("boolean isBusyEnd = reader.isBusy(): "+reader.isBusy());
 		}else{
 			return false;
 		}

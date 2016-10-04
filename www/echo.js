@@ -11,4 +11,10 @@ module.exports = {
          */
         cordova.exec(successCallback, errorCallback, "EinEcho", "testeingabe", [name]);
     }
+	startRfidListener: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "EinEcho", "start", [name]);
+	}
+	endRfidListener: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "EinEcho", "end", [name]);
+	}
 };
