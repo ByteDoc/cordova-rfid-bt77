@@ -17,4 +17,7 @@ module.exports = {
 	endRfidListener: function (name, successCallback, errorCallback) {
 		cordova.exec(successCallback, errorCallback, "EinEcho", "end", [name]);
 	}
+	scanInventory: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "EinEcho", "scan", [name]);
+	}
 };
