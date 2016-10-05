@@ -46,8 +46,14 @@ public class Echo extends CordovaPlugin {
 			this.echo(message, callbackContext, args);
 			return true;
 		}else if (action.equals("start")){
-			this.startRFIDReader();
-			callbackContext.success("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
+			//this.startRFIDReader();
+			reader = new RfidReader();
+			reader.open();
+			if (args != null && args.length() > 0) {
+				callbackContext.success("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
+			}else{
+				callbackContext.error("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
+			}
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
             InventoryResult r = reader.getInventory(p);
