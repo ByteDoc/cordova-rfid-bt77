@@ -20,7 +20,8 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 
 //Testing:
 import com.sevenid.mobile.reader.api.Epc;
-import java.util.Arrays;
+import java.util.*;
+import classes.com.sevenid.mobile.reader.*
 
 /**
 * This class echoes a string called from JavaScript.
