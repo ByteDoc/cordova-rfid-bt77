@@ -55,10 +55,10 @@ public class Echo extends CordovaPlugin {
 			System.out.println("Test1: Reader opened");
 			if (args.getString(0) != null && args.getString(0).length() > 0) {
 				System.out.println("Test1: argument was true");
-				callbackContext.success("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
+				callbackContext.success("boolean isBusyStart = this.reader.isBusy(): "+this.reader.isBusy()+"_-_and boolean isOpenStart = this.reader.isOpen(): "+this.reader.isOpen());
 			}else{
 				System.out.println("Test1: argument was false");
-				callbackContext.error("boolean isBusyStart = reader.isBusy(): "+reader.isBusy()+"_-_and boolean isOpenStart = reader.isOpen(): "+reader.isOpen());
+				callbackContext.error("boolean isBusyStart = this.reader.isBusy(): "+this.reader.isBusy()+"_-_and boolean isOpenStart = this.reader.isOpen(): "+this.reader.isOpen());
 			}
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
@@ -76,14 +76,13 @@ public class Echo extends CordovaPlugin {
 		}else if (action.equals("write")){
 			// blabla
 		}else if (action.equals("end")){
-			reader.close();
-			callbackContext.success("boolean isOpenEnd = reader.isOpen(): "+reader.isOpen()+"_-_and boolean isBusyEnd = reader.isBusy(): "+reader.isBusy());
-			System.out.println("boolean isOpenEnd = reader.isOpen(): "+reader.isOpen());
-			System.out.println("boolean isBusyEnd = reader.isBusy(): "+reader.isBusy());
+			this.reader.close();
+			callbackContext.success("boolean isOpenEnd = this.reader.isOpen(): "+this.reader.isOpen()+"_-_and boolean isBusyEnd = this.reader.isBusy(): "+this.reader.isBusy());
+			System.out.println("boolean isOpenEnd = this.reader.isOpen(): "+this.reader.isOpen());
+			System.out.println("boolean isBusyEnd = this.reader.isBusy(): "+this.reader.isBusy());
 		}else{
 			return false;
 		}
-		reader.close();
 		return true;
 	}
 
