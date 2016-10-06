@@ -51,8 +51,8 @@ public class Echo extends CordovaPlugin {
 			System.out.println("Test1: Start test1");
 			this.reader = new RfidReader();
 			System.out.println("Test1: Reader created");
-			this.reader.open();
-			System.out.println("Test1: Reader opened");
+			System.out.println("this.reader.open(): " + this.reader.open());
+			//System.out.println("Test1: Reader opened");
 			if (args.getString(0) != null && args.getString(0).length() > 0) {
 				System.out.println("Test1: argument was true");
 				callbackContext.success("boolean isBusyStart = this.reader.isBusy(): "+this.reader.isBusy()+"_-_and boolean isOpenStart = this.reader.isOpen(): "+this.reader.isOpen());
@@ -60,6 +60,8 @@ public class Echo extends CordovaPlugin {
 				System.out.println("Test1: argument was false");
 				callbackContext.error("boolean isBusyStart = this.reader.isBusy(): "+this.reader.isBusy()+"_-_and boolean isOpenStart = this.reader.isOpen(): "+this.reader.isOpen());
 			}
+			this.reader.close();
+			System.out.println("Test1: Reader closed");
 		}else if (action.equals("scan")){
 			InventoryParameters p = new InventoryParameters();
             InventoryResult r = reader.getInventory(p);
