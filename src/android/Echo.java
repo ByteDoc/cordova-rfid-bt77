@@ -49,9 +49,9 @@ public class Echo extends CordovaPlugin {
 		}else if (action.equals("start")){
 			//this.startRFIDReader();
 			System.out.println("Test1: Start test1");
-			reader = new RfidReader();
+			this.reader = new RfidReader();
 			System.out.println("Test1: Reader created");
-			reader.open();
+			this.reader.open();
 			System.out.println("Test1: Reader opened");
 			if (args.getString(0) != null && args.getString(0).length() > 0) {
 				System.out.println("Test1: argument was true");
