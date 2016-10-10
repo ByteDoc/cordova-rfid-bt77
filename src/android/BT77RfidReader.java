@@ -47,7 +47,7 @@ public class BT77RfidReader extends CordovaPlugin {
             OperationStatus s = r.getOperationStatus();
 			System.out.println("Test3: OperationStatus: "+s);
 			if(args != null && args.length() > 0){
-				callbackContext.success(s.toString());
+				callbackContext.success(s.toString()+" - InventoryResult:"+r);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
