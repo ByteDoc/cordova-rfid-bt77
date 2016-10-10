@@ -26,7 +26,12 @@ public class BT77RfidReader extends CordovaPlugin {
 	RfidReader reader;
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		if (action.equals("start")){
+		if (action.equals("echo")) {
+			String message = args.getString(0);
+			this.echo(message, callbackContext, args);
+			return true;
+		}else if (action.equals("start")){
+			System.out.println("start executed")
 			this.startRFIDReader();
 		}else if (action.equals("scan")){
 			
@@ -58,6 +63,14 @@ public class BT77RfidReader extends CordovaPlugin {
 			return false;
 		}
 		return true;
+	}
+	
+		private void echo(String message, CallbackContext callbackContext, JSONArray args) {
+		if (message != null && message.length() > 0) {
+			callbackContext.success(args);
+		} else {
+			callbackContext.error("Expected one non-empty string argument.");
+		}
 	}
 	
 	private void startRFIDReader(){

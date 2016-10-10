@@ -6,7 +6,7 @@
     <license>Apache 2.0</license>
     <keywords>cordova,rfidreader,uhf</keywords>
 	<!-- changing the js-module name doesn't have any affections -->
-    <js-module src="www/rfidreader.js" name="ExecuteRfidStatements">
+    <js-module src="www/rfidreader.js" name="rfidreader">
 	<!--
 		target ist the definition how you can access your plugin from outside,
 		e.g. cordova.plugins.echo.echo("my first string", success, failure);

@@ -1,6 +1,9 @@
 /*global cordova, module*/
 
 module.exports = {
+	echo: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "echo", [name]);
+	},
 	startRfidListener: function (name, successCallback, errorCallback) {
 		cordova.exec(successCallback, errorCallback, "RfidReader", "start", [name]);
 	},
