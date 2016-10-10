@@ -45,7 +45,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			//args = new JSONArray(Arrays.asList(r));
 			System.out.println("Test3: args = "+args);
 			if(args != null && args.length() > 0){
-				callbackContext.success(r);
+				callbackContext.success(Arrays.toString(r));
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
