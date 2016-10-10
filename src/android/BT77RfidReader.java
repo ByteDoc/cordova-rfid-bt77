@@ -31,7 +31,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			this.echo(message, callbackContext, args);
 			return true;
 		}else if (action.equals("start")){
-			System.out.println("start executed")
+			System.out.println("start executed");
 			this.startRFIDReader();
 		}else if (action.equals("scan")){
 			
@@ -58,6 +58,7 @@ public class BT77RfidReader extends CordovaPlugin {
 		}else if (action.equals("write")){
 			// blabla
 		}else if (action.equals("stop")){
+			System.out.println("stop executed");
 			this.stopRFIDReader();
 		}else{
 			return false;
