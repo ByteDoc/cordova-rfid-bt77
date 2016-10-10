@@ -64,12 +64,12 @@ public class RfidReader extends CordovaPlugin {
 		this.reader = new RfidReader();
 		System.out.println("Test1: RFIDReader created");
 		System.out.println("Test1: this.reader.open(): " + this.reader.open());
-		System.out.println("Test1: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen())
+		System.out.println("Test1: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 	
 	private void stopRFIDReader(){
 		System.out.println("Test2: Stop RFIDReader:");
 		System.out.println("Test1: this.reader.close(): " + this.reader.close());
-		System.out.println("Test2: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen())
+		System.out.println("Test2: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 }

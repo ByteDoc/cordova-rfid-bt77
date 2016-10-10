@@ -11,7 +11,7 @@
 		target ist the definition how you can access your plugin from outside,
 		e.g. cordova.plugins.echo.echo("my first string", success, failure);
 	-->
-        <clobbers target="cordova.plugins.rfidreader" />
+        <clobbers target="cordova.plugins.covity" />
     </js-module>
 	<platform name="android">
 		<config-file target="config.xml" parent="/*">
