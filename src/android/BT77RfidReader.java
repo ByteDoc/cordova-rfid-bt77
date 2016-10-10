@@ -17,6 +17,7 @@ import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
 import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
+import java.util.*;
 
 /**
 * This class echoes a string called from JavaScript.
