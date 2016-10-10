@@ -21,7 +21,7 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 /**
 * This class echoes a string called from JavaScript.
 */
-public class RfidReader extends CordovaPlugin {
+public class BT77RfidReader extends CordovaPlugin {
 	RfidReader reader;
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {

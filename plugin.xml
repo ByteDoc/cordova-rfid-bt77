@@ -18,10 +18,10 @@
 <!-- has to be the same name as in your *.js-file: cordova.exec(successCallback, errorCallback, "EinEcho", "echo", [name]) -->
 			<feature name="RfidReader">
 				<!-- your package in the *.java-file -->
-				<param name="android-package" value="org.apache.cordova.plugin.RfidReader"/>
+				<param name="android-package" value="org.apache.cordova.plugin.BT77RfidReader"/>
 			</feature>
 		</config-file>
-		<source-file src="src/android/RfidReader.java" target-dir="src/org/apache/cordova/plugin/" />
+		<source-file src="src/android/BT77RfidReader.java" target-dir="src/org/apache/cordova/plugin/" />
 		<framework src="src/android/app-release.gradle" custom="true" type="gradleReference" />
 		<resource-file src="aar/app-release.aar" target="aar/app-release.aar" />
 	</platform>
