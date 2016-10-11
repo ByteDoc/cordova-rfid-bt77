@@ -54,9 +54,42 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 			
 		}else if (action.equals("read")){
-			//blabla
+			ReadParameters p = new ReadParameters();
+
+            p.setMemoryBank(TagMemoryBank.USER);
+//            p.setEpc("3005FB63AC1F3681EC880468");
+			p.setEpc("0066840000000000000010FB");
+            p.setOffset(2);
+            p.setLength(16);
+
+            ReadResult r = this.reader.readMemoryBank(p);
+
+            OperationStatus s = r.getOperationStatus();
+            String data = r.getReadData();
+			
+			if(data != null && data.length() > 0){
+				callbackContext.success("OperationStatus: "+s.toString()+"_-_ReadParameters:"+p+"_-_ReadResult: "+r+"_-_Data: "+data);
+			} else {
+				callbackContext.error("Scan couldn't be initialized.");
+			}
 		}else if (action.equals("write")){
-			// blabla
+			WriteParameters p = new WriteParameters();
+			
+            p.setMemoryBank(TagMemoryBank.USER);
+            p.setEpc("0066840000000000000010FB");
+            p.setOffset(2);
+            String data = this.generateString()
+			p.setWriteData(data);
+
+            WriteResult r = reader.writeMemoryBank(p);
+
+            OperationStatus s = r.getOperationStatus();
+			
+			if(data != null && data.length() > 0){
+				callbackContext.success("OperationStatus: "+s.toString()+"_-_WriteParameters:"+p+"_-_WriteResult: "+r+"_-_Data: "+data);
+			} else {
+				callbackContext.error("Scan couldn't be initialized.");
+			}
 		}else if (action.equals("stop")){
 			System.out.println("stop executed");
 			this.stopRFIDReader();
@@ -66,12 +99,20 @@ public class BT77RfidReader extends CordovaPlugin {
 		return true;
 	}
 	
-		private void echo(String message, CallbackContext callbackContext, JSONArray args) {
+	private void echo(String message, CallbackContext callbackContext, JSONArray args) {
 		if (message != null && message.length() > 0) {
 			callbackContext.success(args);
 		} else {
 			callbackContext.error("Expected one non-empty string argument.");
 		}
+	}
+	
+	public static String generateString(Random rng, String characters, int length){
+		char[] text = new char[length];
+		for (int i = 0; i < length; i++){
+			text[i] = characters.charAt(rng.nextInt(characters.length()));
+		}
+		return new String(text);
 	}
 	
 	private void startRFIDReader(){

@@ -12,5 +12,11 @@ module.exports = {
 	},
 	scanInventory: function (name, successCallback, errorCallback) {
 		cordova.exec(successCallback, errorCallback, "RfidReader", "scan", [name]);
+	},
+	readTag: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "read", [name]);
+	},
+	writeTag: function (name, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "write", [name]);
 	}
 };
