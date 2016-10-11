@@ -78,7 +78,7 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setMemoryBank(TagMemoryBank.USER);
             p.setEpc("0066840000000000000010FB");
             p.setOffset(2);
-            String data = this.generateString()
+            String data = "1337";
 			p.setWriteData(data);
 
             WriteResult r = reader.writeMemoryBank(p);
