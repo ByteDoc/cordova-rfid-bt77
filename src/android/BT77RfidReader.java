@@ -23,7 +23,7 @@ import java.util.*;
 * This class echoes a string called from JavaScript.
 */
 public class BT77RfidReader extends CordovaPlugin {
-	RfidReader reader;
+	RfidReader bt77reader;
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		if (action.equals("echo")) {
@@ -39,7 +39,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
 			System.out.println("Test3: InventoryParameters: "+p);
-            InventoryResult r = this.reader.getInventory(p);
+            InventoryResult r = this.bt77reader.getInventory(p);
 			System.out.println("Test3: InventoryResult: "+r);
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
@@ -62,7 +62,7 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setOffset(2);
             p.setLength(16);
 
-            ReadResult r = this.reader.readMemoryBank(p);
+            ReadResult r = this.bt77reader.readMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
             String data = r.getReadData();
@@ -81,7 +81,7 @@ public class BT77RfidReader extends CordovaPlugin {
             String data = "1337";
 			p.setWriteData(data);
 
-            WriteResult r = reader.writeMemoryBank(p);
+            WriteResult r = bt77reader.writeMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
 			
@@ -117,15 +117,15 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	private void startRFIDReader(){
 		System.out.println("Test1: Start RFIDReader:");
-		this.reader = new RfidReader();
+		this.bt77reader = new RfidReader();
 		System.out.println("Test1: RFIDReader created");
-		System.out.println("Test1: this.reader.open(): " + this.reader.open());
-		System.out.println("Test1: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
+		System.out.println("Test1: this.bt77reader.open(): " + this.bt77reader.open());
+		System.out.println("Test1: this.bt77reader.isBusy(): "+this.bt77reader.isBusy()+"_-_and this.bt77reader.isOpen(): "+this.bt77reader.isOpen());
 	}
 	
 	private void stopRFIDReader(){
 		System.out.println("Test2: Stop RFIDReader:");
-		System.out.println("Test1: this.reader.close(): " + this.reader.close());
-		System.out.println("Test2: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
+		System.out.println("Test1: this.bt77reader.close(): " + this.bt77reader.close());
+		System.out.println("Test2: this.bt77reader.isBusy(): "+this.bt77reader.isBusy()+"_-_and this.bt77reader.isOpen(): "+this.bt77reader.isOpen());
 	}
 }
