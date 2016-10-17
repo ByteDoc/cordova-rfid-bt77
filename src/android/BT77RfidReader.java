@@ -117,7 +117,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	private void startRFIDReader(){
 		System.out.println("Test1: Start RFIDReader:");
-		this.bt77reader = new RfidReader(cordova.getActivity());
+		//this.bt77reader = new RfidReader(cordova.getActivity());
 		System.out.println("Test1: RFIDReader created");
 		System.out.println("Test1: this.bt77reader.open(): " + this.bt77reader.open());
 		System.out.println("Test1: this.bt77reader.isBusy(): "+this.bt77reader.isBusy()+"_-_and this.bt77reader.isOpen(): "+this.bt77reader.isOpen());
