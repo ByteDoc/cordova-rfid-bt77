@@ -50,7 +50,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryResult: "+r);
 			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			InventoryString = "";
+			String InventoryString = "";
 			for(int i; i < r.getInventory().length; i++){
 				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
 				"\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
