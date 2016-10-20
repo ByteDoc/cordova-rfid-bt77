@@ -49,10 +49,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryResult: "+r);
 			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			System.out.println("Test3: InventoryResult.getInventory[0]: "+r.getInventory()[0]+
-			System.out.println("Test3: InventoryResult.getInventory[0].getEpc: "+r.getInventory()[0].getEpc()+
-			System.out.println("Test3: InventoryResult.getInventory[0].getSeenCount: "+r.getInventory()[0].getSeenCount()+
-			System.out.println("Test3: InventoryResult.getInventory[1]: "+r.getInventory()[1]
+			System.out.println("Test3: InventoryResult.getInventory[0]: "+r.getInventory()[0]);
+			System.out.println("Test3: InventoryResult.getInventory[0].getEpc: "+r.getInventory()[0].getEpc());
+			System.out.println("Test3: InventoryResult.getInventory[0].getSeenCount: "+r.getInventory()[0].getSeenCount());
+			System.out.println("Test3: InventoryResult.getInventory[1]: "+r.getInventory()[1]);
 			
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
