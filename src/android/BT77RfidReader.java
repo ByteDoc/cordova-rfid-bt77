@@ -42,9 +42,9 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
 			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
 			System.out.println("Test3: InventoryParameters.getRssiThreshold: "+p.getRssiThreshold());
-			/*System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
-			System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
-			*/
+			System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
+			//System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
+			
             InventoryResult r = this.bt77reader.getInventory(p);
 			System.out.println("Test3: InventoryResult: "+r);
 			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
