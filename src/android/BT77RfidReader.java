@@ -51,11 +51,11 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
 			InventoryString = "";
-			for(Epc i: r.getInventory() )){
-				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+i.getEpc()+
-				"\nInventoryResult.getInventory["+i+"].getEpc: "+i.getEpc()+
-				"\nInventoryResult.getInventory["+i+"].getSeenCount: "+i.getSeenCount()+
-				"\nInventoryResult.getInventory["+i+"].getEpcToByteArray: "+i.getEpcToByteArray();
+			for(int i; i < r.getInventory().length; i++){
+				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getSeenCount: "+InventoryResult.getInventory()[i].getSeenCount()+
+				"\nInventoryResult.getInventory["+i+"].getEpcToByteArray: "+InventoryResult.getInventory()[i].getEpcToByteArray();
 				System.out.println("Test3 InventoryString: "+InventoryString);
 			}
 			
