@@ -57,7 +57,22 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: OperationStatus: "+s);
 			if(args != null && args.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
-				callbackContext.success("OperationStatus: "+s.toString()+"\nInventoryParameters:"+p+"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+"\nInventoryParameters.getCountThreshold: "+p.getCountThreshold()+"\nInventoryParameters.getRssiThreshold: "+p.getRssiThreshold()+"\nInventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix()+"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+"\nInventoryResult: "+r+"\nInventoryResult.getRawResult: "+r.getRawResult()+"\nInventoryResult.getInventory: "+r.getInventory());
+				callbackContext.success(
+					"OperationStatus: "+s.toString()+
+					"\nInventoryParameters:"+p+
+					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
+					"\nInventoryParameters.getCountThreshold: "+p.getCountThreshold()+
+					"\nInventoryParameters.getRssiThreshold: "+p.getRssiThreshold()+
+					"\nInventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix()+
+					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
+					"\nInventoryResult: "+r+
+					"\nInventoryResult.getRawResult: "+r.getRawResult()+
+					"\nInventoryResult.getInventory: "+r.getInventory()+
+					"\nInventoryResult.getInventory[0]: "+r.getInventory()[0]+
+					"\nInventoryResult.getInventory[0].getEpc: "+r.getInventory()[0].getEpc()+
+					"\nInventoryResult.getInventory[0].getSeenCount: "+r.getInventory()[0].getSeenCount()+
+					"\nInventoryResult.getInventory[1]: "+r.getInventory()[1]
+				);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
