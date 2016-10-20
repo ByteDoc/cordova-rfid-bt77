@@ -39,17 +39,17 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
 			System.out.println("Test3: InventoryParameters: "+p);
-			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
+			/*System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
 			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
 			System.out.println("Test3: InventoryParameters.getRssiThreshold: "+p.getRssiThreshold());
 			System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
 			System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
-			
+			*/
             InventoryResult r = this.bt77reader.getInventory(p);
 			System.out.println("Test3: InventoryResult: "+r);
-			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
+			Sy/*stem.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			
+			*/
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
 			
