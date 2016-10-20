@@ -77,8 +77,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
 					"\nInventoryResult: "+r+
 					"\nInventoryResult.getRawResult: "+r.getRawResult()+
-					"\nInventoryResult.getInventory: "+r.getInventory()+
-					"\nInventoryString: "+InventoryString
+					"\nInventoryResult.getInventory: "+r.getInventory()
 				);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
