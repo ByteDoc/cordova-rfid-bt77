@@ -52,10 +52,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
 			String InventoryString = "";
 			for(int i = 0; i < r.getInventory().length; i++){
-				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
-				"\nInventoryResult.getInventory["+i+"].getEpc: "+InventoryResult.getInventory()[i].getEpc()+
-				"\nInventoryResult.getInventory["+i+"].getSeenCount: "+InventoryResult.getInventory()[i].getSeenCount()+
-				"\nInventoryResult.getInventory["+i+"].getEpcToByteArray: "+InventoryResult.getInventory()[i].getEpcToByteArray();
+				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
+				"\nInventoryResult.getInventory["+i+"].getEpcToByteArray: "+r.getInventory()[i].getEpcToByteArray();
 				System.out.println("Test3 InventoryString: "+InventoryString);
 			}
 			
@@ -77,7 +77,8 @@ public class BT77RfidReader extends CordovaPlugin {
 					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
 					"\nInventoryResult: "+r+
 					"\nInventoryResult.getRawResult: "+r.getRawResult()+
-					"\nInventoryResult.getInventory: "+r.getInventory()
+					"\nInventoryResult.getInventory: "+r.getInventory()+
+					"\nInventoryString: "+InventoryString
 				);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
