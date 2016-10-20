@@ -24,6 +24,7 @@ import java.util.*;
 */
 public class BT77RfidReader extends CordovaPlugin {
 	RfidReader bt77reader;
+	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		if (action.equals("echo")) {
@@ -49,10 +50,15 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("Test3: InventoryResult: "+r);
 			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			System.out.println("Test3: InventoryResult.getInventory[0]: "+r.getInventory()[0]);
-			System.out.println("Test3: InventoryResult.getInventory[0].getEpc: "+r.getInventory()[0].getEpc());
-			System.out.println("Test3: InventoryResult.getInventory[0].getSeenCount: "+r.getInventory()[0].getSeenCount());
-			System.out.println("Test3: InventoryResult.getInventory[1]: "+r.getInventory()[1]);
+			InventoryString = "";
+			for( int i: r.getInventory() )){
+				InventoryString += "\nInventoryResult.getInventory["+i+"].getEpc: "+i.getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getEpc: "+i.getEpc()+
+				"\nInventoryResult.getInventory["+i+"].getSeenCount: "+i.getSeenCount()+
+				"\nInventoryResult.getInventory["+i+"].getEpcToByteArray: "+i.getEpcToByteArray();
+				System.out.println("Test3 InventoryString: "+InventoryString);
+			}
+			
 			
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
@@ -72,10 +78,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					"\nInventoryResult: "+r+
 					"\nInventoryResult.getRawResult: "+r.getRawResult()+
 					"\nInventoryResult.getInventory: "+r.getInventory()+
-					"\nInventoryResult.getInventory[0]: "+r.getInventory()[0]+
-					"\nInventoryResult.getInventory[0].getEpc: "+r.getInventory()[0].getEpc()+
-					"\nInventoryResult.getInventory[0].getSeenCount: "+r.getInventory()[0].getSeenCount()+
-					"\nInventoryResult.getInventory[1]: "+r.getInventory()[1]
+					"\nInventoryString: "+InventoryString
 				);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
