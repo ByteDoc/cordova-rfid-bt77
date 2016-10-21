@@ -35,7 +35,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("start executed");
 			this.startRFIDReader();
 		}else if (action.equals("scan")){
-			JsonArray args = Json.createArrayBuilder();
+//			JsonArray args = Json.createArrayBuilder();
 			
 //			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
