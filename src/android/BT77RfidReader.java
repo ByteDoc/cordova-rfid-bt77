@@ -52,18 +52,23 @@ public class BT77RfidReader extends CordovaPlugin {
 //			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
 //			String InventoryString = "";
 			for(int i = 0; i < r.getInventory().length; i++){
-				args.add(Json.createObjectBuilder()
-					.add("NUMBER", i)
-					.add("EPC", r.getInventory()[i].getEpc())
-					.add("EPCByteArray", r.getInventory()[i].getEpcToByteArray())
-				);
+				JSONObject currentInventory = new JSONObject();
+				currentInventory.put("NUMBER", i);
+				currentInventory.put("EPC", r.getInventory()[i].getEpc());
+				currentInventory.put("EPCByteArray", r.getInventory()[i].getEpcToByteArray());
+				args.add(currentInventory);
+//				args.add(Json.createObjectBuilder()
+//					.add("NUMBER", i)
+//					.add("EPC", r.getInventory()[i].getEpc())
+//					.add("EPCByteArray", r.getInventory()[i].getEpcToByteArray())
+//				);
 //				InventoryString += "\nInventoryResult r = this.reader.getInventory(p);"+
 //				"\nr.getInventory()["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
 //				"\nr.getInventory()["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
 //				"\nr.getInventory()["+i+"].getEpcToByteArray: "+r.getInventory()[i].getEpcToByteArray();
 //				System.out.println("Test3 InventoryString: "+InventoryString);
 			}
-			args.build();
+//			args.build();
 			
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
