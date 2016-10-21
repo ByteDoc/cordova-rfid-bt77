@@ -23,7 +23,7 @@ import java.util.*;
 * This class echoes a string called from JavaScript.
 */
 public class BT77RfidReader extends CordovaPlugin {
-	RfidReader bt77reader;
+	RfidReader reader;
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -35,30 +35,35 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("start executed");
 			this.startRFIDReader();
 		}else if (action.equals("scan")){
+			JsonArray args = Json.createArrayBuilder();
 			
-			
-			System.out.println("Test3: Start Test3");
+//			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
-			System.out.println("Test3: InventoryParameters: "+p);
-			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
-			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
-			System.out.println("Test3: InventoryParameters.getRssiThreshold: "+p.getRssiThreshold());
-			System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
-			System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
+//			System.out.println("Test3: InventoryParameters: "+p);
+//			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
+//			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
+//			System.out.println("Test3: InventoryParameters.getRssiThreshold: "+p.getRssiThreshold());
+//			System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
+//			System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
 			
-            InventoryResult r = this.bt77reader.getInventory(p);
-			System.out.println("Test3: InventoryResult: "+r);
-			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
-			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			String InventoryString = "";
+            InventoryResult r = this.reader.getInventory(p);
+//			System.out.println("Test3: InventoryResult: "+r);
+//			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
+//			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
+//			String InventoryString = "";
 			for(int i = 0; i < r.getInventory().length; i++){
-				InventoryString += "\nInventoryResult r = this.bt77reader.getInventory(p);"+
-				"\nr.getInventory()["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
-				"\nr.getInventory()["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
-				"\nr.getInventory()["+i+"].getEpcToByteArray: "+r.getInventory()[i].getEpcToByteArray();
-				System.out.println("Test3 InventoryString: "+InventoryString);
+				args.add(Json.createObjectBuilder()
+					.add("NUMBER", i)
+					.add("EPC", r.getInventory()[i].getEpc())
+					.add("EPCByteArray", r.getInventory()[i].getEpcToByteArray())
+				)
+//				InventoryString += "\nInventoryResult r = this.reader.getInventory(p);"+
+//				"\nr.getInventory()["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
+//				"\nr.getInventory()["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
+//				"\nr.getInventory()["+i+"].getEpcToByteArray: "+r.getInventory()[i].getEpcToByteArray();
+//				System.out.println("Test3 InventoryString: "+InventoryString);
 			}
-			
+			args.build();
 			
 			//args = (JSONArray[])r[0];
 			//args = new JSONArray(Arrays.asList(r));
@@ -68,17 +73,18 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
-					"OperationStatus: "+s.toString()+
-					"\nInventoryParameters:"+p+
-					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
-					"\nInventoryParameters.getCountThreshold: "+p.getCountThreshold()+
-					"\nInventoryParameters.getRssiThreshold: "+p.getRssiThreshold()+
-					"\nInventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix()+
-					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
-					"\nInventoryResult: "+r+
-					"\nInventoryResult.getRawResult: "+r.getRawResult()+
-					"\nInventoryResult.getInventory: "+r.getInventory()+
-					"\nInventoryString: "+InventoryString
+					args
+//					"OperationStatus: "+s.toString()+
+//					"\nInventoryParameters:"+p+
+//					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
+//					"\nInventoryParameters.getCountThreshold: "+p.getCountThreshold()+
+//					"\nInventoryParameters.getRssiThreshold: "+p.getRssiThreshold()+
+//					"\nInventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix()+
+//					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
+//					"\nInventoryResult: "+r+
+//					"\nInventoryResult.getRawResult: "+r.getRawResult()+
+//					"\nInventoryResult.getInventory: "+r.getInventory()+
+//					"\nInventoryString: "+InventoryString
 				);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
@@ -94,7 +100,7 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setOffset(2);
             p.setLength(16);
 
-            ReadResult r = this.bt77reader.readMemoryBank(p);
+            ReadResult r = this.reader.readMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
             String data = r.getReadData();
@@ -113,7 +119,7 @@ public class BT77RfidReader extends CordovaPlugin {
             String data = "1337";
 			p.setWriteData(data);
 
-            WriteResult r = bt77reader.writeMemoryBank(p);
+            WriteResult r = reader.writeMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
 			
@@ -149,15 +155,15 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	private void startRFIDReader(){
 		System.out.println("Test1: Start RFIDReader:");
-		this.bt77reader = new RfidReader(cordova.getActivity());
+		this.reader = new RfidReader(cordova.getActivity());
 		System.out.println("Test1: RFIDReader created");
-		System.out.println("Test1: this.bt77reader.open(): " + this.bt77reader.open());
-		System.out.println("Test1: this.bt77reader.isBusy(): "+this.bt77reader.isBusy()+"_-_and this.bt77reader.isOpen(): "+this.bt77reader.isOpen());
+		System.out.println("Test1: this.reader.open(): " + this.reader.open());
+		System.out.println("Test1: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 	
 	private void stopRFIDReader(){
 		System.out.println("Test2: Stop RFIDReader:");
-		System.out.println("Test1: this.bt77reader.close(): " + this.bt77reader.close());
-		System.out.println("Test2: this.bt77reader.isBusy(): "+this.bt77reader.isBusy()+"_-_and this.bt77reader.isOpen(): "+this.bt77reader.isOpen());
+		System.out.println("Test1: this.reader.close(): " + this.reader.close());
+		System.out.println("Test2: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 }
