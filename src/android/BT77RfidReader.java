@@ -56,7 +56,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					.add("NUMBER", i)
 					.add("EPC", r.getInventory()[i].getEpc())
 					.add("EPCByteArray", r.getInventory()[i].getEpcToByteArray())
-				)
+				);
 //				InventoryString += "\nInventoryResult r = this.reader.getInventory(p);"+
 //				"\nr.getInventory()["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
 //				"\nr.getInventory()["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
