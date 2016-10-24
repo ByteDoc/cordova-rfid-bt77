@@ -79,7 +79,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
-					Arrays.toString(inventory);
+					Arrays.toString(inventory)
 //					"OperationStatus: "+s.toString()+
 //					"\nInventoryParameters:"+p+
 //					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
