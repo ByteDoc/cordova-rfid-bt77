@@ -76,7 +76,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             OperationStatus s = r.getOperationStatus();
 			System.out.println("Test3: OperationStatus: "+s);
-			if(args != null && args.length() > 0){
+			if(inventory != null && inventory.length > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
 					Arrays.toString(inventory)

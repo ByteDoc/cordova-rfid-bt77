@@ -1,22 +1,22 @@
 /*global cordova, module*/
 
 module.exports = {
-	echo: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "echo", [name]);
+	echo: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "echo", [args]);
 	},
-	startRfidListener: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "start", [name]);
+	startRfidListener: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "start", [args]);
 	},
-	endRfidListener: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "stop", [name]);
+	endRfidListener: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "stop", [args]);
 	},
-	scanInventory: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "scan", [name]);
+	scanInventory: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "scan", [args]);
 	},
-	readTag: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "read", [name]);
+	readTag: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "read", [args]);
 	},
-	writeTag: function (name, successCallback, errorCallback) {
-		cordova.exec(successCallback, errorCallback, "RfidReader", "write", [name]);
+	writeTag: function (args, successCallback, errorCallback) {
+		cordova.exec(successCallback, errorCallback, "RfidReader", "write", [args]);
 	}
 };
