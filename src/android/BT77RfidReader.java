@@ -18,7 +18,6 @@ import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
 import java.util.*;
-import org.json.simple.*;
 
 /**
 * This class echoes a string called from JavaScript.
