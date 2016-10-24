@@ -36,7 +36,6 @@ public class BT77RfidReader extends CordovaPlugin {
 			this.startRFIDReader();
 		}else if (action.equals("scan")){
 //			JsonArray args = Json.createArrayBuilder();
-			JSONObject inventory = new JSONObject();
 //			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
 //			System.out.println("Test3: InventoryParameters: "+p);
@@ -50,14 +49,14 @@ public class BT77RfidReader extends CordovaPlugin {
 //			System.out.println("Test3: InventoryResult: "+r);
 //			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 //			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-//			String InventoryString = "";
+			String InventoryString = "";
 			for(int i = 0; i < r.getInventory().length; i++){
 				JSONObject currentInventory = new JSONObject();
 				currentInventory.put("NUMBER", i);
 				currentInventory.put("EPC", r.getInventory()[i].getEpc());
 				currentInventory.put("EPCByteArray", r.getInventory()[i].getEpcToByteArray());
 				//inventory.add(currentInventory); // Hier Fehler!!!! Evtl nur JSONObject zurückgeben????????????????????????????????????????????????????????????????????????????????????????????????????????????
-				inventory.put(currentInventory);
+				args[i] = currentInventory;
 //				args.add(Json.createObjectBuilder()
 //					.add("NUMBER", i)
 //					.add("EPC", r.getInventory()[i].getEpc())
@@ -79,7 +78,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
-					inventory
+					args
 //					"OperationStatus: "+s.toString()+
 //					"\nInventoryParameters:"+p+
 //					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
