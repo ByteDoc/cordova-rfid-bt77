@@ -57,7 +57,7 @@ public class BT77RfidReader extends CordovaPlugin {
 				currentInventory[1] = "EPC:"+ r.getInventory()[i].getEpc();
 				currentInventory[2] = "EPCByteArray:"+ r.getInventory()[i].getEpcToByteArray();
 				//inventory.add(currentInventory); // Hier Fehler!!!! Evtl nur JSONObject zurückgeben????????????????????????????????????????????????????????????????????????????????????????????????????????????
-				inventory[i] = currentInventory;
+				inventory[i] = Arrays.toString(currentInventory);
 //				args.add(Json.createObjectBuilder()
 //					.add("NUMBER", i)
 //					.add("EPC", r.getInventory()[i].getEpc())
@@ -79,7 +79,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
-					inventory
+					Arrays.toString(inventory);
 //					"OperationStatus: "+s.toString()+
 //					"\nInventoryParameters:"+p+
 //					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
