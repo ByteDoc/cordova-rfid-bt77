@@ -100,8 +100,9 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 		}else if (action.equals("read")){
 			System.out.println("READTEST: args="+args);
-			String teststring = args[0];
+			String teststring = args.get("testparam");
 			System.out.println("TESTSTRING:"+teststring);
+			System.out.println("NOT INCLUDED:"+args.get("olp");
 			ReadParameters p = new ReadParameters();
 
             p.setMemoryBank(TagMemoryBank.USER);
