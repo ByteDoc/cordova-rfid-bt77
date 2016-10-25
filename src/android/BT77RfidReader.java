@@ -102,7 +102,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("READTEST: args="+args);
 			String teststring = args.get(0).get("testparam");
 			System.out.println("TESTSTRING:"+teststring);
-			System.out.println("NOT INCLUDED:"+args..get(0).get("olp"));
+			System.out.println("NOT INCLUDED:"+args.get(0).get("olp"));
 			ReadParameters p = new ReadParameters();
 
 			
