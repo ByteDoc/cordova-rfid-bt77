@@ -38,6 +38,7 @@ public class BT77RfidReader extends CordovaPlugin {
 //			JsonArray args = Json.createArrayBuilder();
 //			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
+			p.setCycleCount(10);
 //			System.out.println("Test3: InventoryParameters: "+p);
 //			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
 //			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
@@ -98,13 +99,15 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 			
 		}else if (action.equals("read")){
+			System.out.println("READTEST: args="+args);
 			ReadParameters p = new ReadParameters();
 
-            p.setMemoryBank(TagMemoryBank.USER);
+            p.setMemoryBank(TagMemoryBank.EPC);
 //            p.setEpc("3005FB63AC1F3681EC880468");
 			p.setEpc("0066840000000000000010FB");
             p.setOffset(2);
             p.setLength(16);
+			p.setRetries(10);
 
             ReadResult r = this.reader.readMemoryBank(p);
 
