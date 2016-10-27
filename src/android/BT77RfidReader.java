@@ -108,7 +108,7 @@ public class BT77RfidReader extends CordovaPlugin {
 				System.out.println("testparam:" + object.get("testparam"));
 				// JSONException wird geworfen, wenn .get("") nichts findet
 				try{
-					retries = Integer.parseInt(object.get("retries"));
+					retries = object.getInt("retries");
 				}catch(JSONException e){
 					retries = 10;
 				}
