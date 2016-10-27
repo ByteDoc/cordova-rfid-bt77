@@ -1,5 +1,23 @@
 /*global cordova, module*/
 
+myPlugin =  {
+	retryCount: 0,
+	readSuccessCallback: function(message) {
+		myPlugin.successCallback(message);
+		myPlugin.retryCount = 0;
+	},
+	readErrorCallback: function(message) {
+		if (myPlugin.retryCount < myPlugin.retryMax) {
+			myPlugin.retryCount++;
+			// nochmal ausführen
+			cordova.exec(myPlugin.readSuccessCallback, myPlugin.readErrorCallback, "RfidReader", "readTag", myPlugin.args);
+		} else {
+			myPlugin.errorCallback(message);
+			myPlugin.retryCount = 0;
+		}
+	}
+};
+
 module.exports = {
 	echo: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
@@ -19,7 +37,12 @@ module.exports = {
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		cordova.exec(successCallback, errorCallback, "RfidReader", "readTag", args);
+		myPlugin.retryMax = Math.min(1,parseInt(args[0].retries));
+		myPlugin.args = args;
+		myPlugin.successCallback = successCallback;
+		myPlugin.errorCallback = errorCallback;
+		//cordova.exec(successCallback, errorCallback, "RfidReader", "readTag", args);
+		cordova.exec(myPlugin.readSuccessCallback, myPlugin.readErrorCallback, "RfidReader", "readTag", args);
 	},
 	writeTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
