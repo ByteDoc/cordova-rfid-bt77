@@ -37,7 +37,7 @@ module.exports = {
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		myPlugin.retryMax = Math.min(1,parseInt(args[0].retries));
+		myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
 		myPlugin.args = args;
 		myPlugin.successCallback = successCallback;
 		myPlugin.errorCallback = errorCallback;
