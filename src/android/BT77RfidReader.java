@@ -100,7 +100,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 		}else if (action.equals("readTag")){
 			System.out.println("READTEST: args="+args);
-			int retries;
+			int retries = 0;
 			
 			for (int n = 0; n < args.length(); n++){
 				System.out.println("iteration " + n + " of JSONArray args");
@@ -127,6 +127,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			p.setEpc("0066840000000000000010FB");
             p.setOffset(2);
             p.setLength(16);
+			System.out.println("Retries: "+retries);
 			p.setRetries(retries);
 
             ReadResult r = this.reader.readMemoryBank(p);
