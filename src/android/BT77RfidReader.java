@@ -107,6 +107,7 @@ public class BT77RfidReader extends CordovaPlugin {
 				System.out.println("iteration " + n + " of JSONArray args");
 				JSONObject object = args.getJSONObject(n);
 				System.out.println("testparam:" + object.get("testparam"));
+				// JSONException wird geworfen, wenn .get("") nichts findet
 			}
 			
 			//String teststring = args.get(0).get("testparam");
