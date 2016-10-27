@@ -7,15 +7,15 @@ module.exports = {
 	},
 	startRfidListener: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		cordova.exec(successCallback, errorCallback, "RfidReader", "start", args);
+		cordova.exec(successCallback, errorCallback, "RfidReader", "startRfidListener", args);
 	},
 	endRfidListener: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		cordova.exec(successCallback, errorCallback, "RfidReader", "stop", args);
+		cordova.exec(successCallback, errorCallback, "RfidReader", "endRfidListener", args);
 	},
 	scanInventory: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		cordova.exec(successCallback, errorCallback, "RfidReader", "scan", args);
+		cordova.exec(successCallback, errorCallback, "RfidReader", "scanInventory", args);
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];

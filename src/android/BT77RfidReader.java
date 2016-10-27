@@ -31,10 +31,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			String message = args.getString(0);
 			this.echo(message, callbackContext, args);
 			return true;
-		}else if (action.equals("start")){
+		}else if (action.equals("startRfidListener")){
 			System.out.println("start executed");
 			this.startRFIDReader();
-		}else if (action.equals("scan")){
+		}else if (action.equals("scanInventory")){
 //			JsonArray args = Json.createArrayBuilder();
 //			System.out.println("Test3: Start Test3");
 			InventoryParameters p = new InventoryParameters();
@@ -98,7 +98,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			}
 			
 			
-		}else if (action.equals("read")){
+		}else if (action.equals("readTag")){
 			System.out.println("READTEST: args="+args);
 			
 			
@@ -134,7 +134,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
-		}else if (action.equals("write")){
+		}else if (action.equals("writeTag")){
 			WriteParameters p = new WriteParameters();
 			
             p.setMemoryBank(TagMemoryBank.USER);
@@ -152,7 +152,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
-		}else if (action.equals("stop")){
+		}else if (action.equals("endRfidListener")){
 			System.out.println("stop executed");
 			this.stopRFIDReader();
 		}else{
