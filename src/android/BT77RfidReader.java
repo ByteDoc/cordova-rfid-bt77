@@ -127,7 +127,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			p.setEpc("0066840000000000000010FB");
             p.setOffset(2);
             p.setLength(16);
-			p.setRetries(10);
+			p.setRetries(retries);
 
             ReadResult r = this.reader.readMemoryBank(p);
 
