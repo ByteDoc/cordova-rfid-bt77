@@ -100,14 +100,18 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 		}else if (action.equals("readTag")){
 			System.out.println("READTEST: args="+args);
+			int retries;
 			
-			
-			for(int n = 0; n < args.length(); n++)
-			{
+			for (int n = 0; n < args.length(); n++){
 				System.out.println("iteration " + n + " of JSONArray args");
 				JSONObject object = args.getJSONObject(n);
 				System.out.println("testparam:" + object.get("testparam"));
 				// JSONException wird geworfen, wenn .get("") nichts findet
+				try{
+					retries = object.get("retries");
+				}catch(JSONException e){
+					retries = 10;
+				}
 			}
 			
 			//String teststring = args.get(0).get("testparam");
