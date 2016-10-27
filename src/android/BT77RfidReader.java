@@ -110,6 +110,9 @@ public class BT77RfidReader extends CordovaPlugin {
 				try{
 					retries = object.getInt("retries");
 				}catch(JSONException e){
+					if(e.getMessage().contains("java.lang.String cannot be converted to int")){
+						callbackContext.error(e.getMessage());
+					}
 					System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
 					retries = 10;
 				}
