@@ -21,7 +21,9 @@ myPlugin =  {
 		//wenn hier ein erfolgreicher callback gemacht wurde, addiere den counter von diesem epc im jsonarray auf +1 und wiederhole den scanvorgang so lange wie eingestellt
 		myPlugin.args = message;
 		console.log("test1234567890");
-		console.log("args="+myPlugin.args);
+		console.log("args="+JSON.stringify(myPlugin.args));
+		console.log("cyclecount="+myPlugin.cycleCount);
+		console.log("cycleMax="+myPlugin.cycleMax);
 		if (myPlugin.cycleCount < myPlugin.cycleMax) {
 			console.log("current cycle count: "+cycleCount);
 			myPlugin.cycleCount++;
