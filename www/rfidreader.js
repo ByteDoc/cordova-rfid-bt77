@@ -17,13 +17,16 @@ myPlugin =  {
 			myPlugin.retryCount = 0;
 		}
 	},
-	inventorySuccessCallback: function() {
+	inventorySuccessCallback: function(args) {
 		//wenn hier ein erfolgreicher callback gemacht wurde, addiere den counter von diesem epc im jsonarray auf +1 und wiederhole den scanvorgang so lange wie eingestellt
+		myPlugin.args = args;
 		if (myPlugin.cycleCount < myPlugin.cycleMax) {
+			console.log("current cycle count: "+cycleCount);
+			console.log("args="+myPlugin.args);
 			myPlugin.cycleCount++;
 			// nochmal ausführen
 			cordova.exec(myPlugin.inventorySuccessCallback, myPlugin.inventoryErrorCallback, "RfidReader", "scanInventory", myPlugin.args);
-		} else if (myPlugin.cycleCount === myPlugin.cycleMax) {
+		} else if (myPlugin.cycleCount == myPlugin.cycleMax) {
 			myPlugin.inventoryAddResults(myPlugin.args);
 		}
 	},
