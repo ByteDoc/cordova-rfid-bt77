@@ -51,7 +51,7 @@ public class BT77RfidReader extends CordovaPlugin {
 //			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 //			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
 			//String[] inventory = new String[r.getInventory().length];
-			JSONArray inventory = new JsonArray();
+			JSONArray inventory = new JSONArray();
 			for(int i = 0; i < r.getInventory().length; i++){
 				//HashMap currentInventory = new HashMap();
 				String[] currentInventory = new String[3];
@@ -79,10 +79,11 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             OperationStatus s = r.getOperationStatus();
 			System.out.println("Test3: OperationStatus: "+s);
-			if(inventory != null && inventory.length > 0){
+			if(inventory != null && inventory.length() > 1){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
-					Arrays.toString(inventory)
+					//Arrays.toString(inventory)
+					inventory
 //					"OperationStatus: "+s.toString()+
 //					"\nInventoryParameters:"+p+
 //					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
