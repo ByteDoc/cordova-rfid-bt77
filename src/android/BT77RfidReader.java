@@ -35,70 +35,50 @@ public class BT77RfidReader extends CordovaPlugin {
 			System.out.println("start executed");
 			this.startRFIDReader();
 		}else if (action.equals("scanInventory")){
-//			JsonArray args = Json.createArrayBuilder();
-//			System.out.println("Test3: Start Test3");
+			System.out.println("SCANINVENTORY - args before: "+args);
+			int cycleCount = 0;
 			InventoryParameters p = new InventoryParameters();
-			p.setCycleCount(10);
-//			System.out.println("Test3: InventoryParameters: "+p);
-//			System.out.println("Test3: InventoryParameters.getCycleCount: "+p.getCycleCount());
-//			System.out.println("Test3: InventoryParameters.getCountThreshold: "+p.getCountThreshold());
-//			System.out.println("Test3: InventoryParameters.getRssiThreshold: "+p.getRssiThreshold());
-//			System.out.println("Test3: InventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix());
-//			System.out.println("Test3: InventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix());
+			
+			try{
+				cycleCount = args.getJSONObject(0).getInt("cycleCount");
+			}catch(JSONException e){
+				if(e.getMessage().contains("java.lang.String cannot be converted to int")){
+					callbackContext.error(e.getMessage());
+				}
+				System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
+				cycleCount = 10;
+			}
+			
+			p.setCycleCount(cycleCount);
+			
 			
             InventoryResult r = this.reader.getInventory(p);
-//			System.out.println("Test3: InventoryResult: "+r);
-//			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
-//			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			//String[] inventory = new String[r.getInventory().length];
-			JSONArray inventory = new JSONArray();
-			for(int i = 0; i < r.getInventory().length; i++){
-				//HashMap currentInventory = new HashMap();
-				//String[] currentInventory = new String[3];
-				JSONObject currentInventory = new JSONObject();
-				currentInventory.put("EPC", r.getInventory()[i].getEpc());
-				currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
-				//currentInventory[0] = "NUMBER:"+ i;
-				//currentInventory[1] = "EPC:"+ r.getInventory()[i].getEpc();
-				//currentInventory[2] = "EPCByteArray:"+ r.getInventory()[i].getEpcToByteArray();
-				//inventory.add(currentInventory); // Hier Fehler!!!! Evtl nur JSONObject zurückgeben????????????????????????????????????????????????????????????????????????????????????????????????????????????
-				//inventory[i] = Arrays.toString(currentInventory);
-				inventory.put(currentInventory);
-//				args.add(Json.createObjectBuilder()
-//					.add("NUMBER", i)
-//					.add("EPC", r.getInventory()[i].getEpc())
-//					.add("EPCByteArray", r.getInventory()[i].getEpcToByteArray())
-//				);
-//				InventoryString += "\nInventoryResult r = this.reader.getInventory(p);"+
-//				"\nr.getInventory()["+i+"].getEpc: "+r.getInventory()[i].getEpc()+
-//				"\nr.getInventory()["+i+"].getSeenCount: "+r.getInventory()[i].getSeenCount()+
-//				"\nr.getInventory()["+i+"].getEpcToByteArray: "+r.getInventory()[i].getEpcToByteArray();
-//				System.out.println("Test3 InventoryString: "+InventoryString);
-			}
-//			args.build();
 			
-			//args = (JSONArray[])r[0];
-			//args = new JSONArray(Arrays.asList(r));
+			for(int i = 0; i < r.getInventory().length; i++){
+				try{
+					curSeenCtr = args.getJSONObject(0).getInt(r.getInventory()[i].getEpc());
+					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), curSeenCtr+r.getInventory()[i].getSeenCount()+);
+				}catch(JSONException e){
+					if(e.getMessage().contains("java.lang.String cannot be converted to int")){
+						callbackContext.error(e.getMessage());
+					}
+					System.out.println("Error: " + e + " was thrown. Creating new value.");
+					/** 
+					 *	Wenn mehr Parameter übergeben werden sollen, kann das JSONObject auch mehrere JSONObjects beinhalten (z.B. Key: EPC, Value: JSONObject):
+					 *	JSONObject currentInventory = new JSONObject();
+					 *	currentInventory.put("EPC", r.getInventory()[i].getEpc());
+					 *	currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
+					 *	args.getJSONObject(0).put(currentInventory);
+					 */
+					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), r.getInventory()[i].getSeenCount());
+				}
+			}
+			
 			
             OperationStatus s = r.getOperationStatus();
-			System.out.println("Test3: OperationStatus: "+s);
-			if(inventory != null && inventory.length() > 0){
-				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
-				callbackContext.success(
-					//Arrays.toString(inventory)
-					inventory
-//					"OperationStatus: "+s.toString()+
-//					"\nInventoryParameters:"+p+
-//					"\nInventoryParameters.getCycleCount: "+p.getCycleCount()+
-//					"\nInventoryParameters.getCountThreshold: "+p.getCountThreshold()+
-//					"\nInventoryParameters.getRssiThreshold: "+p.getRssiThreshold()+
-//					"\nInventoryParameters.getEpcInclusionPrefix: "+p.getEpcInclusionPrefix()+
-//					"\nInventoryParameters.getEpcExclusionPrefix: "+p.getEpcExclusionPrefix()+
-//					"\nInventoryResult: "+r+
-//					"\nInventoryResult.getRawResult: "+r.getRawResult()+
-//					"\nInventoryResult.getInventory: "+r.getInventory()+
-//					"\nInventoryString: "+InventoryString
-				);
+			if(args != null && args.length() > 0){
+				System.out.println("SCANINVENTORY - args after: "+args);
+				callbackContext.success(args);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
