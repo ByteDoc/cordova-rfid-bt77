@@ -57,7 +57,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			for(int i = 0; i < r.getInventory().length; i++){
 				try{
 					curSeenCtr = args.getJSONObject(0).getInt(r.getInventory()[i].getEpc());
-					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), curSeenCtr+r.getInventory()[i].getSeenCount()+);
+					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), curSeenCtr+r.getInventory()[i].getSeenCount());
 				}catch(JSONException e){
 					if(e.getMessage().contains("java.lang.String cannot be converted to int")){
 						callbackContext.error(e.getMessage());
