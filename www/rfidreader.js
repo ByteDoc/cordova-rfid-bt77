@@ -15,6 +15,15 @@ myPlugin =  {
 			myPlugin.errorCallback(message);
 			myPlugin.retryCount = 0;
 		}
+	},
+	inventorySuccessCallback: function() {
+		//wenn hier ein erfolgreicher callback gemacht wurde, addiere den counter von diesem epc im jsonarray auf +1 und wiederhole den scanvorgang so lange wie eingestellt
+	},
+	inventoryErrorCallback: function() {
+		//ändere nichts im json array setze den retrycounter auf +1 und wiederhole den vorgang so lange wie eingestellt
+	},
+	inventoryAddResults: function() {
+		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 	}
 };
 
@@ -33,7 +42,7 @@ module.exports = {
 	},
 	scanInventory: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		cordova.exec(successCallback, errorCallback, "RfidReader", "scanInventory", args);
+		cordova.exec(myPlugin.inventorySuccessCallback, errorCallback, "RfidReader", "scanInventory", args);
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];

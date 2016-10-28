@@ -50,7 +50,8 @@ public class BT77RfidReader extends CordovaPlugin {
 //			System.out.println("Test3: InventoryResult: "+r);
 //			System.out.println("Test3: InventoryResult.getRawResult: "+r.getRawResult());
 //			System.out.println("Test3: InventoryResult.getInventory: "+r.getInventory());
-			String[] inventory = new String[r.getInventory().length];
+			//String[] inventory = new String[r.getInventory().length];
+			JSONArray inventory = new JsonArray();
 			for(int i = 0; i < r.getInventory().length; i++){
 				//HashMap currentInventory = new HashMap();
 				String[] currentInventory = new String[3];
@@ -58,7 +59,8 @@ public class BT77RfidReader extends CordovaPlugin {
 				currentInventory[1] = "EPC:"+ r.getInventory()[i].getEpc();
 				currentInventory[2] = "EPCByteArray:"+ r.getInventory()[i].getEpcToByteArray();
 				//inventory.add(currentInventory); // Hier Fehler!!!! Evtl nur JSONObject zurückgeben????????????????????????????????????????????????????????????????????????????????????????????????????????????
-				inventory[i] = Arrays.toString(currentInventory);
+				//inventory[i] = Arrays.toString(currentInventory);
+				inventory.put(currentInventory);
 //				args.add(Json.createObjectBuilder()
 //					.add("NUMBER", i)
 //					.add("EPC", r.getInventory()[i].getEpc())
