@@ -40,7 +40,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			InventoryParameters p = new InventoryParameters();
 			
 			try{
-				cycleCount = args.getJSONObject(0).getInt("cycleCount");
+				cycleCount = args.getJSONObject(0).getInt("cycles");
 			}catch(JSONException e){
 				if(e.getMessage().contains("java.lang.String cannot be converted to int")){
 					callbackContext.error(e.getMessage());
