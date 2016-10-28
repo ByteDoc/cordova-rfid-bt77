@@ -54,10 +54,13 @@ public class BT77RfidReader extends CordovaPlugin {
 			JSONArray inventory = new JSONArray();
 			for(int i = 0; i < r.getInventory().length; i++){
 				//HashMap currentInventory = new HashMap();
-				String[] currentInventory = new String[3];
-				currentInventory[0] = "NUMBER:"+ i;
-				currentInventory[1] = "EPC:"+ r.getInventory()[i].getEpc();
-				currentInventory[2] = "EPCByteArray:"+ r.getInventory()[i].getEpcToByteArray();
+				//String[] currentInventory = new String[3];
+				JSONObject currentInventory = new JSONObject();
+				currentInventory.put("EPC", r.getInventory()[i].getEpc());
+				currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
+				//currentInventory[0] = "NUMBER:"+ i;
+				//currentInventory[1] = "EPC:"+ r.getInventory()[i].getEpc();
+				//currentInventory[2] = "EPCByteArray:"+ r.getInventory()[i].getEpcToByteArray();
 				//inventory.add(currentInventory); // Hier Fehler!!!! Evtl nur JSONObject zurückgeben????????????????????????????????????????????????????????????????????????????????????????????????????????????
 				//inventory[i] = Arrays.toString(currentInventory);
 				inventory.put(currentInventory);
@@ -79,7 +82,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             OperationStatus s = r.getOperationStatus();
 			System.out.println("Test3: OperationStatus: "+s);
-			if(inventory != null && inventory.length() > 1){
+			if(inventory != null && inventory.length() > 0){
 				//callbackContext.success("OperationStatus: "+s.toString()+"_-_InventoryParameters:"+p+"_-_InventoryResult: "+r);
 				callbackContext.success(
 					//Arrays.toString(inventory)
