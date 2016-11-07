@@ -22,10 +22,10 @@ myPlugin =  {
 		myPlugin.args = message;
 		console.log("test1234567890");
 		console.log("args="+JSON.stringify(myPlugin.args));
-		console.log("cyclecount="+myPlugin.cycleCount);
+		console.log("cycleCount="+myPlugin.cycleCount);
 		console.log("cycleMax="+myPlugin.cycleMax);
 		if (myPlugin.cycleCount < myPlugin.cycleMax) {
-			console.log("current cycle count: "+cycleCount);
+			console.log("current cycle count: "+myPlugin.cycleCount);
 			myPlugin.cycleCount++;
 			// nochmal ausführen
 			cordova.exec(myPlugin.inventorySuccessCallback, myPlugin.inventoryErrorCallback, "RfidReader", "scanInventory", myPlugin.args);
