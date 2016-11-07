@@ -41,7 +41,7 @@ myPlugin =  {
 	inventoryAddResults: function(message) {
 		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 		myPlugin.successCallback(message);
-		myPlugin.retryCount = 0;
+		myPlugin.cycleCount = 0;
 	}
 };
 
