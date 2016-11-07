@@ -70,7 +70,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					 *	JSONObject currentInventory = new JSONObject();
 					 *	currentInventory.put("EPC", r.getInventory()[i].getEpc());
 					 *	currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
-					 *	args.getJSONObject(0).put(currentInventory);
+					 *	args.getJSONObject(0).put(r.getInventory()[i].getEpc(), currentInventory);
 					 */
 					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), r.getInventory()[i].getSeenCount());
 				}
@@ -81,6 +81,8 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				System.out.println("SCANINVENTORY - args after: "+args);
 				callbackContext.success(args);
+			} else if (args.length() === 1){
+				callbackContext.error("No results found.");
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}

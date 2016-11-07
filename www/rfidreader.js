@@ -40,7 +40,8 @@ myPlugin =  {
 	},
 	inventoryAddResults: function(message) {
 		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
-		myPlugin.successCallback(message);
+		//myPlugin.successCallback(JSON.stringify(message));
+		// Hier kommt der MaxProp und Value hinein!!!!!!!!!!!!!!
 		myPlugin.cycleCount = 0;
 	}
 };
@@ -60,7 +61,11 @@ module.exports = {
 	},
 	scanInventory: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		myPlugin.cycleMax = Math.max(1,parseInt(args[0].cycles));
+		if(args[0].cycles){
+			myPlugin.cycleMax = Math.max(1,parseInt(args[0].cycles));
+		}else{
+			myPlugin.cycleMax = 35;
+		}
 		myPlugin.args = args;
 		myPlugin.successCallback = successCallback;
 		myPlugin.errorCallback = errorCallback;
@@ -68,7 +73,12 @@ module.exports = {
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
+		if(args[0].retries){
+			myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
+		}else{
+			// Default value
+			myPlugin.retryMax = 40;
+		}
 		myPlugin.args = args;
 		myPlugin.successCallback = successCallback;
 		myPlugin.errorCallback = errorCallback;
