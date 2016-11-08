@@ -23,7 +23,7 @@ import java.util.*;
 * This class echoes a string called from JavaScript.
 */
 public class BT77RfidReader extends CordovaPlugin {
-	RfidReader reader;
+	RfidReader reader = null;
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -179,9 +179,11 @@ public class BT77RfidReader extends CordovaPlugin {
 	}
 	
 	private void startRFIDReader(){
+		if(reader == null){
+			this.reader = new RfidReader(cordova.getActivity());
+		}
 		System.out.println("starttest: this.reader.isBusy() "+this.reader.isBusy() +" - this.reader.isOpen()" +this.reader.isOpen());
 		if(!this.reader.isBusy() || !this.reader.isOpen()){
-			this.reader = new RfidReader(cordova.getActivity());
 			System.out.println("startRFIDReader: this.reader.open(): " + this.reader.open());
 		}
 	}
