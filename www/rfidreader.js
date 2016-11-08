@@ -86,12 +86,12 @@ module.exports = {
 	},
 	scanInventory: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		if(args[0].cycles){
+		if(args && args[0].cycles){
 			myPlugin.cycleMax = Math.max(1,parseInt(args[0].cycles));
 		}else{
 			myPlugin.cycleMax = 35;
 		}
-		if(args[0].retries){
+		if(args && args[0].retries){
 			myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
 		}else{
 			// Default value
@@ -104,7 +104,7 @@ module.exports = {
 	},
 	readTag: function (args, successCallback, errorCallback) {
 		if (!Array.isArray(args)) args = [args];
-		if(args[0].retries){
+		if(args && args[0].retries){
 			myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
 		}else{
 			// Default value
