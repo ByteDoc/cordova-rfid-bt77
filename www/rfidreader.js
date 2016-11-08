@@ -39,6 +39,9 @@ myPlugin =  {
 		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 		//myPlugin.successCallback(JSON.stringify(message));
 		var message = message[0];
+		if (message === null && typeof message !== "object" && message.isArray()){
+			message = {};
+		}
 		var maxSeenCountProp = null;
 		var maxSeenCountValue = -1;
 		for (var prop in message) {
