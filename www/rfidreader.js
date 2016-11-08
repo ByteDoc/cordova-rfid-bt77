@@ -61,6 +61,7 @@ myPlugin =  {
 			myPlugin.inventoryErrorCallback("No results found.");
 		}
 		myPlugin.cycleCount = 0;
+		module.exports.endRfidListener(null, myPlugin.successCallback, myPlugin.errorCallback);
 	}
 };
 
