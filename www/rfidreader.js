@@ -46,7 +46,7 @@ myPlugin =  {
 			if (message.hasOwnProperty(prop)) {
 				var value = message[prop];
 				console.log("InventoryScan-MaxSeenValue: "+value);
-				if (value > maxSeenCountValue && !prop.includes("cycles") && !prop.includes("retries")) {
+				if (value > maxSeenCountValue && prop != "cycles" && prop != "retries") {
 					maxSeenCountProp = prop;
 					maxSeenCountValue = value;
 				}
