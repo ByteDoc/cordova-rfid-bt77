@@ -81,7 +81,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				System.out.println("SCANINVENTORY - args after: "+args);
 				callbackContext.success(args);
-			} else if (args.length() === 1){
+			} else if (args.length() == 1){
 				callbackContext.error("No results found.");
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
