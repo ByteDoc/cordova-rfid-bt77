@@ -32,10 +32,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			this.echo(message, callbackContext, args);
 			return true;
 		}else if (action.equals("startRfidListener")){
-			System.out.println("start executed");
 			this.startRFIDReader();
 		}else if (action.equals("scanInventory")){
-			System.out.println("SCANINVENTORY - args before: "+args);
+			this.startRFIDReader();
+			
 			int cycleCount = 0;
 			InventoryParameters p = new InventoryParameters();
 			
@@ -79,7 +79,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             OperationStatus s = r.getOperationStatus();
 			if(args != null && args.length() > 0){
-				System.out.println("SCANINVENTORY - args after: "+args);
+				System.out.println("JSONArray after InventoryScan: "+args);
 				callbackContext.success(args);
 			//} else if (args.length() == 1){
 			//	callbackContext.error("No results found.");
@@ -87,14 +87,15 @@ public class BT77RfidReader extends CordovaPlugin {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
 			
+			this.stopRFIDReader();
 			
 		}else if (action.equals("readTag")){
-			System.out.println("READTEST: args="+args);
+			this.startRFIDReader();
 			int retries = 0;
 			String epcString = "";
 			
 			for (int n = 0; n < args.length(); n++){
-				System.out.println("iteration " + n + " of JSONArray args");
+				System.out.println("iteration " + n + " of JSONArray" +args);
 				JSONObject object = args.getJSONObject(n);
 				// JSONException wird geworfen, wenn .get("") nichts findet
 				try{
@@ -108,7 +109,6 @@ public class BT77RfidReader extends CordovaPlugin {
 				}
 				try{
 					epcString = object.getString("epc");
-					System.out.println("epcString="+epcString);
 				}catch(JSONException e){
 					callbackContext.error(e.getMessage() + "" + args);
 				}
@@ -117,13 +117,13 @@ public class BT77RfidReader extends CordovaPlugin {
 			ReadParameters p = new ReadParameters();
 
 			
+			
             p.setMemoryBank(TagMemoryBank.USER);
 //            p.setEpc("3005FB63AC1F3681EC880468");
 //			p.setEpc("0066840000000000000010FB");
 			p.setEpc(epcString);
             p.setOffset(2);
             p.setLength(16);
-			System.out.println("Retries: "+retries);
 			p.setRetries(retries);
 
             ReadResult r = this.reader.readMemoryBank(p);
@@ -136,6 +136,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
+			this.stopRFIDReader();
 		}else if (action.equals("writeTag")){
 			WriteParameters p = new WriteParameters();
 			
@@ -155,7 +156,6 @@ public class BT77RfidReader extends CordovaPlugin {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
 		}else if (action.equals("endRfidListener")){
-			System.out.println("stop executed");
 			this.stopRFIDReader();
 		}else{
 			return false;
@@ -180,16 +180,13 @@ public class BT77RfidReader extends CordovaPlugin {
 	}
 	
 	private void startRFIDReader(){
-		System.out.println("Test1: Start RFIDReader:");
 		this.reader = new RfidReader(cordova.getActivity());
-		System.out.println("Test1: RFIDReader created");
-		System.out.println("Test1: this.reader.open(): " + this.reader.open());
-		System.out.println("Test1: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
+		System.out.println("startRFIDReader: this.reader.open(): " + this.reader.open());
+		System.out.println("startRFIDReader: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 	
 	private void stopRFIDReader(){
-		System.out.println("Test2: Stop RFIDReader:");
-		System.out.println("Test1: this.reader.close(): " + this.reader.close());
-		System.out.println("Test2: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
+		System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
+		System.out.println("stopRFIDReader: this.reader.isBusy(): "+this.reader.isBusy()+"_-_and this.reader.isOpen(): "+this.reader.isOpen());
 	}
 }

@@ -55,7 +55,7 @@ myPlugin =  {
 		
 		if (maxSeenCountProp !== null){
 			module.exports.readTag({
-				EPC: maxSeenCountProp
+				epc: maxSeenCountProp
 			}, myPlugin.successCallback, myPlugin.errorCallback);
 		}else{
 			myPlugin.inventoryErrorCallback("No results found.");
