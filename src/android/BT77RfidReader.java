@@ -34,6 +34,7 @@ public class BT77RfidReader extends CordovaPlugin {
 		}else if (action.equals("startRfidListener")){
 			this.startRFIDReader();
 		}else if (action.equals("scanInventory")){
+			System.out.println("JSONArray before InventoryScan: "+args);
 			this.startRFIDReader();
 			
 			int cycleCount = 0;
