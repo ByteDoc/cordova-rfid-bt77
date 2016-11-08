@@ -91,12 +91,11 @@ public class BT77RfidReader extends CordovaPlugin {
 		}else if (action.equals("readTag")){
 			System.out.println("READTEST: args="+args);
 			int retries = 0;
-			String epc = "";
+			String epcString = "";
 			
 			for (int n = 0; n < args.length(); n++){
 				System.out.println("iteration " + n + " of JSONArray args");
 				JSONObject object = args.getJSONObject(n);
-				System.out.println("testparam:" + object.get("testparam"));
 				// JSONException wird geworfen, wenn .get("") nichts findet
 				try{
 					retries = object.getInt("retries");
@@ -108,23 +107,20 @@ public class BT77RfidReader extends CordovaPlugin {
 					retries = 40;
 				}
 				try{
-					epc = object.getString("EPC");
+					epcString = object.getString("epc");
+					System.out.println("epcString="+epcString);
 				}catch(JSONException e){
-					callbackContext.error(e.getMessage());
+					callbackContext.error(e.getMessage() + "" + args);
 				}
 			}
 			
-			//String teststring = args.get(0).get("testparam");
-			//System.out.println("TESTSTRING:"+teststring);
-			//System.out.println("NOT INCLUDED:"+args.get(0).get("olp"));
-			System.out.println("NOT INCLUDED:"+args.get(0));
 			ReadParameters p = new ReadParameters();
 
 			
             p.setMemoryBank(TagMemoryBank.USER);
 //            p.setEpc("3005FB63AC1F3681EC880468");
 //			p.setEpc("0066840000000000000010FB");
-			p.setEpc(epc);
+			p.setEpc(epcString);
             p.setOffset(2);
             p.setLength(16);
 			System.out.println("Retries: "+retries);

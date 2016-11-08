@@ -42,10 +42,10 @@ myPlugin =  {
 		var maxSeenCountProp = null;
 		var maxSeenCountValue = -1;
 		for (var prop in message) {
-			console.log("InventoryScan-property: "+prop);
+			console.log("InventoryScan-MaxSeenRFIDTag: "+prop);
 			if (message.hasOwnProperty(prop)) {
 				var value = message[prop];
-				console.log("InventoryScan-value: "+value);
+				console.log("InventoryScan-MaxSeenValue: "+value);
 				if (value > maxSeenCountValue && prop != "cycles") {
 					maxSeenCountProp = prop;
 					maxSeenCountValue = value;
