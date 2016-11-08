@@ -46,7 +46,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					callbackContext.error(e.getMessage());
 				}
 				System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
-				cycleCount = 10;
+				cycleCount = 35;
 			}
 			
 			p.setCycleCount(cycleCount);
@@ -81,8 +81,8 @@ public class BT77RfidReader extends CordovaPlugin {
 			if(args != null && args.length() > 0){
 				System.out.println("SCANINVENTORY - args after: "+args);
 				callbackContext.success(args);
-			} else if (args.length() == 1){
-				callbackContext.error("No results found.");
+			//} else if (args.length() == 1){
+			//	callbackContext.error("No results found.");
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
@@ -91,6 +91,7 @@ public class BT77RfidReader extends CordovaPlugin {
 		}else if (action.equals("readTag")){
 			System.out.println("READTEST: args="+args);
 			int retries = 0;
+			String epc = "";
 			
 			for (int n = 0; n < args.length(); n++){
 				System.out.println("iteration " + n + " of JSONArray args");
@@ -104,7 +105,12 @@ public class BT77RfidReader extends CordovaPlugin {
 						callbackContext.error(e.getMessage());
 					}
 					System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
-					retries = 10;
+					retries = 40;
+				}
+				try{
+					epc = object.getString("EPC");
+				}catch(JSONException e){
+					callbackContext.error(e.getMessage());
 				}
 			}
 			
@@ -117,7 +123,8 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             p.setMemoryBank(TagMemoryBank.USER);
 //            p.setEpc("3005FB63AC1F3681EC880468");
-			p.setEpc("0066840000000000000010FB");
+//			p.setEpc("0066840000000000000010FB");
+			p.setEpc(epc);
             p.setOffset(2);
             p.setLength(16);
 			System.out.println("Retries: "+retries);

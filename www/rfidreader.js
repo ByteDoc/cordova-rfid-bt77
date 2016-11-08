@@ -41,7 +41,29 @@ myPlugin =  {
 	inventoryAddResults: function(message) {
 		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 		//myPlugin.successCallback(JSON.stringify(message));
-		// Hier kommt der MaxProp und Value hinein!!!!!!!!!!!!!!
+		var message = message[0];
+		var maxSeenCountProp = null;
+		var maxSeenCountValue = -1;
+		console.log("message="+message);
+		for (var prop in message) {
+			console.log("prop="+prop);
+			if (message.hasOwnProperty(prop)) {
+				var value = message[prop];
+				console.log("value="+value);
+				if (value > maxSeenCountValue && prop != "cycles") {
+					maxSeenCountProp = prop;
+					maxSeenCountValue = value;
+				}
+			}
+		}
+		
+		if (maxSeenCountProp !== null){
+			module.exports.readTag({
+				EPC: maxSeenCountProp
+			}, myPlugin.successCallback, myPlugin.errorCallback);
+		}else{
+			myPlugin.inventoryErrorCallback("No results found.");
+		}
 		myPlugin.cycleCount = 0;
 	}
 };
