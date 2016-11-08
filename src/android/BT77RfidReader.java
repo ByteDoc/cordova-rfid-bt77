@@ -179,7 +179,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	}
 	
 	private void startRFIDReader(){
-		System.out.println("starttest: this.reader.isBusy() "+this.reader.isBusy() +" - this.reader.isOpen()" this.reader.isOpen());
+		System.out.println("starttest: this.reader.isBusy() "+this.reader.isBusy() +" - this.reader.isOpen()" +this.reader.isOpen());
 		if(!this.reader.isBusy() || !this.reader.isOpen()){
 			this.reader = new RfidReader(cordova.getActivity());
 			System.out.println("startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -187,7 +187,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	}
 	
 	private void stopRFIDReader(){
-		System.out.println("stoptest: this.reader.isBusy() "+this.reader.isBusy() +" - this.reader.isOpen()" this.reader.isOpen());
+		System.out.println("stoptest: this.reader.isBusy() "+this.reader.isBusy() +" - this.reader.isOpen()" +this.reader.isOpen());
 		if(this.reader.isBusy() && this.reader.isOpen()){
 			System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
 		}
