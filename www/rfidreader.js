@@ -39,7 +39,7 @@ myPlugin =  {
 		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 		//myPlugin.successCallback(JSON.stringify(message));
 		var message = message[0];
-		if (message === null && typeof message !== "object" && Array.isArray(message)){
+		if (message === null || typeof message !== "object" || Array.isArray(message)){
 			message = {};
 		}
 		var maxSeenCountProp = null;
@@ -49,7 +49,7 @@ myPlugin =  {
 			if (message.hasOwnProperty(prop)) {
 				var value = message[prop];
 				console.log("InventoryScan-MaxSeenValue: "+value);
-				if (value > maxSeenCountValue && prop != "cycles" && prop != "retries") {
+				if (value > maxSeenCountValue && (prop != "cycles" || prop != "retries")) {
 					maxSeenCountProp = prop;
 					maxSeenCountValue = value;
 				}
