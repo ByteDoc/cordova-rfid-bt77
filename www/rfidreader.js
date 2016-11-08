@@ -18,7 +18,6 @@ myPlugin =  {
 		}
 	},
 	inventorySuccessCallback: function(message) {
-		//wenn hier ein erfolgreicher callback gemacht wurde, addiere den counter von diesem epc im jsonarray auf +1 und wiederhole den scanvorgang so lange wie eingestellt
 		myPlugin.args = message;
 		console.log("InventoryScan-maxCycles: "+myPlugin.cycleMax);
 		if (myPlugin.cycleCount < myPlugin.cycleMax) {
@@ -31,17 +30,18 @@ myPlugin =  {
 		}
 	},
 	inventoryErrorCallback: function(message) {
-		//ändere nichts im json array setze den retrycounter auf +1 und wiederhole den vorgang so lange wie eingestellt
 		myPlugin.errorCallback(message);
 		myPlugin.cycleCount = 0;
 	},
 	inventoryAddResults: function(message) {
-		//wenn alle durchläufe beendet sind gebe diese an die app weiter und setze den counter wieder auf 0
 		//myPlugin.successCallback(JSON.stringify(message));
+		// "message" must be an existing object
 		var message = message[0];
 		if (message === null || typeof message !== "object" || Array.isArray(message)){
 			message = {};
 		}
+		
+		// get EPC from the most tagged RFID-tag
 		var maxSeenCountProp = null;
 		var maxSeenCountValue = -1;
 		for (var prop in message) {
@@ -56,6 +56,7 @@ myPlugin =  {
 			}
 		}
 		
+		// start reading the RFID-tag by using EPC from the most tagged RFID-tag
 		if (maxSeenCountProp !== null){
 			module.exports.readTag({
 				epc: maxSeenCountProp
@@ -63,6 +64,8 @@ myPlugin =  {
 		}else{
 			myPlugin.inventoryErrorCallback("No results found.");
 		}
+		
+		// shutdown process
 		myPlugin.cycleCount = 0;
 		module.exports.endRfidListener(null, myPlugin.successCallback, myPlugin.errorCallback);
 	}
