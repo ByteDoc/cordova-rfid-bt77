@@ -46,7 +46,7 @@ myPlugin =  {
 			if (message.hasOwnProperty(prop)) {
 				var value = message[prop];
 				console.log("InventoryScan-MaxSeenValue: "+value);
-				if (value > maxSeenCountValue && prop != "cycles") {
+				if (value > maxSeenCountValue && !prop.includes("cycles") && !prop.includes("retries")) {
 					maxSeenCountProp = prop;
 					maxSeenCountValue = value;
 				}
@@ -84,6 +84,12 @@ module.exports = {
 			myPlugin.cycleMax = Math.max(1,parseInt(args[0].cycles));
 		}else{
 			myPlugin.cycleMax = 35;
+		}
+		if(args[0].retries){
+			myPlugin.retryMax = Math.max(1,parseInt(args[0].retries));
+		}else{
+			// Default value
+			myPlugin.retryMax = 40;
 		}
 		myPlugin.args = args;
 		myPlugin.successCallback = successCallback;
