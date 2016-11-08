@@ -20,12 +20,9 @@ myPlugin =  {
 	inventorySuccessCallback: function(message) {
 		//wenn hier ein erfolgreicher callback gemacht wurde, addiere den counter von diesem epc im jsonarray auf +1 und wiederhole den scanvorgang so lange wie eingestellt
 		myPlugin.args = message;
-		console.log("test1234567890");
-		console.log("args="+JSON.stringify(myPlugin.args));
-		console.log("cycleCount="+myPlugin.cycleCount);
-		console.log("cycleMax="+myPlugin.cycleMax);
+		console.log("InventoryScan-maxCycles: "+myPlugin.cycleMax);
 		if (myPlugin.cycleCount < myPlugin.cycleMax) {
-			console.log("current cycle count: "+myPlugin.cycleCount);
+			console.log("InventoryScan-currentCycle: "+myPlugin.cycleCount);
 			myPlugin.cycleCount++;
 			// nochmal ausführen
 			cordova.exec(myPlugin.inventorySuccessCallback, myPlugin.inventoryErrorCallback, "RfidReader", "scanInventory", myPlugin.args);
@@ -44,12 +41,11 @@ myPlugin =  {
 		var message = message[0];
 		var maxSeenCountProp = null;
 		var maxSeenCountValue = -1;
-		console.log("message="+message);
 		for (var prop in message) {
-			console.log("prop="+prop);
+			console.log("InventoryScan-property: "+prop);
 			if (message.hasOwnProperty(prop)) {
 				var value = message[prop];
-				console.log("value="+value);
+				console.log("InventoryScan-value: "+value);
 				if (value > maxSeenCountValue && prop != "cycles") {
 					maxSeenCountProp = prop;
 					maxSeenCountValue = value;
