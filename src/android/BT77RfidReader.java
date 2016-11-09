@@ -33,6 +33,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			return true;
 		}else if (action.equals("startRfidListener")){
 			this.startRFIDReader();
+			
+			
+			
+			
 		}else if (action.equals("scanInventory")){
 			System.out.println("JSONArray before InventoryScan: "+args);
 			this.startRFIDReader();
@@ -40,8 +44,10 @@ public class BT77RfidReader extends CordovaPlugin {
 			int cycleCount = 0;
 			InventoryParameters p = new InventoryParameters();
 			
+			JSONObject argsObject = args.getJSONObject(0);
+			
 			try{
-				cycleCount = args.getJSONObject(0).getInt("cycles");
+				cycleCount = argsObject.getInt("cycles");
 			}catch(JSONException e){
 				if(e.getMessage().contains("java.lang.String cannot be converted to int")){
 					callbackContext.error(e.getMessage());
@@ -55,26 +61,60 @@ public class BT77RfidReader extends CordovaPlugin {
 			
             InventoryResult r = this.reader.getInventory(p);
 			
-			for(int i = 0; i < r.getInventory().length; i++){
-				try{
-					System.out.println("found EPC: "+r.getInventory()[i].getEpc());
-					int curSeenCtr = args.getJSONObject(0).getInt(r.getInventory()[i].getEpc());
-					System.out.println("curSeenCtr for "+i+". entry: "+curSeenCtr);
-					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), curSeenCtr+r.getInventory()[i].getSeenCount());
-				}catch(JSONException e){
-					if(e.getMessage().contains("java.lang.String cannot be converted to int")){
-						callbackContext.error(e.getMessage());
-					}
-					System.out.println("Error: " + e + " was thrown. Creating new value.");
-					/** 
-					 *	Wenn mehr Parameter übergeben werden sollen, kann das JSONObject auch mehrere JSONObjects beinhalten (z.B. Key: EPC, Value: JSONObject):
-					 *	JSONObject currentInventory = new JSONObject();
-					 *	currentInventory.put("EPC", r.getInventory()[i].getEpc());
-					 *	currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
-					 *	args.getJSONObject(0).put(r.getInventory()[i].getEpc(), currentInventory);
-					 */
-					args.getJSONObject(0).put(r.getInventory()[i].getEpc(), r.getInventory()[i].getSeenCount());
+			// Ergebnisse im Attribut INVENTORY des argument-Objektes festhalten
+			// argsObject soll das Format haben:
+			/**
+			{
+				retries: x,
+				cycles: y,
+				inventory: {					JSONObject
+					epc_id_123:	epc_count		Int
+					epc_id_456: epc_count		Int
 				}
+			}
+			*/
+			JSONObject inventory;
+			try{
+				inventory = argsObject.getJSONObject("inventory");
+			} catch (JSONException e) {
+				System.out.println("Creating JSONObject for inventory (" + e + ")");
+				inventory = new JSONObject();
+				argsObject.put("inventory", inventory);
+			}
+			
+			
+			for(int i = 0; i < r.getInventory().length; i++){
+				Epc currentEpc = r.getInventory()[i];
+				Int epcCount;
+				try{
+					epcCount = inventory.getInt(currentEpc.getEpc());
+				} catch (JSONException e) {
+					System.out.println("Creating Int for epcCount (" + e + ")");
+					epcCount = new Int(0);
+				}
+				epcCount += currentEpc.getSeenCount();
+				inventory.put(currentEpc.getEpc(), epcCount);
+				
+				
+				// try{
+					// System.out.println("found EPC: "+r.getInventory()[i].getEpc());
+					// int curSeenCtr = argsObject.getInt(r.getInventory()[i].getEpc());
+					// System.out.println("curSeenCtr for "+i+". entry: "+curSeenCtr);
+					// argsObject.put(r.getInventory()[i].getEpc(), curSeenCtr+r.getInventory()[i].getSeenCount());
+				// }catch(JSONException e){
+					// if(e.getMessage().contains("java.lang.String cannot be converted to int")){
+						// callbackContext.error(e.getMessage());
+					// }
+					// System.out.println("Error: " + e + " was thrown. Creating new value.");
+					// /** 
+					 // *	Wenn mehr Parameter übergeben werden sollen, kann das JSONObject auch mehrere JSONObjects beinhalten (z.B. Key: EPC, Value: JSONObject):
+					 // *	JSONObject currentInventory = new JSONObject();
+					 // *	currentInventory.put("EPC", r.getInventory()[i].getEpc());
+					 // *	currentInventory.put("SEENCTR", r.getInventory()[i].getSeenCount());
+					 // *	args.getJSONObject(0).put(r.getInventory()[i].getEpc(), currentInventory);
+					 // */
+					// argsObject.put(r.getInventory()[i].getEpc(), r.getInventory()[i].getSeenCount());
+				// }
 			}
 			
 			
@@ -87,6 +127,12 @@ public class BT77RfidReader extends CordovaPlugin {
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
+			
+			
+			
+			
+			
+			
 			
 			
 		}else if (action.equals("readTag")){
