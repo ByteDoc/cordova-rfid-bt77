@@ -86,7 +86,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			
 			for(int i = 0; i < r.getInventory().length; i++){
 				Epc currentEpc = r.getInventory()[i];
-				Int epcCount;
+				int epcCount;
 				try{
 					epcCount = inventory.getInt(currentEpc.getEpc());
 				} catch (JSONException e) {
