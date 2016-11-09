@@ -15,6 +15,7 @@ import com.sevenid.mobile.reader.api.parameters.InventoryParameters;
 import com.sevenid.mobile.reader.api.parameters.ReadParameters;
 import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
 import com.sevenid.mobile.reader.api.parameters.WriteParameters;
+import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
 import java.util.*;
