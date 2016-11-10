@@ -80,7 +80,7 @@ myPlugin =  {
 		// nur ein Object erlaubt, kein Array! 
 		if (typeof(args) != "object" || args == null || Array.isArray(args)) args = {};
 		return [args];	// Array erstellen
-	}
+	},
 	setPresets: function(args, successCallback, errorCallback){
 		var argsArray = myPlugin.getArgsArray(args);
 		var argsObject = argsArray[0];
