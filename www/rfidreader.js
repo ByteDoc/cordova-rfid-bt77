@@ -81,9 +81,10 @@ myPlugin =  {
 		if (typeof(args) != "object" || args == null || Array.isArray(args)) args = {};
 		return [args];	// Array erstellen
 	},
-	setPresets: function(args, successCallback, errorCallback){
+	setPresets: function(args, successCallback, errorCallback) {
 		var argsArray = myPlugin.getArgsArray(args);
 		var argsObject = argsArray[0];
+		console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: "+argsObject);
 		
 		if(argsObject.retries){
 			myPlugin.retryMax = Math.max(1,parseInt(argsObject.retries));
