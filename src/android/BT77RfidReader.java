@@ -183,10 +183,10 @@ public class BT77RfidReader extends CordovaPlugin {
             ReadResult r = this.reader.readMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
-            String data = r.getReadData();
+            this.dataString = r.getReadData();
 			
-			if(data != null && data.length() > 0){
-				callbackContext.success("OperationStatus: "+s.toString()+"_-_ReadParameters:"+p+"_-_ReadResult: "+r+"_-_Data: "+data);
+			if(this.dataString != null && this.dataString.length() > 0){
+				callbackContext.success("OperationStatus: "+s.toString()+"_-_ReadParameters:"+p+"_-_ReadResult: "+r+"_-_Data: "+this.dataString);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
@@ -209,8 +209,8 @@ public class BT77RfidReader extends CordovaPlugin {
 
             OperationStatus s = r.getOperationStatus();
 			
-			if(data != null && data.length() > 0){
-				callbackContext.success("OperationStatus: "+s.toString()+"_-_WriteParameters:"+p+"_-_WriteResult: "+r+"_-_Data: "+data);
+			if(this.dataString != null && this.dataString.length() > 0){
+				callbackContext.success("OperationStatus: "+s.toString()+"_-_WriteParameters:"+p+"_-_WriteResult: "+r+"_-_Data: "+this.dataString);
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
