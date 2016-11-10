@@ -85,7 +85,6 @@ myPlugin =  {
 	setPresets: function(args, successCallback, errorCallback) {
 		var argsArray = myPlugin.getArgsArray(args);
 		var argsObject = argsArray[0];
-		console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: "+argsObject);
 		
 		if(argsObject.retries){
 			myPlugin.retryMax = Math.max(1,parseInt(argsObject.retries));
@@ -96,6 +95,7 @@ myPlugin =  {
 		myPlugin.argsArray = argsArray;
 		myPlugin.successCallback = successCallback;
 		myPlugin.errorCallback = errorCallback;
+		return argsArray;
 	}
 };
 
@@ -134,12 +134,12 @@ module.exports = {
 		cordova.exec(myPlugin.inventorySuccessCallback, myPlugin.inventoryErrorCallback, "RfidReader", "scanInventory", argsArray);
 	},
 	readTag: function (args, successCallback, errorCallback) {
-		myPlugin.setPresets(args, successCallback, errorCallback);
+		var argsArray = myPlugin.setPresets(args, successCallback, errorCallback);
 		//cordova.exec(successCallback, errorCallback, "RfidReader", "readTag", args);
 		cordova.exec(myPlugin.rwSuccessCallback, myPlugin.rwErrorCallback, "RfidReader", "readTag", argsArray);
 	},
 	writeTag: function (args, successCallback, errorCallback) {
-		myPlugin.setPresets(args, successCallback, errorCallback);
+		var argsArray = myPlugin.setPresets(args, successCallback, errorCallback);
 		//cordova.exec(successCallback, errorCallback, "RfidReader", "writeTag", argsArray);
 		cordova.exec(myPlugin.rwSuccessCallback, myPlugin.rwErrorCallback, "RfidReader", "writeTag", argsArray);
 	}
