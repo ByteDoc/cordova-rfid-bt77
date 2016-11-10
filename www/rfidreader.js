@@ -56,10 +56,11 @@ myPlugin =  {
 		
 		// start reading the RFID-tag by using EPC from the most tagged RFID-tag
 		if (maxSeenCountEpc !== null){
-			if(myPlugin.bWriteTag === true){
+			if(myPlugin.data != ""){
 				module.exports.writeTag({
 					retries: myPlugin.retryMax,
-					epc: maxSeenCountEpc
+					epc: maxSeenCountEpc,
+					data: myPlugin.data
 				}, myPlugin.successCallback, myPlugin.errorCallback);
 			}else{
 				module.exports.readTag({
@@ -107,11 +108,7 @@ module.exports = {
 		var argsArray = myPlugin.getArgsArray(args);
 		cordova.exec(successCallback, errorCallback, "RfidReader", "endRfidListener", argsArray);
 	},
-	scanInventory: function (args, successCallback, errorCallback, bWriteTag) {
-		if(bWriteTag !== true){
-			bWriteTag = false;
-		}
-		
+	scanInventory: function (args, successCallback, errorCallback) {
 		var argsArray = myPlugin.getArgsArray(args);
 		var argsObject = argsArray[0];
 		
@@ -126,10 +123,10 @@ module.exports = {
 			// Default value
 			myPlugin.retryMax = 40;
 		}
-		if(argsObject.writeTag){
-			myPlugin.bWriteTag = (argsObject.writeTag === "true");
+		if(argsObject.data){
+			myPlugin.data = argsObject.data;
 		}else{
-			myPlugin.bWriteTag = false;
+			myPlugin.data = "";
 		}
 		myPlugin.argsArray = argsArray;
 		myPlugin.successCallback = successCallback;
