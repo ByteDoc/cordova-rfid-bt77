@@ -82,8 +82,7 @@ myPlugin =  {
 		if (typeof(args) != "object" || args == null || Array.isArray(args)) args = {};
 		return [args];	// Array erstellen
 	},
-	setPresets: function(args, successCallback, errorCallback) {
-		var argsArray = myPlugin.getArgsArray(args);
+	setPresets: function(argsArray, successCallback, errorCallback) {
 		var argsObject = argsArray[0];
 		
 		if(argsObject.retries){
@@ -95,7 +94,6 @@ myPlugin =  {
 		myPlugin.argsArray = argsArray;
 		myPlugin.successCallback = successCallback;
 		myPlugin.errorCallback = errorCallback;
-		return argsArray;
 	}
 };
 
@@ -134,12 +132,14 @@ module.exports = {
 		cordova.exec(myPlugin.inventorySuccessCallback, myPlugin.inventoryErrorCallback, "RfidReader", "scanInventory", argsArray);
 	},
 	readTag: function (args, successCallback, errorCallback) {
-		var argsArray = myPlugin.setPresets(args, successCallback, errorCallback);
+		var argsArray = myPlugin.getArgsArray(args);
+		myPlugin.setPresets(argsArray, successCallback, errorCallback);
 		//cordova.exec(successCallback, errorCallback, "RfidReader", "readTag", args);
 		cordova.exec(myPlugin.rwSuccessCallback, myPlugin.rwErrorCallback, "RfidReader", "readTag", argsArray);
 	},
 	writeTag: function (args, successCallback, errorCallback) {
-		var argsArray = myPlugin.setPresets(args, successCallback, errorCallback);
+		var argsArray = myPlugin.getArgsArray(args);
+		myPlugin.setPresets(argsArray, successCallback, errorCallback);
 		//cordova.exec(successCallback, errorCallback, "RfidReader", "writeTag", argsArray);
 		cordova.exec(myPlugin.rwSuccessCallback, myPlugin.rwErrorCallback, "RfidReader", "writeTag", argsArray);
 	}
