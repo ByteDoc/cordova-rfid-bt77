@@ -25,6 +25,8 @@ import java.util.*;
 */
 public class BT77RfidReader extends CordovaPlugin {
 	RfidReader reader = null;
+	int retries = 0;
+	String epcString = "", dataString = "";
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -139,7 +141,9 @@ public class BT77RfidReader extends CordovaPlugin {
 		}else if (action.equals("readTag")){
 			this.startRFIDReader();
 			
-			int retries = 0;
+			
+			
+			/* int retries = 0;
 			String epcString = "";
 			
 			for (int n = 0; n < args.length(); n++){
@@ -160,7 +164,9 @@ public class BT77RfidReader extends CordovaPlugin {
 				}catch(JSONException e){
 					callbackContext.error(e.getMessage() + "" + args);
 				}
-			}
+			} */
+			
+			this.getParameters(args, callbackContext, 40, false);
 			
 			ReadParameters p = new ReadParameters();
 
@@ -169,10 +175,10 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setMemoryBank(TagMemoryBank.USER);
 //            p.setEpc("3005FB63AC1F3681EC880468");
 //			p.setEpc("0066840000000000000010FB");
-			p.setEpc(epcString);
+			p.setEpc(this.epcString);
             p.setOffset(2);
             p.setLength(16);
-			p.setRetries(retries);
+			p.setRetries(this.retries);
 
             ReadResult r = this.reader.readMemoryBank(p);
 
@@ -185,13 +191,19 @@ public class BT77RfidReader extends CordovaPlugin {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
 		}else if (action.equals("writeTag")){
+			this.startRFIDReader();
+			
+			this.getParameters(args, callbackContext, 40, true);
+			
+			
 			WriteParameters p = new WriteParameters();
 			
             p.setMemoryBank(TagMemoryBank.USER);
-            p.setEpc("0066840000000000000010FB");
+            p.setEpc(this.epcString);
             p.setOffset(2);
-            String data = "1337";
-			p.setWriteData(data);
+            /* String data = "1337"; */
+			p.setRetries(this.retries);
+			p.setWriteData(this.dataString);
 
             WriteResult r = reader.writeMemoryBank(p);
 
@@ -202,6 +214,8 @@ public class BT77RfidReader extends CordovaPlugin {
 			} else {
 				callbackContext.error("Scan couldn't be initialized.");
 			}
+			
+			
 		}else if (action.equals("endRfidListener")){
 			this.stopRFIDReader();
 		}else{
@@ -238,6 +252,35 @@ public class BT77RfidReader extends CordovaPlugin {
 	private void stopRFIDReader(){
 		if(this.reader.isBusy() && this.reader.isOpen()){
 			System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
+		}
+	}
+	
+	private void getParameters(JSONArray args, CallbackContext callbackContext, int retriesDefault, boolean bWriteData){
+		if(bWriteData != true){
+			bWriteData = false;
+		}
+		
+		for (int n = 0; n < args.length(); n++){
+			System.out.println("iteration " + n + " of JSONArray" +args);
+			JSONObject object = args.getJSONObject(n);
+			// JSONException wird geworfen, wenn .get("") nichts findet
+			try{
+				this.retries = object.getInt("retries");
+			}catch(JSONException e){
+				if(e.getMessage().contains("java.lang.String cannot be converted to int")){
+					callbackContext.error(e.getMessage());
+				}
+				System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
+				this.retries = retriesDefault;
+			}
+			try{
+				this.epcString = object.getString("epc");
+				if(bWriteData == true){
+					this.dataString = object.getString("data");
+				}
+			}catch(JSONException e){
+				callbackContext.error(e.getMessage() + "" + args);
+			}
 		}
 	}
 }
