@@ -30,6 +30,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		System.out.println("dataString (should be empty now): "+dataString);
 		if (action.equals("echo")) {
 			String message = args.getString(0);
 			this.echo(message, callbackContext, args);
@@ -253,6 +254,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	private void stopRFIDReader(){
 		if(this.reader.isBusy() && this.reader.isOpen()){
+			this.dataString = "";
 			System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
 		}
 	}
