@@ -255,11 +255,11 @@ public class BT77RfidReader extends CordovaPlugin {
 		}
 	}
 	
-	private void getParameters(JSONArray args, CallbackContext callbackContext, int retriesDefault, boolean bWriteData){
+	private void getParameters(JSONArray args, CallbackContext callbackContext, int retriesDefault, boolean bWriteData) throws JSONException {
 		if(bWriteData != true){
 			bWriteData = false;
 		}
-		
+
 		for (int n = 0; n < args.length(); n++){
 			System.out.println("iteration " + n + " of JSONArray" +args);
 			JSONObject object = args.getJSONObject(n);
