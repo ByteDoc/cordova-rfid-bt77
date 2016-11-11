@@ -179,7 +179,7 @@ public class BT77RfidReader extends CordovaPlugin {
 //			p.setEpc("0066840000000000000010FB");
 			p.setEpc(this.epcString);
             p.setOffset(2);
-            p.setLength(16);
+            p.setLength(6);
 			p.setRetries(this.retries);
 
 			System.out.println("ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
