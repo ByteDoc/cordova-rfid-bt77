@@ -182,9 +182,11 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setLength(16);
 			p.setRetries(this.retries);
 
+			System.out.println("ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
             ReadResult r = this.reader.readMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
+			System.out.println("OperationStatus: "+s.toString());
             this.dataString = r.getReadData();
 			System.out.println("r.getReadData(): "+r.getReadData());
 			System.out.println("dataString (should be filled out now): "+this.dataString);
