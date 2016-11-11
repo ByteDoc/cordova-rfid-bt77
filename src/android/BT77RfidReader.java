@@ -30,7 +30,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		System.out.println("dataString (should be empty now): "+dataString);
+		System.out.println("dataString (should be empty now): "+this.dataString);
 		if (action.equals("echo")) {
 			String message = args.getString(0);
 			this.echo(message, callbackContext, args);
@@ -186,6 +186,9 @@ public class BT77RfidReader extends CordovaPlugin {
 
             OperationStatus s = r.getOperationStatus();
             this.dataString = r.getReadData();
+			System.out.println("r.getReadData(): "+r.getReadData());
+			System.out.println("dataString (should be filled out now): "+this.dataString);
+			
 			
 			if(this.dataString != null && this.dataString.length() > 0){
 				callbackContext.success("OperationStatus: "+s.toString()+"_-_ReadParameters:"+p+"_-_ReadResult: "+r+"_-_Data: "+this.dataString);
