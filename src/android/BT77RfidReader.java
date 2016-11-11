@@ -211,11 +211,15 @@ public class BT77RfidReader extends CordovaPlugin {
             p.setOffset(2);
             /* String data = "1337"; */
 			p.setRetries(this.retries);
-			p.setWriteData(this.dataString);
+			//p.setWriteData(this.dataString);
+			p.setWriteData("7766840000000000000010FB");
 
+			System.out.println("WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+")");
+            
             WriteResult r = reader.writeMemoryBank(p);
 
             OperationStatus s = r.getOperationStatus();
+			System.out.println("OperationStatus: "+s.toString());
 			
 			if(this.dataString != null && this.dataString.length() > 0){
 				callbackContext.success("OperationStatus: "+s.toString()+"_-_WriteParameters:"+p+"_-_WriteResult: "+r+"_-_Data: "+this.dataString);
