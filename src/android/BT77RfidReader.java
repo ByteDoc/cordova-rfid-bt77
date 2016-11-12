@@ -102,7 +102,6 @@ public class BT77RfidReader extends CordovaPlugin {
     
     private boolean stopRFIDReader(){
         if(this.reader.isBusy() && this.reader.isOpen()){
-            this.dataString = "";
             System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
         }
         return true;
