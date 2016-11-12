@@ -154,8 +154,8 @@ public class BT77RfidReader extends CordovaPlugin {
             inventory = new JSONObject();
             try{
                 argsObject.put("inventory", inventory);
-            } catch (JSONException e) {
-                System.out.println("Exception: " + e + "");
+            } catch (JSONException e2) {
+                System.out.println("Exception: " + e2 + "");
             }
         }
         
