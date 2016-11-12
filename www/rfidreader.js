@@ -4,6 +4,11 @@ var RfidReaderPlugin = (function () {
     "use strict";
     
     var CORDOVA_PLUGIN_NAME = "RfidReader";
+    var CORDOVA_ACTION_SCAN_INVENTORY = "scanInventory";
+    var CORDOVA_ACTION_READ_TAG = "readTag";
+    var CORDOVA_ACTION_WRITE_TAG = "writeTag";
+    var CORDOVA_ACTION_START_RFID_LISTENER = "startRfidListener";
+    var CORDOVA_ACTION_END_RFID_LISTENER = "endRfidListener";
 
     var defaultValues = {
         inventoryCycles: 30,
@@ -11,6 +16,11 @@ var RfidReaderPlugin = (function () {
         seenCountAdvantageForFind: 5,
         retriesReadWrite: 20
     };
+    // further attributes for args object
+    //   epcToRead: epc
+    //   epcToWrite: epc
+    //   dataToWrite: epc
+    //   dataFromReadResult: epc
     var valueLimits = {
         maxInventoryCycles: 50,
         maxSeenCountForFind: 5,
@@ -81,7 +91,7 @@ var RfidReaderPlugin = (function () {
             emptyCallback,
             errorCallback,
             CORDOVA_PLUGIN_NAME,
-            "endRfidListener",
+            CORDOVA_ACTION_END_RFID_LISTENER,
             argsArray);
     }
     function emptyCallback() {
@@ -99,7 +109,7 @@ var RfidReaderPlugin = (function () {
             inventoryCycleSuccessCallback,
             inventoryCycleErrorCallback,
             CORDOVA_PLUGIN_NAME,
-            "scanInventory",
+            CORDOVA_ACTION_SCAN_INVENTORY,
             argsArray
         );
     }
@@ -175,7 +185,7 @@ var RfidReaderPlugin = (function () {
             readRetrySuccessCallback,
             readRetryErrorCallback,
             CORDOVA_PLUGIN_NAME,
-            "readTag",
+            CORDOVA_ACTION_READ_TAG,
             argsArray);
     }
     function readRetrySuccessCallback(message) {
@@ -207,7 +217,7 @@ var RfidReaderPlugin = (function () {
             writeRetrySuccessCallback,
             writeRetryErrorCallback,
             CORDOVA_PLUGIN_NAME,
-            "writeTag",
+            CORDOVA_ACTION_WRITE_TAG,
             argsArray);
     }
     function writeRetrySuccessCallback(message) {
@@ -301,11 +311,11 @@ var RfidReaderPlugin = (function () {
     // calls only for test purposes, should not be necessary to be called by applications
     function startRfidListener (args, successCallback, errorCallback) {
         var argsArray = getArgsArray(args);
-        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, "startRfidListener", argsArray);
+        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_START_RFID_LISTENER, argsArray);
     }
     function endRfidListener (args, successCallback, errorCallback) {
         var argsArray = getArgsArray(args);
-        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, "endRfidListener", argsArray);
+        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_END_RFID_LISTENER, argsArray);
     }
     
     return {
