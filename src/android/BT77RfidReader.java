@@ -60,7 +60,7 @@ public class BT77RfidReader extends CordovaPlugin {
             return false;
         }
         
-        if (action.equals("echo")) {
+        if (actionString.equals("echo")) {
             String message = args.getString(0);
             this.echo(message, callbackContext, args);
             return true;
@@ -68,23 +68,23 @@ public class BT77RfidReader extends CordovaPlugin {
 
         switch (action) {
 
-            case START_RFID_LISTENER:
+            case Action.START_RFID_LISTENER:
                 return startRFIDReader();
                 break;
             
-            case SCAN_INVENTORY:
+            case Action.SCAN_INVENTORY:
                 return scanInventory();
                 break;
             
-            case READ_TAG:
+            case Action.READ_TAG:
                 return readTag();
                 break;
             
-            case WRITE_TAG:
+            case Action.WRITE_TAG:
                 return writeTag();
                 break;
             
-            case STOP_RFID_LISTENER:
+            case Action.STOP_RFID_LISTENER:
                 return stopRFIDReader();
                 break;
             
