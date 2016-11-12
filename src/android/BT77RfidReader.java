@@ -29,10 +29,11 @@ public class BT77RfidReader extends CordovaPlugin {
     String epcToRead = "", epcToWrite = "", dataToWrite = "", dataFromReadResult = "";
     // epcString = "", dataString = "";
     JSONObject argsObject;
+    CallbackContext callbackContext;
     
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        
+        this.callbackContext = callbackContext;
         // read argument object, expected as first entry in args array
         try {
             argsObject = args.getJSONObject(0);
@@ -149,7 +150,7 @@ public class BT77RfidReader extends CordovaPlugin {
             Epc currentEpc = inventoryResult.getInventory()[i];
             int epcCount;
             try{
-                epcCount = inventory.getString(currentEpc.getEpc());
+                epcCount = inventory.getInt(currentEpc.getEpc());
             } catch (JSONException e) {
                 System.out.println("Creating Int for epcCount (" + e + ")");
                 epcCount = 0;
@@ -201,7 +202,6 @@ public class BT77RfidReader extends CordovaPlugin {
         p.setMemoryBank(TagMemoryBank.EPC);
         p.setEpc(epcToWrite);
         p.setOffset(EPC_OFFSET);
-        p.setLength(EPC_LENGTH);
         p.setRetries(retriesReadWrite);
         p.setWriteData(dataToWrite);
 
@@ -232,7 +232,7 @@ public class BT77RfidReader extends CordovaPlugin {
         }
         return new String(text);
     }
-    */
+    
     
     private void getParameters(JSONArray args, CallbackContext callbackContext, int retriesReadWriteDefault, boolean bWriteData) throws JSONException {
         if(bWriteData != true){
@@ -262,4 +262,5 @@ public class BT77RfidReader extends CordovaPlugin {
             }
         }
     }
+    */
 }
