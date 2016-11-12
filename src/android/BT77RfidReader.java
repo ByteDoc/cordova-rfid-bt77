@@ -74,24 +74,18 @@ public class BT77RfidReader extends CordovaPlugin {
 
             case START_RFID_LISTENER:
                 return startRFIDReader();
-                break;
             
             case SCAN_INVENTORY:
                 return scanInventory();
-                break;
             
             case READ_TAG:
                 return readTag();
-                break;
             
             case WRITE_TAG:
                 return writeTag();
-                break;
             
             case STOP_RFID_LISTENER:
                 return stopRFIDReader();
-                break;
-            
         }
         
         return false;
