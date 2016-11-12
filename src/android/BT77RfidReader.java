@@ -20,6 +20,10 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 
 import java.util.*;
 
+public enum CordovaAction {
+    SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
+}
+
 public class BT77RfidReader extends CordovaPlugin {
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
@@ -30,10 +34,9 @@ public class BT77RfidReader extends CordovaPlugin {
     // epcString = "", dataString = "";
     JSONObject argsObject;
     CallbackContext callbackContext;
+    CordovaAction action;
     
-    public enum Action {
-        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
-    }
+
     
     @Override
     public boolean execute(String actionString, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -53,7 +56,7 @@ public class BT77RfidReader extends CordovaPlugin {
         }
         
         try {
-            Action action = Action.valueOf(actionString);
+            action = CordovaAction.valueOf(actionString);
         } catch (IllegalArgumentException e) {
             System.out.println("Error: JSONException " + e + " was thrown. No valid action supplied!");
             callbackContext.error(e.getMessage());
