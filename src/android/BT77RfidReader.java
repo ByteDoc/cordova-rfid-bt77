@@ -38,9 +38,9 @@ public class BT77RfidReader extends CordovaPlugin {
             argsObject = args.getJSONObject(0);
             retriesReadWrite = argsObject.getInt("retriesReadWrite");
             inventoryCycles = argsObject.getInt("inventoryCycles");
-            epcToRead = argsObject.getInt("epcToRead");
-            epcToWrite = argsObject.getInt("epcToWrite");
-            dataToWrite = argsObject.getInt("dataToWrite");
+            epcToRead = argsObject.getString("epcToRead");
+            epcToWrite = argsObject.getString("epcToWrite");
+            dataToWrite = argsObject.getString("dataToWrite");
         } catch (JSONException e){
             System.out.println("Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
             callbackContext.error(e.getMessage());
@@ -147,7 +147,7 @@ public class BT77RfidReader extends CordovaPlugin {
             Epc currentEpc = inventoryResult.getInventory()[i];
             int epcCount;
             try{
-                epcCount = inventory.getInt(currentEpc.getEpc());
+                epcCount = inventory.getString(currentEpc.getEpc());
             } catch (JSONException e) {
                 System.out.println("Creating Int for epcCount (" + e + ")");
                 epcCount = 0;
