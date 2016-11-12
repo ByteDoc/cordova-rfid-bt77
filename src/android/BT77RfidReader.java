@@ -214,7 +214,7 @@ public class BT77RfidReader extends CordovaPlugin {
 			//p.setWriteData(this.dataString);
 			p.setWriteData("7766840000000000000010FB");
 
-			System.out.println("WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+")");
+			System.out.println("WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
             
             WriteResult r = reader.writeMemoryBank(p);
 
