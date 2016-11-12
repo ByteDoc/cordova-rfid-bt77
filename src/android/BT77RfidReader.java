@@ -21,8 +21,8 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 import java.util.*;
 
 public class BT77RfidReader extends CordovaPlugin {
-    const int EPC_OFFSET = 2;
-    const int EPC_LENGTH = 6;
+    private static int EPC_OFFSET = 2;
+    private static int EPC_LENGTH = 6;
     RfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
