@@ -31,8 +31,12 @@ public class BT77RfidReader extends CordovaPlugin {
     JSONObject argsObject;
     CallbackContext callbackContext;
     
+    private enum Action {
+        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER;
+    }
+    
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String actionString, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         // read argument object, expected as first entry in args array
         try {
@@ -47,37 +51,43 @@ public class BT77RfidReader extends CordovaPlugin {
             callbackContext.error(e.getMessage());
             return false;
         }
+        
+        try {
+            Action action = Action.valueOf(actionString);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: JSONException " + e + " was thrown. No valid action supplied!");
+            callbackContext.error(e.getMessage());
+            return false;
+        }
+        
+        if (action.equals("echo")) {
+            String message = args.getString(0);
+            this.echo(message, callbackContext, args);
+            return true;
+        }
 
         switch (action) {
-            case "echo":
-                String message = args.getString(0);
-                this.echo(message, callbackContext, args);
-                return true;
-                break;
-            
-            case "startRfidListener":
+
+            case START_RFID_LISTENER:
                 return startRFIDReader();
                 break;
             
-            case "scanInventory":
+            case SCAN_INVENTORY:
                 return scanInventory();
                 break;
             
-            case "readTag":
+            case READ_TAG:
                 return readTag();
                 break;
             
-            case "writeTag":
+            case WRITE_TAG:
                 return writeTag();
                 break;
             
-            case "endRfidListener":
+            case STOP_RFID_LISTENER:
                 return stopRFIDReader();
                 break;
             
-            case "startRfidListener":
-                return startRFIDReader();
-                break;
         }
         
         return false;
