@@ -44,7 +44,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e){
             System.out.println("Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
             callbackContext.error(e.getMessage());
-            return;
+            return false;
         }
 
 
@@ -55,23 +55,23 @@ public class BT77RfidReader extends CordovaPlugin {
             
         } else if (action.equals("startRfidListener")){
             
-            startRFIDReader();
+            return startRFIDReader();
             
         } else if (action.equals("scanInventory")){
             
-            scanInventory();
+            return scanInventory();
             
         } else if (action.equals("readTag")){
             
-            readTag();
+            return readTag();
 
         } else if (action.equals("writeTag")){
             
-            writeTag();
+            return writeTag();
 
         } else if (action.equals("endRfidListener")){
             
-            stopRFIDReader();
+            return stopRFIDReader();
             
         } else{
             
@@ -89,23 +89,25 @@ public class BT77RfidReader extends CordovaPlugin {
         }
     }
     
-    private void startRFIDReader(){
+    private boolean startRFIDReader(){
         if(reader == null){
             this.reader = new RfidReader(cordova.getActivity());
         }
         if(!this.reader.isBusy() || !this.reader.isOpen()){
             System.out.println("startRFIDReader: this.reader.open(): " + this.reader.open());
         }
+        return true;
     }
     
-    private void stopRFIDReader(){
+    private boolean stopRFIDReader(){
         if(this.reader.isBusy() && this.reader.isOpen()){
             this.dataString = "";
             System.out.println("stopRFIDReader: this.reader.close(): " + this.reader.close());
         }
+        return true;
     }
     
-    private void scanInventory() {
+    private boolean scanInventory() {
         startRFIDReader();
 
         InventoryParameters p = new InventoryParameters();
@@ -118,7 +120,7 @@ public class BT77RfidReader extends CordovaPlugin {
         System.out.println("OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in scanInventory: " + status.name());
-            return;
+            return false;
         }  
         
         // results in attribute INVENTORY of argsObject, with the format:
@@ -159,9 +161,10 @@ public class BT77RfidReader extends CordovaPlugin {
         
         argsObject.put("status", status.name());
         callbackContext.success(argsObject);
+        return true;
     }
     
-    private void readTag() {
+    private boolean readTag() {
         startRFIDReader();
 
         ReadParameters p = new ReadParameters();
@@ -178,7 +181,7 @@ public class BT77RfidReader extends CordovaPlugin {
         System.out.println("OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in readTag: " + status.name());
-            return;
+            return false;
         }
 
         argsObject.put("dataFromReadResult", readResult.getReadData());
@@ -186,9 +189,10 @@ public class BT77RfidReader extends CordovaPlugin {
 
         argsObject.put("status", status.name());
         callbackContext.success(argsObject);
+        return true;
     }
     
-    private void writeTag() {
+    private boolean writeTag() {
         
         startRFIDReader();
 
@@ -209,11 +213,12 @@ public class BT77RfidReader extends CordovaPlugin {
         System.out.println("OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in writeTag: " + status.name());
-            return;
+            return false;
         }
         
         argsObject.put("status", status.name());
         callbackContext.success(argsObject);
+        return true;
     }
     
     
