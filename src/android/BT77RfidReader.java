@@ -20,11 +20,12 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 
 import java.util.*;
 
-public enum CordovaAction {
-    SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
-}
+
 
 public class BT77RfidReader extends CordovaPlugin {
+    public enum CordovaAction {
+        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
+    }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
     RfidReader reader = null;
