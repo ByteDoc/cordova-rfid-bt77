@@ -31,8 +31,8 @@ public class BT77RfidReader extends CordovaPlugin {
     JSONObject argsObject;
     CallbackContext callbackContext;
     
-    private enum Action {
-        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER;
+    public enum Action {
+        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
     }
     
     @Override
@@ -68,23 +68,23 @@ public class BT77RfidReader extends CordovaPlugin {
 
         switch (action) {
 
-            case Action.START_RFID_LISTENER:
+            case START_RFID_LISTENER:
                 return startRFIDReader();
                 break;
             
-            case Action.SCAN_INVENTORY:
+            case SCAN_INVENTORY:
                 return scanInventory();
                 break;
             
-            case Action.READ_TAG:
+            case READ_TAG:
                 return readTag();
                 break;
             
-            case Action.WRITE_TAG:
+            case WRITE_TAG:
                 return writeTag();
                 break;
             
-            case Action.STOP_RFID_LISTENER:
+            case STOP_RFID_LISTENER:
                 return stopRFIDReader();
                 break;
             
