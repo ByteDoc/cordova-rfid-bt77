@@ -48,38 +48,39 @@ public class BT77RfidReader extends CordovaPlugin {
             return false;
         }
 
-
-        if (action.equals("echo")) {
-            String message = args.getString(0);
-            this.echo(message, callbackContext, args);
-            return true;
+        switch (action) {
+            case "echo":
+                String message = args.getString(0);
+                this.echo(message, callbackContext, args);
+                return true;
+                break;
             
-        } else if (action.equals("startRfidListener")){
+            case "startRfidListener":
+                return startRFIDReader();
+                break;
             
-            return startRFIDReader();
+            case "scanInventory":
+                return scanInventory();
+                break;
             
-        } else if (action.equals("scanInventory")){
+            case "readTag":
+                return readTag();
+                break;
             
-            return scanInventory();
+            case "writeTag":
+                return writeTag();
+                break;
             
-        } else if (action.equals("readTag")){
+            case "endRfidListener":
+                return stopRFIDReader();
+                break;
             
-            return readTag();
-
-        } else if (action.equals("writeTag")){
-            
-            return writeTag();
-
-        } else if (action.equals("endRfidListener")){
-            
-            return stopRFIDReader();
-            
-        } else{
-            
-            return false;
+            case "startRfidListener":
+                return startRFIDReader();
+                break;
         }
         
-        return true;
+        return false;
     }
     
     private void echo(String message, CallbackContext callbackContext, JSONArray args) {
@@ -141,7 +142,11 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e) {
             System.out.println("Creating JSONObject for inventory (" + e + ")");
             inventory = new JSONObject();
-            argsObject.put("inventory", inventory);
+            try{
+                argsObject.put("inventory", inventory);
+            } catch (JSONException e) {
+                System.out.println("Exception: " + e + "");
+            }
         }
         
         // update inventory with the scan results
@@ -155,11 +160,20 @@ public class BT77RfidReader extends CordovaPlugin {
                 epcCount = 0;
             }
             epcCount += currentEpc.getSeenCount();
-            inventory.put(currentEpc.getEpc(), epcCount);
+            try{
+                inventory.put(currentEpc.getEpc(), epcCount);
+            } catch (JSONException e) {
+                System.out.println("Exception: " + e + "");
+            }
             System.out.println("count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
         }
         
-        argsObject.put("status", status.name());
+        
+        try{
+            argsObject.put("status", status.name());
+        } catch (JSONException e) {
+            System.out.println("Exception: " + e + "");
+        }
         callbackContext.success(argsObject);
         return true;
     }
@@ -184,10 +198,18 @@ public class BT77RfidReader extends CordovaPlugin {
             return false;
         }
 
-        argsObject.put("dataFromReadResult", readResult.getReadData());
+        try{
+            argsObject.put("dataFromReadResult", readResult.getReadData());
+        } catch (JSONException e) {
+            System.out.println("Exception: " + e + "");
+        }
         System.out.println("readResult.getReadData(): "+readResult.getReadData());
 
-        argsObject.put("status", status.name());
+        try{
+            argsObject.put("status", status.name());
+        } catch (JSONException e) {
+            System.out.println("Exception: " + e + "");
+        }
         callbackContext.success(argsObject);
         return true;
     }
@@ -215,7 +237,11 @@ public class BT77RfidReader extends CordovaPlugin {
             return false;
         }
         
-        argsObject.put("status", status.name());
+        try{
+            argsObject.put("status", status.name());
+        } catch (JSONException e) {
+            System.out.println("Exception: " + e + "");
+        }
         callbackContext.success(argsObject);
         return true;
     }
