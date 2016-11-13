@@ -40,6 +40,10 @@ var RfidReaderPlugin = (function () {
         console.log("rfidreader.js: " + message);
     }
     
+    function isSet(checkVar) {
+        return typeof(checkVar) != "undefined" && checkVar !== null && checkVar !== "";
+    }
+    
     /**
      * ensure that needed values are set in the argsObject
      * and set default values if initial or bad value ...
@@ -58,6 +62,12 @@ var RfidReaderPlugin = (function () {
         if (isNaN(argsObject.retriesReadWrite)){
             argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
         }
+        ["epcToRead","epcToWrite","dataToWrite"].forEach(function(ELEM, IDX, ARR) {
+            if (!isSet(argsObject[ELEM])) {
+                argsObject[ELEM] = "";
+            }
+        });
+
         seenCountForFind = Math.min(
             Math.max(1,parseInt(argsObject.seenCountForFind)),
             valueLimits.maxSeenCountForFind);

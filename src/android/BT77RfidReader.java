@@ -57,6 +57,7 @@ public class BT77RfidReader extends CordovaPlugin {
             //return false;
         }
         
+        
         try {
             action = CordovaAction.valueOf(actionString);
         } catch (IllegalArgumentException e) {
