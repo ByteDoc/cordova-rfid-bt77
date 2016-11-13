@@ -34,7 +34,7 @@ var RfidReaderPlugin = (function () {
     var seenCountForFind = 0;
     var seenCountAdvantageForFind = 0;
 
-    //var successCallback, errorCallback, inventoryProcessCallback;
+    var successCallback, errorCallback, inventoryProcessCallback;
     
     /**
      * ensure that needed values are set in the argsObject
