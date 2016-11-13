@@ -36,6 +36,10 @@ var RfidReaderPlugin = (function () {
 
     var successCallback, errorCallback, inventoryProcessCallback;
     
+    function debugLog(message) {
+        console.log("rfidreader.js: " + message);
+    }
+    
     /**
      * ensure that needed values are set in the argsObject
      * and set default values if initial or bad value ...
@@ -76,12 +80,14 @@ var RfidReaderPlugin = (function () {
         return [args];  // Array erstellen
     }
     function init(args, cbSuccess, cbError) {
+        debugLog("args before init: " + JSON.stringify(args));
         argsArray = getArgsArray(args);
         checkArgsObject();
         successCallback = cbSuccess;
         errorCallback = cbError;
         cycleCount = 0;
         retryCount = 0;
+        debugLog("argsObject at the end of init: " + JSON.stringify(argsObject));
     }
     function shutdown(argsArray, errorCallback) {
         if (typeof(errorCallback) != "function") {
@@ -122,7 +128,7 @@ var RfidReaderPlugin = (function () {
 
         if (cycleCount < argsObject.inventoryCycles) {
             cycleCount = cycleCount + 1;
-            console.log("scanInventory ... starting another cycle: " + cycleCount +
+            debugLog("scanInventory ... starting another cycle: " + cycleCount +
                 " (max: " + argsObject.inventoryCycles + ")");
             cordovaExecScanInventory();
         } else {
@@ -144,12 +150,12 @@ var RfidReaderPlugin = (function () {
         cordovaExecReadTag();
     }
     function getBestEpcFromInventory() {
-        console.log("getBestEpcFromInventory ... processing results ...");
+        debugLog("getBestEpcFromInventory ... processing results ...");
         var maxSeenCountEpc = null;
         var maxSeenCountValue = -1;
         Object.keys(argsObject.inventory).forEach(function(epc) {
             var seenCount = argsObject.inventory[epc];
-            console.log("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -162,7 +168,7 @@ var RfidReaderPlugin = (function () {
              - remove this code afterwards
         for (var epc in argsObject.inventory) {
             var seenCount = argsObject.inventory[epc];
-            console.log("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -195,7 +201,7 @@ var RfidReaderPlugin = (function () {
     function readRetryErrorCallback(message) {
         if (retryCount < argsObject.retriesReadWrite) {
             retryCount++;
-            console.log("readTag ... starting another cycle: " + retryCount +
+            debugLog("readTag ... starting another cycle: " + retryCount +
                 " (max: " + argsObject.retriesReadWrite + ")");
             cordovaExecReadTag();
 
@@ -227,7 +233,7 @@ var RfidReaderPlugin = (function () {
     function writeRetryErrorCallback(message) {
         if (retryCount < argsObject.retriesReadWrite) {
             retryCount++;
-            console.log("writeTag ... starting another cycle: " + retryCount +
+            debugLog("writeTag ... starting another cycle: " + retryCount +
                 " (max: " + argsObject.retriesReadWrite + ")");
             cordovaExecWriteTag();
 
@@ -253,7 +259,7 @@ var RfidReaderPlugin = (function () {
         var maxSeenCountValue = -1;
         for (var epc in argsObject.inventory) {
             var seenCount = argsObject.inventory[epc];
-            console.log("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -289,7 +295,7 @@ var RfidReaderPlugin = (function () {
      *  PUBLIC FUNCTIONS for the plugin
      */
     function scanAndReadBestTag (args, successCallback, errorCallback) {
-        console.log("rfidreader.js ... starting scanAndReadBestTag");
+        debugLog("starting scanAndReadBestTag");
         // init the plugin class
         init(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
