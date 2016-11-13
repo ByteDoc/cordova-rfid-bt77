@@ -34,6 +34,7 @@ public class BT77RfidReader extends CordovaPlugin {
     String epcToRead = "", epcToWrite = "", dataToWrite = "", dataFromReadResult = "";
     // epcString = "", dataString = "";
     JSONObject argsObject;
+    JSONArray argsArray;
     CallbackContext callbackContext;
     CordovaAction action;
     
@@ -45,6 +46,7 @@ public class BT77RfidReader extends CordovaPlugin {
         this.callbackContext = callbackContext;
         // read argument object, expected as first entry in args array
         try {
+            argsArray = args;
             argsObject = args.getJSONObject(0);
             retriesReadWrite = argsObject.getInt("retriesReadWrite");
             inventoryCycles = argsObject.getInt("inventoryCycles");
@@ -54,7 +56,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e){
             Log.e("BT77RfidReader", "Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
             callbackContext.error(e.getMessage());
-            //return false;
+            return false;
         }
         
         
@@ -184,7 +186,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
-        callbackContext.success(argsObject);
+        callbackContext.success(argsArray);
         return true;
     }
     
@@ -220,7 +222,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
-        callbackContext.success(argsObject);
+        callbackContext.success(argsArray);
         return true;
     }
     
@@ -252,7 +254,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
-        callbackContext.success(argsObject);
+        callbackContext.success(argsArray);
         return true;
     }
     
