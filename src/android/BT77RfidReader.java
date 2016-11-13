@@ -54,7 +54,7 @@ public class BT77RfidReader extends CordovaPlugin {
         } catch (JSONException e){
             Log.e("BT77RfidReader", "Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
             callbackContext.error(e.getMessage());
-            return false;
+            //return false;
         }
         
         try {
