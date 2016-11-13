@@ -41,6 +41,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
     @Override
     public boolean execute(String actionString, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        Log.i("BT77RfidReader", "execute called for action " + actionString);
         this.callbackContext = callbackContext;
         // read argument object, expected as first entry in args array
         try {
