@@ -75,11 +75,11 @@ var RfidReaderPlugin = (function () {
         }
         return [args];  // Array erstellen
     }
-    function init(args, successCallback, errorCallback) {
+    function init(args, cbSuccess, cbError) {
         argsArray = getArgsArray(args);
         checkArgsObject();
-        successCallback = successCallback;
-        errorCallback = errorCallback;
+        successCallback = cbSuccess;
+        errorCallback = cbError;
         cycleCount = 0;
         retryCount = 0;
     }
@@ -289,6 +289,7 @@ var RfidReaderPlugin = (function () {
      *  PUBLIC FUNCTIONS for the plugin
      */
     function scanAndReadBestTag (args, successCallback, errorCallback) {
+        console.log("rfidreader.js ... starting scanAndReadBestTag");
         // init the plugin class
         init(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
