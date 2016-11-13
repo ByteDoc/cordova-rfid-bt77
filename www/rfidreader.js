@@ -129,8 +129,8 @@ var RfidReaderPlugin = (function () {
             argsArray
         );
     }
-    function inventoryCycleSuccessCallback(argsArray) {
-        argsArray = argsArray;
+    function inventoryCycleSuccessCallback(args) {
+        argsArray = args;
         argsObject = argsArray[0];
 
 
