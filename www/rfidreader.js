@@ -91,7 +91,7 @@ var RfidReaderPlugin = (function () {
             emptyCallback,
             errorCallback,
             CORDOVA_PLUGIN_NAME,
-            CORDOVA_ACTION_END_RFID_LISTENER,
+            CORDOVA_ACTION_STOP_RFID_LISTENER,
             argsArray);
     }
     function emptyCallback() {
@@ -315,7 +315,7 @@ var RfidReaderPlugin = (function () {
     }
     function endRfidListener (args, successCallback, errorCallback) {
         var argsArray = getArgsArray(args);
-        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_END_RFID_LISTENER, argsArray);
+        cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_STOP_RFID_LISTENER, argsArray);
     }
     
     return {
