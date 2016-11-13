@@ -212,7 +212,7 @@ var RfidReaderPlugin = (function () {
                 secondMostSeenCountValue = seenCount;
             }
         });
-        if (maxSeenCountValue - secondMostSeenCountValue >= maxSeenCountAdvantageForFind) {
+        if (maxSeenCountValue - secondMostSeenCountValue >= seenCountAdvantageForFind) {
             return true;
         }
         return false;
