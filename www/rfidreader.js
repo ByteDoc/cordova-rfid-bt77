@@ -147,7 +147,7 @@ var RfidReaderPlugin = (function () {
         } else {
             //debugLog("inventoryCycleSuccessCallback ... max cycles reached ... moving on to callback");
             //inventoryProcessCallback();
-			inventoryCycleErrorCallback("No epc were found!")
+			inventoryCycleErrorCallback("Error in inventoryCycleSuccessCallback: No epc or too little results were found!")
         }
     }
     function inventoryCycleErrorCallback(message) {
@@ -168,17 +168,12 @@ var RfidReaderPlugin = (function () {
 	function writeBestTagFromInventory() {
         var epc = getBestEpcFromInventory(argsArray);
 		debugLog("writeBestTagFromInventory ... epc: " + epc);
-		if(epc !== null){
-			// set EPC into argsArray
-			argsObject.epcToWrite = epc;
-			argsArray[0] = argsObject;
-
-			cordovaExecWriteTag();
-		}else{
-			debugLog("Error: No EPC was found!"); //????????????
-		}
 		
-        
+		// set EPC into argsArray
+		argsObject.epcToWrite = epc;
+		argsArray[0] = argsObject;
+
+		cordovaExecWriteTag();
     }
     function getBestEpcFromInventory() {
         debugLog("getBestEpcFromInventory ... processing results ...");
