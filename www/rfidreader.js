@@ -156,6 +156,7 @@ var RfidReaderPlugin = (function () {
     }
     function readBestTagFromInventory() {
         var epc = getBestEpcFromInventory(argsArray);
+		debugLog("readBestTagFromInventory ... epc: " + epc);
 
         // set EPC into argsArray
         argsObject.epcToRead = epc;
@@ -165,6 +166,7 @@ var RfidReaderPlugin = (function () {
     }
 	function writeBestTagFromInventory() {
         var epc = getBestEpcFromInventory(argsArray);
+		debugLog("writeBestTagFromInventory ... epc: " + epc);
 
         // set EPC into argsArray
         argsObject.epcToWrite = epc;
