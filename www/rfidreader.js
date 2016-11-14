@@ -147,7 +147,9 @@ var RfidReaderPlugin = (function () {
         } else {
             //debugLog("inventoryCycleSuccessCallback ... max cycles reached ... moving on to callback");
             //inventoryProcessCallback();
-			inventoryCycleErrorCallback("Error in inventoryCycleSuccessCallback: No epc or too little results were found!")
+			var errString = "Maximum inventoryCycles reached ... no winner determined!";
+			debugLog(errString);
+			inventoryCycleErrorCallback(errString);
         }
     }
     function inventoryCycleErrorCallback(message) {

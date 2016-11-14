@@ -206,11 +206,7 @@ public class BT77RfidReader extends CordovaPlugin {
         OperationStatus status = readResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
-            if (status == OperationStatus.STATUS_OPERATION_FAIL){
-				callbackContext.error("Error in readTag: " + status.name() + " - no Tag found to read from it");
-			}else{
-				callbackContext.error("Error in readTag: " + status.name());
-			}
+            callbackContext.error("Error in readTag: " + status.name());
             return false;
         }
 
@@ -249,11 +245,7 @@ public class BT77RfidReader extends CordovaPlugin {
         OperationStatus status = r.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
-            if (status == OperationStatus.STATUS_OPERATION_FAIL){
-				callbackContext.error("Error in writeTag: " + status.name() + " - no Tag found to write on it");
-			}else{
-				callbackContext.error("Error in writeTag: " + status.name());
-			}
+            callbackContext.error("Error in writeTag: " + status.name());
             return false;
         }
         
