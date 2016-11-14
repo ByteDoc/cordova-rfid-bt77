@@ -50,13 +50,15 @@ var RfidReaderPlugin = (function () {
         argsObject = argsArray[0];
         argsObject.inventoryCycles = Math.min(
             Math.max(1, parseInt(argsObject.inventoryCycles, 10)),
-            valueLimits.maxInventoryCycles);
+			valueLimits.maxInventoryCycles
+		);
         if (isNaN(argsObject.inventoryCycles)) {
             argsObject.inventoryCycles = defaultValues.inventoryCycles;
         }
         argsObject.retriesReadWrite = Math.min(
             Math.max(1, parseInt(argsObject.retriesReadWrite, 10)),
-            valueLimits.maxRetriesReadWrite);
+            valueLimits.maxRetriesReadWrite
+		);
         if (isNaN(argsObject.retriesReadWrite)) {
             argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
         }
@@ -68,13 +70,15 @@ var RfidReaderPlugin = (function () {
 
         seenCountForFind = Math.min(
             Math.max(1, parseInt(argsObject.seenCountForFind, 10)),
-            valueLimits.maxSeenCountForFind);
+            valueLimits.maxSeenCountForFind
+		);
         if (isNaN(seenCountForFind)) {
             seenCountForFind = defaultValues.seenCountForFind;
         }
         seenCountAdvantageForFind = Math.min(
-            Math.max(1, parseInt(argsObject.seenCountAdvantageForFind)),
-            valueLimits.maxSeenCountAdvantageForFind);
+            Math.max(1, parseInt(argsObject.seenCountAdvantageForFind, 10)),
+            valueLimits.maxSeenCountAdvantageForFind
+		);
         if (isNaN(seenCountAdvantageForFind)) {
             seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
         }
@@ -106,7 +110,8 @@ var RfidReaderPlugin = (function () {
             errorCallback,
             CORDOVA_PLUGIN_NAME,
             CORDOVA_ACTION_STOP_RFID_LISTENER,
-            argsArray);
+            argsArray
+		);
     }
     function emptyCallback() {
 
@@ -160,8 +165,8 @@ var RfidReaderPlugin = (function () {
     }
     function getBestEpcFromInventory() {
         debugLog("getBestEpcFromInventory ... processing results ...");
-        var maxSeenCountEpc = null;
-        var maxSeenCountValue = -1;
+        var maxSeenCountEpc = null,
+			maxSeenCountValue = -1;
         Object.keys(argsObject.inventory).forEach(function (epc) {
             var seenCount = argsObject.inventory[epc];
             debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
@@ -188,7 +193,9 @@ var RfidReaderPlugin = (function () {
     function inventoryAdvantageReached() {
         debugLog("inventoryAdvantageReached ... checking current inventory ...");
         var maxSeenCountEpc = null,
-			maxSeenCountValue = -1;
+			maxSeenCountValue = -1,
+			secondMostSeenCountEpc = null,
+			secondMostSeenCountValue = -1;
         Object.keys(argsObject.inventory).forEach(function (epc) {
             var seenCount = argsObject.inventory[epc];
             debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
@@ -197,9 +204,7 @@ var RfidReaderPlugin = (function () {
                 maxSeenCountValue = seenCount;
             }
         });
-        var secondMostSeenCountEpc = null;
-        var secondMostSeenCountValue = -1;
-        Object.keys(argsObject.inventory).forEach(function(epc) {
+        Object.keys(argsObject.inventory).forEach(function (epc) {
             if (epc == maxSeenCountEpc) {
                 return;     // do not use the epc already in first place with highest seenCount
             }
@@ -231,7 +236,8 @@ var RfidReaderPlugin = (function () {
             readRetryErrorCallback,
             CORDOVA_PLUGIN_NAME,
             CORDOVA_ACTION_READ_TAG,
-            argsArray);
+            argsArray
+		);
     }
     function readRetrySuccessCallback(message) {
         successCallback(message);
@@ -263,7 +269,8 @@ var RfidReaderPlugin = (function () {
             writeRetryErrorCallback,
             CORDOVA_PLUGIN_NAME,
             CORDOVA_ACTION_WRITE_TAG,
-            argsArray);
+            argsArray
+		);
     }
     function writeRetrySuccessCallback(message) {
         successCallback(message);
