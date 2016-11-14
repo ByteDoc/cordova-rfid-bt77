@@ -163,6 +163,15 @@ var RfidReaderPlugin = (function () {
 
         cordovaExecReadTag();
     }
+	function writeBestTagFromInventory() {
+        var epc = getBestEpcFromInventory(argsArray);
+
+        // set EPC into argsArray
+        argsObject.epcToWrite = epc;
+        argsArray[0] = argsObject;
+
+        cordovaExecWriteTag();
+    }
     function getBestEpcFromInventory() {
         debugLog("getBestEpcFromInventory ... processing results ...");
         var maxSeenCountEpc = null,
@@ -175,19 +184,6 @@ var RfidReaderPlugin = (function () {
                 maxSeenCountValue = seenCount;
             }
         });
-        /* WOLFGANG TODO:
-             - check OneNote for "Notepad++", install JSLintNpp
-             - check https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
-             - check http://www.jslint.com/help.html#forin
-             - remove this code afterwards
-        for (var epc in argsObject.inventory) {
-            var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
-            if (seenCount > maxSeenCountValue) {
-                maxSeenCountEpc = epc;
-                maxSeenCountValue = seenCount;
-            }
-        } */
         return maxSeenCountEpc;
     }
     function inventoryAdvantageReached() {
@@ -347,6 +343,15 @@ var RfidReaderPlugin = (function () {
         // ... before initiating the scan
         cordovaExecScanInventory();
     }
+	function scanAndWriteBestTag(args, successCallback, errorCallback) {
+        debugLog("starting scanAndWriteBestTag");
+        // init the plugin class
+        init(args, successCallback, errorCallback);
+        // set the necessary follow-up action ... (because scan and read are separate API calls)
+        inventoryProcessCallback = writeBestTagFromInventory;
+        // ... before initiating the scan
+        cordovaExecScanInventory();
+    }
     function readTag(args, successCallback, errorCallback) {
         // init the plugin class
         init(args, successCallback, errorCallback);
@@ -370,6 +375,7 @@ var RfidReaderPlugin = (function () {
     }
     return {
         scanAndReadBestTag: scanAndReadBestTag,
+		scanAndWriteBestTag: scanAndWriteBestTag,
         readTag: readTag,
         writeTag: writeTag,
         startRfidListener: startRfidListener,
