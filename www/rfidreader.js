@@ -2,48 +2,46 @@
 
 var RfidReaderPlugin = (function () {
     "use strict";
-    
-    var CORDOVA_PLUGIN_NAME = "RfidReader";
-    var CORDOVA_ACTION_SCAN_INVENTORY = "SCAN_INVENTORY";
-    var CORDOVA_ACTION_READ_TAG = "READ_TAG";
-    var CORDOVA_ACTION_WRITE_TAG = "WRITE_TAG";
-    var CORDOVA_ACTION_START_RFID_LISTENER = "START_RFID_LISTENER";
-    var CORDOVA_ACTION_STOP_RFID_LISTENER = "STOP_RFID_LISTENER";
+    var CORDOVA_PLUGIN_NAME = "RfidReader",
+		CORDOVA_ACTION_SCAN_INVENTORY = "SCAN_INVENTORY",
+		CORDOVA_ACTION_READ_TAG = "READ_TAG",
+		CORDOVA_ACTION_WRITE_TAG = "WRITE_TAG",
+		CORDOVA_ACTION_START_RFID_LISTENER = "START_RFID_LISTENER",
+		CORDOVA_ACTION_STOP_RFID_LISTENER = "STOP_RFID_LISTENER",
 
-    var defaultValues = {
-        inventoryCycles: 30,
-        seenCountForFind: 5,
-        seenCountAdvantageForFind: 5,
-        retriesReadWrite: 20
-    };
+		defaultValues = {
+			inventoryCycles: 30,
+			seenCountForFind: 5,
+			seenCountAdvantageForFind: 5,
+			retriesReadWrite: 20
+		},
     // further attributes for args object
     //   epcToRead: epc
     //   epcToWrite: epc
     //   dataToWrite: epc
     //   dataFromReadResult: epc
-    var valueLimits = {
-        maxInventoryCycles: 50,
-        maxSeenCountForFind: 5,
-        maxSeenCountAdvantageForFind: 5,
-        maxRetriesReadWrite: 35
-    };
-    var argsObject = {};
-    var argsArray = [];
-    var retryCount = 0;
-    var cycleCount = 0;
-    var seenCountForFind = 0;
-    var seenCountAdvantageForFind = 0;
+		valueLimits = {
+			maxInventoryCycles: 50,
+			maxSeenCountForFind: 5,
+			maxSeenCountAdvantageForFind: 5,
+			maxRetriesReadWrite: 35
+		},
+		argsObject = {},
+		argsArray = [],
+		retryCount = 0,
+		cycleCount = 0,
+		seenCountForFind = 0,
+		seenCountAdvantageForFind = 0,
 
-    var successCallback, errorCallback, inventoryProcessCallback;
-    
+		successCallback,
+		errorCallback,
+		inventoryProcessCallback;
     function debugLog(message) {
         console.log("rfidreader.js: " + message);
     }
-    
     function isSet(checkVar) {
-        return typeof(checkVar) != "undefined" && checkVar !== null && checkVar !== "";
+        return typeof (checkVar) != "undefined" && checkVar !== null && checkVar !== "";
     }
-    
     /**
      * ensure that needed values are set in the argsObject
      * and set default values if initial or bad value ...
@@ -51,40 +49,40 @@ var RfidReaderPlugin = (function () {
     function checkArgsObject() {
         argsObject = argsArray[0];
         argsObject.inventoryCycles = Math.min(
-            Math.max(1,parseInt(argsObject.inventoryCycles)),
+            Math.max(1, parseInt(argsObject.inventoryCycles, 10)),
             valueLimits.maxInventoryCycles);
-        if (isNaN(argsObject.inventoryCycles)){
+        if (isNaN(argsObject.inventoryCycles)) {
             argsObject.inventoryCycles = defaultValues.inventoryCycles;
         }
         argsObject.retriesReadWrite = Math.min(
-            Math.max(1,parseInt(argsObject.retriesReadWrite)),
+            Math.max(1, parseInt(argsObject.retriesReadWrite, 10)),
             valueLimits.maxRetriesReadWrite);
-        if (isNaN(argsObject.retriesReadWrite)){
+        if (isNaN(argsObject.retriesReadWrite)) {
             argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
         }
-        ["epcToRead","epcToWrite","dataToWrite"].forEach(function(ELEM, IDX, ARR) {
+        ["epcToRead", "epcToWrite", "dataToWrite"].forEach(function (ELEM, IDX, ARR) {
             if (!isSet(argsObject[ELEM])) {
                 argsObject[ELEM] = "";
             }
         });
 
         seenCountForFind = Math.min(
-            Math.max(1,parseInt(argsObject.seenCountForFind)),
+            Math.max(1, parseInt(argsObject.seenCountForFind, 10)),
             valueLimits.maxSeenCountForFind);
-        if (isNaN(seenCountForFind)){
+        if (isNaN(seenCountForFind)) {
             seenCountForFind = defaultValues.seenCountForFind;
         }
         seenCountAdvantageForFind = Math.min(
-            Math.max(1,parseInt(argsObject.seenCountAdvantageForFind)),
+            Math.max(1, parseInt(argsObject.seenCountAdvantageForFind)),
             valueLimits.maxSeenCountAdvantageForFind);
-        if (isNaN(seenCountAdvantageForFind)){
+        if (isNaN(seenCountAdvantageForFind)) {
             seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
         }
     }
     function getArgsArray(args) {
         // args auf erlaubten typ/inhalt prüfen
         // nur ein Object erlaubt, kein Array!
-        if (typeof(args) != "object" || args === null || Array.isArray(args)) {
+        if (typeof (args) != "object" || args === null || Array.isArray(args)) {
             args = {};
         }
         return [args];  // Array erstellen
@@ -100,7 +98,7 @@ var RfidReaderPlugin = (function () {
         debugLog("argsObject at the end of init: " + JSON.stringify(argsObject));
     }
     function shutdown(argsArray, errorCallback) {
-        if (typeof(errorCallback) != "function") {
+        if (typeof (errorCallback) != "function") {
             errorCallback = errorCallback;
         }
         cordova.exec(
@@ -136,7 +134,7 @@ var RfidReaderPlugin = (function () {
         if (inventoryAdvantageReached()) {
             debugLog("inventoryAdvantageReached ... we have a winner!");
             inventoryProcessCallback();
-        }else if (cycleCount < argsObject.inventoryCycles) {
+        } else if (cycleCount < argsObject.inventoryCycles) {
             cycleCount = cycleCount + 1;
             debugLog("scanInventory ... starting another cycle: " + cycleCount +
                 " (max: " + argsObject.inventoryCycles + ")");
@@ -164,9 +162,9 @@ var RfidReaderPlugin = (function () {
         debugLog("getBestEpcFromInventory ... processing results ...");
         var maxSeenCountEpc = null;
         var maxSeenCountValue = -1;
-        Object.keys(argsObject.inventory).forEach(function(epc) {
+        Object.keys(argsObject.inventory).forEach(function (epc) {
             var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -189,11 +187,11 @@ var RfidReaderPlugin = (function () {
     }
     function inventoryAdvantageReached() {
         debugLog("inventoryAdvantageReached ... checking current inventory ...");
-        var maxSeenCountEpc = null;
-        var maxSeenCountValue = -1;
-        Object.keys(argsObject.inventory).forEach(function(epc) {
+        var maxSeenCountEpc = null,
+			maxSeenCountValue = -1;
+        Object.keys(argsObject.inventory).forEach(function (epc) {
             var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -206,7 +204,7 @@ var RfidReaderPlugin = (function () {
                 return;     // do not use the epc already in first place with highest seenCount
             }
             var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc("+epc+"), seenCount("+seenCount+")");
+            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
             if (seenCount > maxSeenCountValue) {
                 secondMostSeenCountEpc = epc;
                 secondMostSeenCountValue = seenCount;
@@ -330,12 +328,10 @@ var RfidReaderPlugin = (function () {
         module.exports.endRfidListener(null, successCallback, errorCallback);
     },
     */
-
-    
     /**
      *  PUBLIC FUNCTIONS for the plugin
      */
-    function scanAndReadBestTag (args, successCallback, errorCallback) {
+    function scanAndReadBestTag(args, successCallback, errorCallback) {
         debugLog("starting scanAndReadBestTag");
         // init the plugin class
         init(args, successCallback, errorCallback);
@@ -344,28 +340,27 @@ var RfidReaderPlugin = (function () {
         // ... before initiating the scan
         cordovaExecScanInventory();
     }
-    function readTag (args, successCallback, errorCallback) {
+    function readTag(args, successCallback, errorCallback) {
         // init the plugin class
         init(args, successCallback, errorCallback);
         // call the readTag API
         cordovaExecReadTag();
     }
-    function writeTag (args, successCallback, errorCallback) {
+    function writeTag(args, successCallback, errorCallback) {
         // init the plugin class
         init(args, successCallback, errorCallback);
         // call the writeTag API
         cordovaExecWriteTag();
     }
     // calls only for test purposes, should not be necessary to be called by applications
-    function startRfidListener (args, successCallback, errorCallback) {
+    function startRfidListener(args, successCallback, errorCallback) {
         var argsArray = getArgsArray(args);
         cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_START_RFID_LISTENER, argsArray);
     }
-    function endRfidListener (args, successCallback, errorCallback) {
+    function endRfidListener(args, successCallback, errorCallback) {
         var argsArray = getArgsArray(args);
         cordova.exec(successCallback, errorCallback, CORDOVA_PLUGIN_NAME, CORDOVA_ACTION_STOP_RFID_LISTENER, argsArray);
     }
-    
     return {
         scanAndReadBestTag: scanAndReadBestTag,
         readTag: readTag,
@@ -384,7 +379,6 @@ module.exports = {
     // calls only for test purposes, should not be necessary to be called by applications
     startRfidListener: RfidReaderPlugin.startRfidListener,
     endRfidListener: RfidReaderPlugin.endRfidListener
-    
     /**
     scanAndReadBestTag: function(args, successCallback, errorCallback) {
         // init the plugin class
