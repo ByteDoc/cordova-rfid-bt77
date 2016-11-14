@@ -62,7 +62,7 @@ var RfidReaderPlugin = (function () {
         if (isNaN(argsObject.retriesReadWrite)) {
             argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
         }
-        ["epcToRead", "epcToWrite", "dataToWrite"].forEach(function (ELEM, IDX, ARR) {
+        ["epcToRead", "epcToWrite", "dataToWrite"].forEach(function (ELEM) {
             if (!isSet(argsObject[ELEM])) {
                 argsObject[ELEM] = "";
             }
