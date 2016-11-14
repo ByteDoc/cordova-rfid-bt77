@@ -374,6 +374,7 @@ var RfidReaderPlugin = (function () {
 
 module.exports = {
     scanAndReadBestTag: RfidReaderPlugin.scanAndReadBestTag,
+    scanAndWriteBestTag: RfidReaderPlugin.scanAndWriteBestTag,
     readTag: RfidReaderPlugin.readTag,
     writeTag: RfidReaderPlugin.writeTag,
     // calls only for test purposes, should not be necessary to be called by applications
