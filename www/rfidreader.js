@@ -4,7 +4,7 @@ var RfidReaderPlugin = (function () {
     "use strict";
     var CORDOVA_PLUGIN_NAME = "RfidReader",
 		CORDOVA_ACTION_SCAN_INVENTORY = "SCAN_INVENTORY",
-		CORDOVA_ACTION_SCAN_INVENTORY2 = "SCAN_INVENTORY_TWO",
+		CORDOVA_ACTION_SCAN_INVENTORY_TWO = "SCAN_INVENTORY_TWO",
 		CORDOVA_ACTION_READ_TAG = "READ_TAG",
 		CORDOVA_ACTION_WRITE_TAG = "WRITE_TAG",
 		CORDOVA_ACTION_START_RFID_LISTENER = "START_RFID_LISTENER",
@@ -186,7 +186,7 @@ var RfidReaderPlugin = (function () {
             inventoryProcessCallback,
             inventoryCycleErrorCallback,
             CORDOVA_PLUGIN_NAME,
-            CORDOVA_ACTION_SCAN_INVENTORY2,
+            CORDOVA_ACTION_SCAN_INVENTORY_TWO,
             argsArray
         );
     }

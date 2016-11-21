@@ -85,7 +85,7 @@ public class BT77RfidReader extends CordovaPlugin {
                 return scanInventory();
 				
 			case SCAN_INVENTORY_TWO:
-				return scanInventory2();
+				return scanInventoryTwo();
             
             case READ_TAG:
                 return readTag();
@@ -195,7 +195,7 @@ public class BT77RfidReader extends CordovaPlugin {
         return true;
     }
 	
-	private boolean scanInventory2() {
+	private boolean scanInventoryTwo() {
         startRFIDReader();
 
         InventoryParameters p = new InventoryParameters();
