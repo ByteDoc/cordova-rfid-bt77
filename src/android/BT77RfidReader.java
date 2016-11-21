@@ -84,7 +84,7 @@ public class BT77RfidReader extends CordovaPlugin {
             case SCAN_INVENTORY:
                 return scanInventory();
 				
-			case SCAN_INVENTORY2:
+			case SCAN_INVENTORY_TWO:
 				return scanInventory2();
             
             case READ_TAG:
@@ -303,38 +303,6 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     
     private boolean writeTag() {
-        
-        startRFIDReader();
-
-        WriteParameters p = new WriteParameters();
-        
-        p.setMemoryBank(TagMemoryBank.EPC);
-        p.setEpc(epcToWrite);
-        p.setOffset(EPC_OFFSET);
-        p.setRetries(retriesReadWrite);
-        p.setWriteData(dataToWrite);
-
-        Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
-        
-        WriteResult r = reader.writeMemoryBank(p);
-
-        OperationStatus status = r.getOperationStatus();
-        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
-        if (status != OperationStatus.STATUS_OK) {
-            callbackContext.error("Error in writeTag: " + status.name());
-            return false;
-        }
-        
-        try{
-            argsObject.put("status", status.name());
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
-        callbackContext.success(argsArray);
-        return true;
-    }
-	
-	private boolean writeTag2() {
         
         startRFIDReader();
 
