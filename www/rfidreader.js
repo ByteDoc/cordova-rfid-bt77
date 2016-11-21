@@ -420,6 +420,15 @@ var RfidReaderPlugin = (function () {
         // ... before initiating the scan
         cordovaExecScanInventory();
     }
+	function scanAndReadBestTag2(args, successCallback, errorCallback) {
+        debugLog("starting scanAndReadBestTag");
+        // init the plugin class
+        init2(args, successCallback, errorCallback);
+        // set the necessary follow-up action ... (because scan and read are separate API calls)
+        inventoryProcessCallback = readBestTagFromInventory;
+        // ... before initiating the scan
+        cordovaExecScanInventory2();
+    }
 	function scanAndWriteBestTag(args, successCallback, errorCallback) {
         debugLog("starting scanAndWriteBestTag");
         // init the plugin class
@@ -468,6 +477,7 @@ var RfidReaderPlugin = (function () {
     return {
         scanAndReadBestTag: scanAndReadBestTag,
 		scanAndWriteBestTag: scanAndWriteBestTag,
+		scanAndWriteBestTag2: scanAndWriteBestTag2,
         readTag: readTag,
         writeTag: writeTag,
         startRfidListener: startRfidListener,
@@ -479,7 +489,9 @@ var RfidReaderPlugin = (function () {
 
 module.exports = {
     scanAndReadBestTag: RfidReaderPlugin.scanAndReadBestTag,
+	scanAndReadBestTag2: RfidReaderPlugin.scanAndReadBestTag2,
     scanAndWriteBestTag: RfidReaderPlugin.scanAndWriteBestTag,
+	scanAndWriteBestTag2: RfidReaderPlugin.scanAndWriteBestTag2,
     readTag: RfidReaderPlugin.readTag,
     writeTag: RfidReaderPlugin.writeTag,
     // calls only for test purposes, should not be necessary to be called by applications
