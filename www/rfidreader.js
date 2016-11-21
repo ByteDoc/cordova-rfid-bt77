@@ -476,6 +476,7 @@ var RfidReaderPlugin = (function () {
     }
     return {
         scanAndReadBestTag: scanAndReadBestTag,
+		scanAndReadBestTag2: scanAndReadBestTag2,
 		scanAndWriteBestTag: scanAndWriteBestTag,
 		scanAndWriteBestTag2: scanAndWriteBestTag2,
         readTag: readTag,
