@@ -183,7 +183,7 @@ var RfidReaderPlugin = (function () {
     }
 	function cordovaExecScanInventory2() {
         cordova.exec(
-            inventoryProcessCallback,
+            inventoryCycleSuccessCallback2,
             inventoryCycleErrorCallback,
             CORDOVA_PLUGIN_NAME,
             CORDOVA_ACTION_SCAN_INVENTORY_TWO,
@@ -202,6 +202,21 @@ var RfidReaderPlugin = (function () {
             debugLog("scanInventory ... starting another cycle: " + cycleCount +
                 " (max: " + argsObject.inventoryCycles + ")");
             cordovaExecScanInventory();
+        } else {
+            //debugLog("inventoryCycleSuccessCallback ... max cycles reached ... moving on to callback");
+            //inventoryProcessCallback();
+			var errString = "Maximum inventoryCycles reached ... no winner determined!";
+			debugLog(errString);
+			inventoryCycleErrorCallback(errString);
+        }
+    }
+	function inventoryCycleSuccessCallback2(args) {
+        argsArray = args;
+        argsObject = argsArray[0];
+
+        if (inventoryAdvantageReached()) {
+            debugLog("inventoryAdvantageReached ... we have a winner!");
+            inventoryProcessCallback();
         } else {
             //debugLog("inventoryCycleSuccessCallback ... max cycles reached ... moving on to callback");
             //inventoryProcessCallback();
