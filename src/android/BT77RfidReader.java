@@ -31,6 +31,7 @@ public class BT77RfidReader extends CordovaPlugin {
     RfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
+	int inventoryCountThreshold = 0;
     String epcToRead = "", epcToWrite = "", dataToWrite = "", dataFromReadResult = "";
     // epcString = "", dataString = "";
     JSONObject argsObject;
@@ -50,6 +51,7 @@ public class BT77RfidReader extends CordovaPlugin {
             argsObject = args.getJSONObject(0);
             retriesReadWrite = argsObject.getInt("retriesReadWrite");
             inventoryCycles = argsObject.getInt("inventoryCycles");
+			inventoryCountThreshold = argsObject.getInt("inventoryCountThreshold");
             epcToRead = argsObject.getString("epcToRead");
             epcToWrite = argsObject.getString("epcToWrite");
             dataToWrite = argsObject.getString("dataToWrite");
@@ -81,6 +83,9 @@ public class BT77RfidReader extends CordovaPlugin {
             
             case SCAN_INVENTORY:
                 return scanInventory();
+				
+			case SCAN_INVENTORY2:
+				return scanInventory2();
             
             case READ_TAG:
                 return readTag();
@@ -189,6 +194,77 @@ public class BT77RfidReader extends CordovaPlugin {
         callbackContext.success(argsArray);
         return true;
     }
+	
+	private boolean scanInventory2() {
+        startRFIDReader();
+
+        InventoryParameters p = new InventoryParameters();
+        p.setCycleCount(inventoryCycles);
+		p.setCountThreshold(inventoryCountThreshold);
+
+        // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
+        InventoryResult inventoryResult = reader.getInventory(p);
+                
+        OperationStatus status = inventoryResult.getOperationStatus();
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
+        if (status != OperationStatus.STATUS_OK) {
+            callbackContext.error("Error in scanInventory: " + status.name());
+            return false;
+        }  
+        
+        // results in attribute INVENTORY of argsObject, with the format:
+        /**
+        {
+            retriesReadWrite: x,
+            inventoryCycles: y,
+            inventory: {                    JSONObject
+                epc_id_123: epc_count       Int
+                epc_id_456: epc_count       Int
+            }
+        }
+        */
+        // read current inventory from argsObject, or create if not existent yet
+        JSONObject inventory;
+        try{
+            inventory = argsObject.getJSONObject("inventory");
+        } catch (JSONException e) {
+            Log.i("BT77RfidReader", "Creating JSONObject for inventory (" + e + ")");
+            inventory = new JSONObject();
+            try{
+                argsObject.put("inventory", inventory);
+            } catch (JSONException e2) {
+                Log.e("BT77RfidReader", "Exception: " + e2 + "");
+            }
+        }
+        
+        // update inventory with the scan results
+        for(int i = 0; i < inventoryResult.getInventory().length; i++){
+            Epc currentEpc = inventoryResult.getInventory()[i];
+            int epcCount;
+            try{
+                epcCount = inventory.getInt(currentEpc.getEpc());
+            } catch (JSONException e) {
+                Log.i("BT77RfidReader", "Creating Int for epcCount (" + e + ")");
+                epcCount = 0;
+            }
+            epcCount = currentEpc.getSeenCount();
+            try{
+                inventory.put(currentEpc.getEpc(), epcCount);
+            } catch (JSONException e) {
+                Log.e("BT77RfidReader", "Exception: " + e + "");
+            }
+            Log.i("BT77RfidReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
+        }
+        
+        
+        try{
+            argsObject.put("status", status.name());
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        callbackContext.success(argsArray);
+        return true;
+    }
     
     private boolean readTag() {
         startRFIDReader();
@@ -227,6 +303,38 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     
     private boolean writeTag() {
+        
+        startRFIDReader();
+
+        WriteParameters p = new WriteParameters();
+        
+        p.setMemoryBank(TagMemoryBank.EPC);
+        p.setEpc(epcToWrite);
+        p.setOffset(EPC_OFFSET);
+        p.setRetries(retriesReadWrite);
+        p.setWriteData(dataToWrite);
+
+        Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
+        
+        WriteResult r = reader.writeMemoryBank(p);
+
+        OperationStatus status = r.getOperationStatus();
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
+        if (status != OperationStatus.STATUS_OK) {
+            callbackContext.error("Error in writeTag: " + status.name());
+            return false;
+        }
+        
+        try{
+            argsObject.put("status", status.name());
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        callbackContext.success(argsArray);
+        return true;
+    }
+	
+	private boolean writeTag2() {
         
         startRFIDReader();
 
