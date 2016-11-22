@@ -112,6 +112,8 @@ public class BT77RfidReader extends CordovaPlugin {
         if(reader == null){
             this.reader = new RfidReader(cordova.getActivity()){
 				@Override
+				public UhfReader reader;
+				
 				public InventoryResult getInventory(InventoryParameters param){
 					System.out.println("This is a test if this method will really be overwritten!!!");
 					InventoryResult result = new InventoryResult();
