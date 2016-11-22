@@ -419,6 +419,8 @@ public class BT77RfidReader extends CordovaPlugin {
 }
 
 class CustomRfidReader extends RfidReader{
+	super();
+	
 	@Override
 	public InventoryResult getInventory(InventoryParameters param){
 		System.out.println("This is a test if this method will really be overwritten!!!");
