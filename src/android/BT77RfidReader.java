@@ -28,7 +28,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
-    RfidReader reader = null;
+    CustomRfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
 	int inventoryCountThreshold = 0;
@@ -110,7 +110,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
     private boolean startRFIDReader(){
         if(reader == null){
-            this.reader = new RfidReader(cordova.getActivity());
+            this.reader = new CustomRfidReader(cordova.getActivity());
         }
         if(!this.reader.isBusy() || !this.reader.isOpen()){
             Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -333,6 +333,41 @@ public class BT77RfidReader extends CordovaPlugin {
         callbackContext.success(argsArray);
         return true;
     }
+	
+/* 	private void inventoryAdvantageReached(){
+		Log.e("inventoryAdvantageReached ... checking current inventory ...");
+		String maxSeenCountEpc = secondMostSeenCountEpc = null;
+		int maxSeenCountValue = secondMostSeenCountValue = -1;
+		for (int i = 0; i < args.length(); i++){
+			
+			
+		}
+		
+		
+	}
+        Object.keys(argsObject.inventory).forEach(function (epc) {
+            var seenCount = argsObject.inventory[epc];
+            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
+            if (seenCount > maxSeenCountValue) {
+                maxSeenCountEpc = epc;
+                maxSeenCountValue = seenCount;
+            }
+        });
+        Object.keys(argsObject.inventory).forEach(function (epc) {
+            if (epc == maxSeenCountEpc) {
+                return;     // do not use the epc already in first place with highest seenCount
+            }
+            var seenCount = argsObject.inventory[epc];
+            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
+            if (seenCount > maxSeenCountValue) {
+                secondMostSeenCountEpc = epc;
+                secondMostSeenCountValue = seenCount;
+            }
+        });
+        if (maxSeenCountValue - secondMostSeenCountValue >= seenCountAdvantageForFind) {
+            return true;
+        }
+        return false; */
     
     
     
