@@ -17,8 +17,6 @@ import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
 import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.bt77.RfidReader;
-import com.android.hdhe.uhf.reader.Tools;
-import com.android.hdhe.uhf.reader.UhfReader;
 
 import java.util.*;
 import android.util.Log;
@@ -30,7 +28,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
-    RfidReader oReader = null;
+    RfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
 	int inventoryCountThreshold = 0;
@@ -81,7 +79,7 @@ public class BT77RfidReader extends CordovaPlugin {
         switch (action) {
 
             case START_RFID_LISTENER:
-                return startRfidReader();
+                return startRFIDReader();
             
             case SCAN_INVENTORY:
                 return scanInventory();
@@ -96,7 +94,7 @@ public class BT77RfidReader extends CordovaPlugin {
                 return writeTag();
             
             case STOP_RFID_LISTENER:
-                return stopRfidReader();
+                return stopRFIDReader();
         }
         
         return false;
@@ -110,73 +108,31 @@ public class BT77RfidReader extends CordovaPlugin {
         }
     }
     
-    private boolean startRfidReader(){
-        if(oReader == null){
-            this.oReader = new RfidReader(cordova.getActivity()){
-				@Override
-				public InventoryResult getInventory(InventoryParameters param){
-					System.out.println("This is a test if this method will really be overwritten!!!");
-					InventoryResult result = new InventoryResult();
-					
-					HashMap<String, Epc> unfilteredInventory = new HashMap();
-					for (int i = 0; i < param.getCycleCount(); i++){
-						List<byte[]> currentInventory = this.reader.inventoryRealTime();
-						if ((currentInventory != null) && (!currentInventory.isEmpty())) {
-							for (byte[] epc : currentInventory) {
-								if ((epc != null) && (epc.length > 0)){
-									String epcStr = Tools.Bytes2HexString(epc, epc.length);
-									if (survivesFilter(epcStr, param)){
-										Epc old = (Epc)unfilteredInventory.get(epcStr);
-										if (old == null) {
-											unfilteredInventory.put(epcStr, new Epc(epcStr));
-										} else {
-											old.incrementSeenCount();
-										}
-									}
-								}
-							}
-						}
-						try{
-							Thread.sleep(50L);
-						} catch (InterruptedException localInterruptedException1) {}
-					}
-					List<Epc> thresholdFilteredEpcList = new ArrayList();
-					for (Iterator i = unfilteredInventory.entrySet().iterator(); i.hasNext();){
-						Map.Entry currentEntry = (Map.Entry)i.next();
-						Epc currentEpc = (Epc)currentEntry.getValue();
-						if (currentEpc.getSeenCount() >= param.getCountThreshold()) {
-							thresholdFilteredEpcList.add(currentEpc);
-						}
-					}
-					Epc[] a = new Epc[thresholdFilteredEpcList.size()];
-					result.setInventory((Epc[])thresholdFilteredEpcList.toArray(a));
-					result.setOperationStatus(OperationStatus.STATUS_OK);
-					
-					return result;
-				}
-			};
+    private boolean startRFIDReader(){
+        if(reader == null){
+            this.reader = new CustomRfidReader(cordova.getActivity());
         }
-        if(!this.oReader.isBusy() || !this.oReader.isOpen()){
-            Log.i("BT77RfidReader", "startRfidReader: this.oReader.open(): " + this.oReader.open());
+        if(!this.reader.isBusy() || !this.reader.isOpen()){
+            Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
         }
         return true;
     }
     
-    private boolean stopRfidReader(){
-        if(this.oReader.isBusy() && this.oReader.isOpen()){
-            Log.i("BT77RfidReader", "stopRfidReader: this.oReader.close(): " + this.oReader.close());
+    private boolean stopRFIDReader(){
+        if(this.reader.isBusy() && this.reader.isOpen()){
+            Log.i("BT77RfidReader", "stopRFIDReader: this.reader.close(): " + this.reader.close());
         }
         return true;
     }
     
     private boolean scanInventory() {
-        startRfidReader();
+        startRFIDReader();
 		
         InventoryParameters p = new InventoryParameters();
         p.setCycleCount(inventoryCycles);
 
-        // DO THE INVENTORY SCANNING ... using the oReader, this is the hardware call
-        InventoryResult inventoryResult = oReader.getInventory(p);
+        // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
+        InventoryResult inventoryResult = reader.getInventory(p);
                 
         OperationStatus status = inventoryResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
@@ -240,14 +196,14 @@ public class BT77RfidReader extends CordovaPlugin {
     }
 	
 	private boolean scanInventoryTwo() {
-        startRfidReader();
+        startRFIDReader();
 
         InventoryParameters p = new InventoryParameters();
         p.setCycleCount(inventoryCycles);
 		p.setCountThreshold(inventoryCountThreshold);
 
-        // DO THE INVENTORY SCANNING ... using the oReader, this is the hardware call
-        InventoryResult inventoryResult = oReader.getInventory(p);
+        // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
+        InventoryResult inventoryResult = reader.getInventory(p);
                 
         OperationStatus status = inventoryResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
@@ -311,7 +267,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     
     private boolean readTag() {
-        startRfidReader();
+        startRFIDReader();
 
         ReadParameters p = new ReadParameters();
         p.setMemoryBank(TagMemoryBank.EPC);
@@ -321,7 +277,7 @@ public class BT77RfidReader extends CordovaPlugin {
         p.setRetries(retriesReadWrite);
 
         Log.i("BT77RfidReader", "ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
-        ReadResult readResult = oReader.readMemoryBank(p);
+        ReadResult readResult = reader.readMemoryBank(p);
 
         OperationStatus status = readResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
@@ -348,7 +304,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
     private boolean writeTag() {
         
-        startRfidReader();
+        startRFIDReader();
 
         WriteParameters p = new WriteParameters();
         
@@ -360,7 +316,7 @@ public class BT77RfidReader extends CordovaPlugin {
 
         Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
         
-        WriteResult r = oReader.writeMemoryBank(p);
+        WriteResult r = reader.writeMemoryBank(p);
 
         OperationStatus status = r.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
@@ -380,7 +336,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
 /* 	public InventoryResult getInventory(InventoryParameters param){
 		System.out.println("This is a test if this method will really be overwritten!!!");
-		return oReader.getInventory(param);
+		return reader.getInventory(param);
 	} */
 	
 /* 	private void inventoryAdvantageReached(){
@@ -460,4 +416,47 @@ public class BT77RfidReader extends CordovaPlugin {
         }
     }
     */
+}
+public class CustomRfidReader extends RfidReader{
+	@Override
+	public InventoryResult getInventory(InventoryParameters param){
+		System.out.println("This is a test if this method will really be overwritten!!!");
+		InventoryResult result = new InventoryResult();
+		
+		HashMap<String, Epc> unfilteredInventory = new HashMap();
+		for (int i = 0; i < param.getCycleCount(); i++){
+			List<byte[]> currentInventory = this.reader.inventoryRealTime();
+			if ((currentInventory != null) && (!currentInventory.isEmpty())) {
+				for (byte[] epc : currentInventory) {
+					if ((epc != null) && (epc.length > 0)){
+						String epcStr = Tools.Bytes2HexString(epc, epc.length);
+						if (survivesFilter(epcStr, param)){
+							Epc old = (Epc)unfilteredInventory.get(epcStr);
+							if (old == null) {
+								unfilteredInventory.put(epcStr, new Epc(epcStr));
+							} else {
+								old.incrementSeenCount();
+							}
+						}
+					}
+				}
+			}
+			try{
+				Thread.sleep(50L);
+			} catch (InterruptedException localInterruptedException1) {}
+		}
+		List<Epc> thresholdFilteredEpcList = new ArrayList();
+		for (Iterator i = unfilteredInventory.entrySet().iterator(); i.hasNext();){
+			Map.Entry currentEntry = (Map.Entry)i.next();
+			Epc currentEpc = (Epc)currentEntry.getValue();
+			if (currentEpc.getSeenCount() >= param.getCountThreshold()) {
+				thresholdFilteredEpcList.add(currentEpc);
+			}
+		}
+		Epc[] a = new Epc[thresholdFilteredEpcList.size()];
+		result.setInventory((Epc[])thresholdFilteredEpcList.toArray(a));
+		result.setOperationStatus(OperationStatus.STATUS_OK);
+		
+		return result;
+	}
 }
