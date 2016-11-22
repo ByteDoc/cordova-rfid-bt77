@@ -113,7 +113,7 @@ public class BT77RfidReader extends CordovaPlugin {
             this.reader = new RfidReader(cordova.getActivity()){
 				@Override
 				public InventoryResult getInventory(InventoryParameters param){
-					System.out.println("This is a test if this method will really be overwritten!!!")
+					System.out.println("This is a test if this method will really be overwritten!!!");
 					InventoryResult result = new InventoryResult();
 					
 					HashMap<String, Epc> unfilteredInventory = new HashMap();
