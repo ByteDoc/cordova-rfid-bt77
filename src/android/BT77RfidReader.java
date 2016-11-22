@@ -134,7 +134,7 @@ public class BT77RfidReader extends CordovaPlugin {
     private boolean startRFIDReader(){
         if(reader == null){
             this.reader = new RfidReader(cordova.getActivity()){
-				Field fReader = RfidReader.class.getDeclaredField("reader");
+				Field fReader = this.reader.getClass().getDeclaredField("reader");
 				fReader.setAccessible(true);
 				uhfreader = fReader.get(this.reader);
 				
