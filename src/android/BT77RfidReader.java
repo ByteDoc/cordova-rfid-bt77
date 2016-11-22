@@ -419,7 +419,9 @@ public class BT77RfidReader extends CordovaPlugin {
 }
 
 class CustomRfidReader extends RfidReader{
-	super();
+	CustomRfidReader(){
+		super();
+	}
 	
 	@Override
 	public InventoryResult getInventory(InventoryParameters param){
