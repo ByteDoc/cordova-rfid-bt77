@@ -420,7 +420,7 @@ public class BT77RfidReader extends CordovaPlugin {
 
 class CustomRfidReader extends RfidReader{
 	CustomRfidReader(){
-		super();
+		super(x);
 	}
 	
 	@Override
