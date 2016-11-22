@@ -335,7 +335,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
 	
 	public InventoryResult getInventory(InventoryParameters param){
-		return reader.getInventory();
+		return reader.getInventory(param);
 		System.out.println("This is a test if this method will really be overwritten!!!");
 	}
 	
