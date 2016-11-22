@@ -152,7 +152,10 @@ public class BT77RfidReader extends CordovaPlugin {
 				}
 				
 				public Boolean bSurvivesFilter(epcStr, param){
-					Method mSurvivesFilter RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
+					//Class[] cArg = new Class[2];
+					//cArg[0] = String.class;
+					//cArg[1] = InventoryParameters.class;
+					Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
 					mSurvivesFilter.setAccessible(true);
 					return mSurvivesFilter.invoke(this, epcStr, param);
 				}
