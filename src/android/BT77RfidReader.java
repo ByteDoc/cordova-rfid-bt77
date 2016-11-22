@@ -136,7 +136,7 @@ public class BT77RfidReader extends CordovaPlugin {
             this.reader = new RfidReader(cordova.getActivity()){
 				Field fReader = this.reader.getClass().getDeclaredField("reader");
 				fReader.setAccessible(true);
-				uhfreader = fReader.get(this.reader);
+				UhfReader uhfreader = (UhfReader) fReader.get(this.reader);
 				
 				@Override
 				public InventoryResult getInventory(InventoryParameters param){
