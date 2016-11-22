@@ -144,11 +144,17 @@ public class BT77RfidReader extends CordovaPlugin {
     private boolean startRFIDReader2(){
         if(reader == null){
             this.reader = new RfidReader(cordova.getActivity()){
-				UhfReader uhfreader;
-				public void accessFields(){
+				UhfReader uhfreader = accessReaderField();
+				public UhfReader accessReaderField(){
 					Field fReader = RfidReader.class.getDeclaredField("reader");
 					fReader.setAccessible(true);
-					this.uhfreader = (UhfReader) fReader.get(this);
+					return fReader.get(this);
+				}
+				
+				public Boolean bSurvivesFilter(epcStr, param){
+					Method mSurvivesFilter RfidReader.class.getDeclaredMethod("survivesFilter", epcStr, param);
+					mSurvivesFilter.setAccessible(true);
+					return mSurvivesFilter.invoke(this, epcStr, param);
 				}
 				
 				@Override
@@ -163,7 +169,7 @@ public class BT77RfidReader extends CordovaPlugin {
 							for (byte[] epc : currentInventory) {
 								if ((epc != null) && (epc.length > 0)){
 									String epcStr = Tools.Bytes2HexString(epc, epc.length);
-									if (survivesFilter(epcStr, param)){
+									if (bSurvivesFilter(epcStr, param)){
 										Epc old = (Epc)unfilteredInventory.get(epcStr);
 										if (old == null) {
 											unfilteredInventory.put(epcStr, new Epc(epcStr));
