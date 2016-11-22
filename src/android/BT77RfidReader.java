@@ -419,11 +419,8 @@ public class BT77RfidReader extends CordovaPlugin {
 }
 
 class CustomRfidReader extends RfidReader{
-	private Activity context;
-	
-	public CustomRfidReader(Activity c){
-		this.context = c;
-	}
+	Field field = RfidReader.class.getDeclaredField("reader");
+	field.setAccessible(true);
 	
 	@Override
 	public InventoryResult getInventory(InventoryParameters param){
