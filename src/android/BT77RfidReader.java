@@ -131,12 +131,25 @@ public class BT77RfidReader extends CordovaPlugin {
         }
     }
     
-    private boolean startRFIDReader(){
+	private boolean startRFIDReader(){
+		if(reader == null){
+			this.reader = new RfidReader(cordova.getActivity());
+		}
+		if(!this.reader.isBusy() || !this.reader.isOpen()){
+			Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
+		}
+		return true;
+    }
+	
+    private boolean startRFIDReader2(){
         if(reader == null){
             this.reader = new RfidReader(cordova.getActivity()){
-				Field fReader = this.reader.getClass().getDeclaredField("reader");
-				fReader.setAccessible(true);
-				UhfReader uhfreader = (UhfReader) fReader.get(this.reader);
+				UhfReader uhfreader;
+				public accessFields(){
+					Field fReader = this.reader.getClass().getDeclaredField("reader");
+					fReader.setAccessible(true);
+					this.uhfreader = (UhfReader) fReader.get(this.reader);
+				}
 				
 				@Override
 				public InventoryResult getInventory(InventoryParameters param){
@@ -145,7 +158,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					
 					HashMap<String, Epc> unfilteredInventory = new HashMap();
 					for (int i = 0; i < param.getCycleCount(); i++){
-						List<byte[]> currentInventory = uhfreader.inventoryRealTime();
+						List<byte[]> currentInventory = this.uhfreader.inventoryRealTime();
 						if ((currentInventory != null) && (!currentInventory.isEmpty())) {
 							for (byte[] epc : currentInventory) {
 								if ((epc != null) && (epc.length > 0)){
