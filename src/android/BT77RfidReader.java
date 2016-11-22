@@ -20,7 +20,7 @@ import com.sevenid.mobile.reader.bt77.RfidReader;
 
 import java.util.*;
 import android.util.Log;
-import android.app.Activity;
+import java.lang.reflect.*;
 
 public class BT77RfidReader extends CordovaPlugin {
     public enum CordovaAction {
