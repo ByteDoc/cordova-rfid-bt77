@@ -16,7 +16,7 @@ import com.sevenid.mobile.reader.api.parameters.ReadParameters;
 import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
 import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.api.Epc;
-import com.sevenid.mobile.reader.bt77.RfidoReader;
+import com.sevenid.mobile.reader.bt77.RfidReader;
 import com.android.hdhe.uhf.reader.Tools;
 import com.android.hdhe.uhf.reader.UhfReader;
 
@@ -24,13 +24,13 @@ import java.util.*;
 import android.util.Log;
 
 
-public class BT77RfidoReader extends CordovaPlugin {
+public class BT77RfidReader extends CordovaPlugin {
     public enum CordovaAction {
         SCAN_INVENTORY, SCAN_INVENTORY_TWO, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
-    RfidoReader oReader = null;
+    RfidReader oReader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
 	int inventoryCountThreshold = 0;
@@ -45,7 +45,7 @@ public class BT77RfidoReader extends CordovaPlugin {
     
     @Override
     public boolean execute(String actionString, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        Log.i("BT77RfidoReader", "execute called for action " + actionString);
+        Log.i("BT77RfidReader", "execute called for action " + actionString);
         this.callbackContext = callbackContext;
         // read argument object, expected as first entry in args array
         try {
@@ -58,7 +58,7 @@ public class BT77RfidoReader extends CordovaPlugin {
             epcToWrite = argsObject.getString("epcToWrite");
             dataToWrite = argsObject.getString("dataToWrite");
         } catch (JSONException e){
-            Log.e("BT77RfidoReader", "Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
+            Log.e("BT77RfidReader", "Error: JSONException " + e + " was thrown. No or bad argument object supplied!");
             callbackContext.error(e.getMessage());
             return false;
         }
@@ -67,7 +67,7 @@ public class BT77RfidoReader extends CordovaPlugin {
         try {
             action = CordovaAction.valueOf(actionString);
         } catch (IllegalArgumentException e) {
-            Log.e("BT77RfidoReader", "Error: JSONException " + e + " was thrown. No valid action supplied!");
+            Log.e("BT77RfidReader", "Error: JSONException " + e + " was thrown. No valid action supplied!");
             callbackContext.error(e.getMessage());
             return false;
         }
@@ -81,7 +81,7 @@ public class BT77RfidoReader extends CordovaPlugin {
         switch (action) {
 
             case START_RFID_LISTENER:
-                return startRFIDoReader();
+                return startRfidReader();
             
             case SCAN_INVENTORY:
                 return scanInventory();
@@ -96,7 +96,7 @@ public class BT77RfidoReader extends CordovaPlugin {
                 return writeTag();
             
             case STOP_RFID_LISTENER:
-                return stopRFIDoReader();
+                return stopRfidReader();
         }
         
         return false;
@@ -110,9 +110,9 @@ public class BT77RfidoReader extends CordovaPlugin {
         }
     }
     
-    private boolean startRFIDoReader(){
+    private boolean startRfidReader(){
         if(oReader == null){
-            this.oReader = new RfidoReader(cordova.getActivity()){
+            this.oReader = new RfidReader(cordova.getActivity()){
 				@Override
 				public InventoryResult getInventory(InventoryParameters param){
 					System.out.println("This is a test if this method will really be overwritten!!!");
@@ -157,20 +157,20 @@ public class BT77RfidoReader extends CordovaPlugin {
 			};
         }
         if(!this.oReader.isBusy() || !this.oReader.isOpen()){
-            Log.i("BT77RfidoReader", "startRFIDoReader: this.oReader.open(): " + this.oReader.open());
+            Log.i("BT77RfidReader", "startRfidReader: this.oReader.open(): " + this.oReader.open());
         }
         return true;
     }
     
-    private boolean stopRFIDoReader(){
+    private boolean stopRfidReader(){
         if(this.oReader.isBusy() && this.oReader.isOpen()){
-            Log.i("BT77RfidoReader", "stopRFIDoReader: this.oReader.close(): " + this.oReader.close());
+            Log.i("BT77RfidReader", "stopRfidReader: this.oReader.close(): " + this.oReader.close());
         }
         return true;
     }
     
     private boolean scanInventory() {
-        startRFIDoReader();
+        startRfidReader();
 		
         InventoryParameters p = new InventoryParameters();
         p.setCycleCount(inventoryCycles);
@@ -179,7 +179,7 @@ public class BT77RfidoReader extends CordovaPlugin {
         InventoryResult inventoryResult = oReader.getInventory(p);
                 
         OperationStatus status = inventoryResult.getOperationStatus();
-        Log.i("BT77RfidoReader", "OperationStatus: " + status.toString());
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in scanInventory: " + status.name());
             return false;
@@ -201,12 +201,12 @@ public class BT77RfidoReader extends CordovaPlugin {
         try{
             inventory = argsObject.getJSONObject("inventory");
         } catch (JSONException e) {
-            Log.i("BT77RfidoReader", "Creating JSONObject for inventory (" + e + ")");
+            Log.i("BT77RfidReader", "Creating JSONObject for inventory (" + e + ")");
             inventory = new JSONObject();
             try{
                 argsObject.put("inventory", inventory);
             } catch (JSONException e2) {
-                Log.e("BT77RfidoReader", "Exception: " + e2 + "");
+                Log.e("BT77RfidReader", "Exception: " + e2 + "");
             }
         }
         
@@ -217,30 +217,30 @@ public class BT77RfidoReader extends CordovaPlugin {
             try{
                 epcCount = inventory.getInt(currentEpc.getEpc());
             } catch (JSONException e) {
-                Log.i("BT77RfidoReader", "Creating Int for epcCount (" + e + ")");
+                Log.i("BT77RfidReader", "Creating Int for epcCount (" + e + ")");
                 epcCount = 0;
             }
             epcCount += currentEpc.getSeenCount();
             try{
                 inventory.put(currentEpc.getEpc(), epcCount);
             } catch (JSONException e) {
-                Log.e("BT77RfidoReader", "Exception: " + e + "");
+                Log.e("BT77RfidReader", "Exception: " + e + "");
             }
-            Log.i("BT77RfidoReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
+            Log.i("BT77RfidReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
         }
         
         
         try{
             argsObject.put("status", status.name());
         } catch (JSONException e) {
-            Log.e("BT77RfidoReader", "Exception: " + e + "");
+            Log.e("BT77RfidReader", "Exception: " + e + "");
         }
         callbackContext.success(argsArray);
         return true;
     }
 	
 	private boolean scanInventoryTwo() {
-        startRFIDoReader();
+        startRfidReader();
 
         InventoryParameters p = new InventoryParameters();
         p.setCycleCount(inventoryCycles);
@@ -250,7 +250,7 @@ public class BT77RfidoReader extends CordovaPlugin {
         InventoryResult inventoryResult = oReader.getInventory(p);
                 
         OperationStatus status = inventoryResult.getOperationStatus();
-        Log.i("BT77RfidoReader", "OperationStatus: " + status.toString());
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in scanInventory: " + status.name());
             return false;
@@ -272,12 +272,12 @@ public class BT77RfidoReader extends CordovaPlugin {
         try{
             inventory = argsObject.getJSONObject("inventory");
         } catch (JSONException e) {
-            Log.i("BT77RfidoReader", "Creating JSONObject for inventory (" + e + ")");
+            Log.i("BT77RfidReader", "Creating JSONObject for inventory (" + e + ")");
             inventory = new JSONObject();
             try{
                 argsObject.put("inventory", inventory);
             } catch (JSONException e2) {
-                Log.e("BT77RfidoReader", "Exception: " + e2 + "");
+                Log.e("BT77RfidReader", "Exception: " + e2 + "");
             }
         }
         
@@ -288,30 +288,30 @@ public class BT77RfidoReader extends CordovaPlugin {
             try{
                 epcCount = inventory.getInt(currentEpc.getEpc());
             } catch (JSONException e) {
-                Log.i("BT77RfidoReader", "Creating Int for epcCount (" + e + ")");
+                Log.i("BT77RfidReader", "Creating Int for epcCount (" + e + ")");
                 epcCount = 0;
             }
             epcCount = currentEpc.getSeenCount();
             try{
                 inventory.put(currentEpc.getEpc(), epcCount);
             } catch (JSONException e) {
-                Log.e("BT77RfidoReader", "Exception: " + e + "");
+                Log.e("BT77RfidReader", "Exception: " + e + "");
             }
-            Log.i("BT77RfidoReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
+            Log.i("BT77RfidReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
         }
         
         
         try{
             argsObject.put("status", status.name());
         } catch (JSONException e) {
-            Log.e("BT77RfidoReader", "Exception: " + e + "");
+            Log.e("BT77RfidReader", "Exception: " + e + "");
         }
         callbackContext.success(argsArray);
         return true;
     }
     
     private boolean readTag() {
-        startRFIDoReader();
+        startRfidReader();
 
         ReadParameters p = new ReadParameters();
         p.setMemoryBank(TagMemoryBank.EPC);
@@ -320,11 +320,11 @@ public class BT77RfidoReader extends CordovaPlugin {
         p.setLength(EPC_LENGTH);
         p.setRetries(retriesReadWrite);
 
-        Log.i("BT77RfidoReader", "ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
+        Log.i("BT77RfidReader", "ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
         ReadResult readResult = oReader.readMemoryBank(p);
 
         OperationStatus status = readResult.getOperationStatus();
-        Log.i("BT77RfidoReader", "OperationStatus: " + status.toString());
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in readTag: " + status.name());
             return false;
@@ -333,14 +333,14 @@ public class BT77RfidoReader extends CordovaPlugin {
         try{
             argsObject.put("dataFromReadResult", readResult.getReadData());
         } catch (JSONException e) {
-            Log.e("BT77RfidoReader", "Exception: " + e + "");
+            Log.e("BT77RfidReader", "Exception: " + e + "");
         }
-        Log.i("BT77RfidoReader", "readResult.getReadData(): "+readResult.getReadData());
+        Log.i("BT77RfidReader", "readResult.getReadData(): "+readResult.getReadData());
 
         try{
             argsObject.put("status", status.name());
         } catch (JSONException e) {
-            Log.e("BT77RfidoReader", "Exception: " + e + "");
+            Log.e("BT77RfidReader", "Exception: " + e + "");
         }
         callbackContext.success(argsArray);
         return true;
@@ -348,7 +348,7 @@ public class BT77RfidoReader extends CordovaPlugin {
     
     private boolean writeTag() {
         
-        startRFIDoReader();
+        startRfidReader();
 
         WriteParameters p = new WriteParameters();
         
@@ -358,12 +358,12 @@ public class BT77RfidoReader extends CordovaPlugin {
         p.setRetries(retriesReadWrite);
         p.setWriteData(dataToWrite);
 
-        Log.i("BT77RfidoReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
+        Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
         
         WriteResult r = oReader.writeMemoryBank(p);
 
         OperationStatus status = r.getOperationStatus();
-        Log.i("BT77RfidoReader", "OperationStatus: " + status.toString());
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
             callbackContext.error("Error in writeTag: " + status.name());
             return false;
@@ -372,7 +372,7 @@ public class BT77RfidoReader extends CordovaPlugin {
         try{
             argsObject.put("status", status.name());
         } catch (JSONException e) {
-            Log.e("BT77RfidoReader", "Exception: " + e + "");
+            Log.e("BT77RfidReader", "Exception: " + e + "");
         }
         callbackContext.success(argsArray);
         return true;
