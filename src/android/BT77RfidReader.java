@@ -22,6 +22,29 @@ import java.util.*;
 import android.util.Log;
 import java.lang.reflect.*;
 
+import com.sevenid.mobile.reader.bt77.*;
+import android.app.Activity;
+import android.util.Log;
+import com.android.hdhe.uhf.reader.Tools;
+import com.android.hdhe.uhf.reader.UhfReader;
+import com.sevenid.mobile.reader.api.Epc;
+import com.sevenid.mobile.reader.api.IAbstractReader;
+import com.sevenid.mobile.reader.api.operationresult.InventoryResult;
+import com.sevenid.mobile.reader.api.operationresult.OperationStatus;
+import com.sevenid.mobile.reader.api.operationresult.ReadResult;
+import com.sevenid.mobile.reader.api.operationresult.WriteResult;
+import com.sevenid.mobile.reader.api.parameters.InventoryParameters;
+import com.sevenid.mobile.reader.api.parameters.ReadParameters;
+import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
+import com.sevenid.mobile.reader.api.parameters.WriteParameters;
+import com.sevenid.mobile.reader.core.LicenseManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
 public class BT77RfidReader extends CordovaPlugin {
     public enum CordovaAction {
         SCAN_INVENTORY, SCAN_INVENTORY_TWO, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
@@ -155,7 +178,7 @@ public class BT77RfidReader extends CordovaPlugin {
 					result.setOperationStatus(OperationStatus.STATUS_OK);
 					
 					return result;
-				
+				}
 			};
         }
         if(!this.reader.isBusy() || !this.reader.isOpen()){
