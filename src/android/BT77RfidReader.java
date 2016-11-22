@@ -419,8 +419,10 @@ public class BT77RfidReader extends CordovaPlugin {
 }
 
 class CustomRfidReader extends RfidReader{
-	CustomRfidReader(){
-		super(Activity c);
+	private CustomRfidReader() {}
+  
+	public CustomRfidReader(Activity c){
+		this.context = c;
 	}
 	
 	@Override
