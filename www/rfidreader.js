@@ -4,7 +4,7 @@ var RfidReaderPlugin = (function () {
     "use strict";
     var CORDOVA_PLUGIN_NAME = "RfidReader",
 		CORDOVA_ACTION_SCAN_INVENTORY = "SCAN_INVENTORY",
-		CORDOVA_ACTION_SCAN_INVENTORY_TWO = "SCAN_INVENTORY_TWO",
+		CORDOVA_ACTION_SCAN_INVENTORY2 = "SCAN_INVENTORY2",
 		CORDOVA_ACTION_READ_TAG = "READ_TAG",
 		CORDOVA_ACTION_WRITE_TAG = "WRITE_TAG",
 		CORDOVA_ACTION_START_RFID_LISTENER = "START_RFID_LISTENER",
@@ -84,44 +84,6 @@ var RfidReaderPlugin = (function () {
             seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
         }
     }
-	function checkArgsObject2() {
-        argsObject = argsArray[0];
-        argsObject.inventoryCycles = Math.min(
-            Math.max(1, parseInt(argsObject.inventoryCycles, 10)),
-			valueLimits.maxInventoryCycles
-		);
-        if (isNaN(argsObject.inventoryCycles)) {
-            argsObject.inventoryCycles = defaultValues.inventoryCycles;
-        }
-        argsObject.retriesReadWrite = Math.min(
-            Math.max(1, parseInt(argsObject.retriesReadWrite, 10)),
-            valueLimits.maxRetriesReadWrite
-		);
-        if (isNaN(argsObject.retriesReadWrite)) {
-            argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
-        }
-        ["epcToRead", "epcToWrite", "dataToWrite"].forEach(function (ELEM) {
-            if (!isSet(argsObject[ELEM])) {
-                argsObject[ELEM] = "";
-            }
-        });
-
-        seenCountForFind = Math.min(
-            Math.max(1, parseInt(argsObject.seenCountForFind, 10)),
-            valueLimits.maxSeenCountForFind
-		);
-        if (isNaN(seenCountForFind)) {
-            seenCountForFind = defaultValues.seenCountForFind;
-        }
-        seenCountAdvantageForFind = Math.min(
-            Math.max(1, parseInt(argsObject.seenCountAdvantageForFind, 10)),
-            valueLimits.maxSeenCountAdvantageForFind
-		);
-        if (isNaN(seenCountAdvantageForFind)) {
-            seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
-        }
-		argsObject.inventoryCountThreshold = seenCountForFind;
-    }
     function getArgsArray(args) {
         // args auf erlaubten typ/inhalt prüfen
         // nur ein Object erlaubt, kein Array!
@@ -134,16 +96,6 @@ var RfidReaderPlugin = (function () {
         debugLog("args before init: " + JSON.stringify(args));
         argsArray = getArgsArray(args);
         checkArgsObject();
-        successCallback = cbSuccess;
-        errorCallback = cbError;
-        cycleCount = 0;
-        retryCount = 0;
-        debugLog("argsObject at the end of init: " + JSON.stringify(argsObject));
-    }
-	function init2(args, cbSuccess, cbError) {
-        debugLog("args before init: " + JSON.stringify(args));
-        argsArray = getArgsArray(args);
-        checkArgsObject2();
         successCallback = cbSuccess;
         errorCallback = cbError;
         cycleCount = 0;
@@ -182,12 +134,15 @@ var RfidReaderPlugin = (function () {
         );
     }
 	function cordovaExecScanInventory2() {
-        cordova.exec(
-            inventoryCycleSuccessCallback2,
+		// Only do one retry at scanInventory-Method in BT77RfidReader.java
+		var tempArgsArray = argsArray;
+		tempArgsArray[0].inventoryCycles = 1;
+		cordova.exec(
+            inventoryCycleSuccessCallback,
             inventoryCycleErrorCallback,
             CORDOVA_PLUGIN_NAME,
-            CORDOVA_ACTION_SCAN_INVENTORY_TWO,
-            argsArray
+            CORDOVA_ACTION_SCAN_INVENTORY2,
+            tempArgsArray
         );
     }
     function inventoryCycleSuccessCallback(args) {
@@ -210,7 +165,7 @@ var RfidReaderPlugin = (function () {
 			inventoryCycleErrorCallback(errString);
         }
     }
-	function inventoryCycleSuccessCallback2(args) {
+/*	function inventoryCycleSuccessCallback2(args) {
         argsArray = args;
         argsObject = argsArray[0];
 
@@ -224,7 +179,7 @@ var RfidReaderPlugin = (function () {
 			debugLog(errString);
 			inventoryCycleErrorCallback(errString);
         }
-    }
+    }*/
     function inventoryCycleErrorCallback(message) {
         errorCallback(message);
         //shutdown(message, emptyCallback);
@@ -438,7 +393,7 @@ var RfidReaderPlugin = (function () {
 	function scanAndReadBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndReadBestTag");
         // init the plugin class
-        init2(args, successCallback, errorCallback);
+        init(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = readBestTagFromInventory;
         // ... before initiating the scan
@@ -456,7 +411,7 @@ var RfidReaderPlugin = (function () {
 	function scanAndWriteBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndWriteBestTag");
         // init the plugin class
-        init2(args, successCallback, errorCallback);
+        init(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = writeBestTagFromInventory;
         // ... before initiating the scan
