@@ -463,11 +463,11 @@ public class BT77RfidReader extends CordovaPlugin {
 		super(c);
 	}
 	
-	RfidReader reader = new RfidReader();
+	/* RfidReader reader = new RfidReader();
  	Field fReader = RfidReader.class.getDeclaredField("reader");
 	fReader.setAccessible(true);
-	UhfReader uhfreader = (UhfReader) fReader.get(reader);
-	
+	UhfReader uhfreader = (UhfReader) fReader.get(reader); */
+	private UhfReader reader;
 	
 /*	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
 		Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
@@ -491,7 +491,7 @@ public class BT77RfidReader extends CordovaPlugin {
 		
 		HashMap<String, Epc> unfilteredInventory = new HashMap();
 		for (int i = 0; i < param.getCycleCount(); i++){
-			List<byte[]> currentInventory = this.uhfreader.inventoryRealTime();
+			List<byte[]> currentInventory = this.reader.inventoryRealTime();
 			if ((currentInventory != null) && (!currentInventory.isEmpty())) {
 				for (byte[] epc : currentInventory) {
 					if ((epc != null) && (epc.length > 0)){
