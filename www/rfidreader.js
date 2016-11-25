@@ -35,6 +35,7 @@ var RfidReaderPlugin = (function () {
 		cycleCount = 0,
 		seenCountForFind = 0,
 		seenCountAdvantageForFind = 0,
+		bOnlyOneInventoryCycleForJava = false,
 
 		successCallback,
 		errorCallback,
@@ -95,6 +96,11 @@ var RfidReaderPlugin = (function () {
         if (isNaN(argsObject.inventoryCycles)) {
             argsObject.inventoryCycles = defaultValues.inventoryCycles;
         }
+		if(bOnlyOneInventoryCycleForJava === true){
+			argsObject.inventoryCyclesForJava = 1;
+		}else{
+			argsObject.inventoryCyclesForJava = argsObject.inventoryCycles;
+		}
         argsObject.retriesReadWrite = Math.min(
             Math.max(1, parseInt(argsObject.retriesReadWrite, 10)),
             valueLimits.maxRetriesReadWrite
@@ -190,21 +196,18 @@ var RfidReaderPlugin = (function () {
         );
     }
 	function cordovaExecScanInventory2() {
-		// Only do one retry at scanInventory-Method in BT77RfidReader.java
-		var tempArgsArray = argsArray;
-		tempArgsArray[0].inventoryCycles = 1;
 		cordova.exec(
-            inventoryCycleSuccessCallback,
+            inventoryCycleSuccessCallback2,
             inventoryCycleErrorCallback,
             CORDOVA_PLUGIN_NAME,
             CORDOVA_ACTION_SCAN_INVENTORY2,
-            tempArgsArray
+            argsArray
         );
     }
     function inventoryCycleSuccessCallback(args) {
         argsArray = args;
         argsObject = argsArray[0];
-
+		
         if (inventoryAdvantageReached()) {
             debugLog("inventoryAdvantageReached ... we have a winner!");
             inventoryProcessCallback();
@@ -221,13 +224,18 @@ var RfidReaderPlugin = (function () {
 			inventoryCycleErrorCallback(errString);
         }
     }
-/*	function inventoryCycleSuccessCallback2(args) {
+	function inventoryCycleSuccessCallback2(args) {
         argsArray = args;
         argsObject = argsArray[0];
-
+		
         if (inventoryAdvantageReached()) {
             debugLog("inventoryAdvantageReached ... we have a winner!");
             inventoryProcessCallback();
+        } else if (bOnlyOneInventoryCycleForJava === true && cycleCount < argsObject.inventoryCycles) {
+            cycleCount = cycleCount + 1;
+            debugLog("scanInventory ... starting another cycle: " + cycleCount +
+                " (max: " + argsObject.inventoryCycles + ")");
+            cordovaExecScanInventory();
         } else {
             //debugLog("inventoryCycleSuccessCallback ... max cycles reached ... moving on to callback");
             //inventoryProcessCallback();
@@ -235,7 +243,7 @@ var RfidReaderPlugin = (function () {
 			debugLog(errString);
 			inventoryCycleErrorCallback(errString);
         }
-    }*/
+    }
     function inventoryCycleErrorCallback(message) {
         errorCallback(message);
         //shutdown(message, emptyCallback);
@@ -448,7 +456,8 @@ var RfidReaderPlugin = (function () {
     }
 	function scanAndReadBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndReadBestTag");
-        // init the plugin class
+        bOnlyOneInventoryCycleForJava = true;
+		// init the plugin class
         init2(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = readBestTagFromInventory;
@@ -466,7 +475,8 @@ var RfidReaderPlugin = (function () {
     }
 	function scanAndWriteBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndWriteBestTag");
-        // init the plugin class
+        bOnlyOneInventoryCycleForJava = true;
+		// init the plugin class
         init2(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = writeBestTagFromInventory;

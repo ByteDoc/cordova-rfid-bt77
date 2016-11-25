@@ -43,7 +43,7 @@ public class BT77RfidReader extends CordovaPlugin {
     private static int EPC_LENGTH = 6;
     RfidReader reader = null;
     int retriesReadWrite = 0;
-    int inventoryCycles = 0;
+    int inventoryCyclesForJava = 0;
 	int inventoryCountThreshold = 0;
     String epcToRead = "", epcToWrite = "", dataToWrite = "", dataFromReadResult = "";
     // epcString = "", dataString = "";
@@ -63,7 +63,7 @@ public class BT77RfidReader extends CordovaPlugin {
             argsArray = args;
             argsObject = args.getJSONObject(0);
             retriesReadWrite = argsObject.getInt("retriesReadWrite");
-            inventoryCycles = argsObject.getInt("inventoryCycles");
+            inventoryCyclesForJava = argsObject.getInt("inventoryCyclesForJava");
 			inventoryCountThreshold = argsObject.getInt("inventoryCountThreshold");
             epcToRead = argsObject.getString("epcToRead");
             epcToWrite = argsObject.getString("epcToWrite");
@@ -152,7 +152,7 @@ public class BT77RfidReader extends CordovaPlugin {
         startRFIDReader();
 		
         InventoryParameters p = new InventoryParameters();
-        p.setCycleCount(inventoryCycles);
+        p.setCycleCount(inventoryCyclesForJava);
 
         // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
         InventoryResult inventoryResult = reader.getInventory(p);
@@ -168,7 +168,7 @@ public class BT77RfidReader extends CordovaPlugin {
         /**
         {
             retriesReadWrite: x,
-            inventoryCycles: y,
+            inventoryCyclesForJava: y,
             inventory: {                    JSONObject
                 epc_id_123: epc_count       Int
                 epc_id_456: epc_count       Int
@@ -222,7 +222,7 @@ public class BT77RfidReader extends CordovaPlugin {
         startRFIDReader();
 
         InventoryParameters p = new InventoryParameters();
-        p.setCycleCount(inventoryCycles);
+        p.setCycleCount(inventoryCyclesForJava);
 		p.setCountThreshold(inventoryCountThreshold);
 
         // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
@@ -239,7 +239,7 @@ public class BT77RfidReader extends CordovaPlugin {
         /**
         {
             retriesReadWrite: x,
-            inventoryCycles: y,
+            inventoryCyclesForJava: y,
             inventory: {                    JSONObject
                 epc_id_123: epc_count       Int
                 epc_id_456: epc_count       Int
