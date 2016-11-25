@@ -496,7 +496,7 @@ public class BT77RfidReader extends CordovaPlugin {
 				for (byte[] epc : currentInventory) {
 					if ((epc != null) && (epc.length > 0)){
 						String epcStr = Tools.Bytes2HexString(epc, epc.length);
-						if (bSurvivesFilter(epcStr, param)){
+						if (survivesFilter(epcStr, param)){
 							Epc old = (Epc)unfilteredInventory.get(epcStr);
 							if (old == null) {
 								unfilteredInventory.put(epcStr, new Epc(epcStr));
