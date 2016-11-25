@@ -133,7 +133,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
 	private boolean startRFIDReader(){
 		if(reader == null){
-			this.reader = new RfidReader(cordova.getActivity());
+			this.reader = new CustomRfidReader(cordova.getActivity());
 		}
 		if(!this.reader.isBusy() || !this.reader.isOpen()){
 			Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -143,75 +143,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
     private boolean startRFIDReader2(){
         if(reader == null){
-            this.reader = new RfidReader(cordova.getActivity()){
-				/* UhfReader uhfreader = accessReaderField();
-				public UhfReader accessReaderField(){
-					Field fReader = RfidReader.class.getDeclaredField("reader");
-					fReader.setAccessible(true);
-					return fReader.get(this);
-				} */
-				Field fReader = RfidReader.class.getDeclaredField("reader");
-				fReader.setAccessible(true);
-				UhfReader uhfreader = (UhfReader) fReader.get(this);
-				
-				
-				public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
-					Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
-					mSurvivesFilter.setAccessible(true);
-					return mSurvivesFilter.invoke(this, epcStr, param);
-				}
-				
-				/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-					/project/src/org/apache/cordova/plugin/BT77RfidReader.java:151: error: incompatible types: Object cannot be converted to UhfReader
-						return fReader.get(this);
-										  ^
-					/project/src/org/apache/cordova/plugin/BT77RfidReader.java:160: error: incompatible types: Object cannot be converted to Boolean
-										return mSurvivesFilter.invoke(this, epcStr, param);
-																	 ^
-				*/
-				
-				@Override
-				public InventoryResult getInventory(InventoryParameters param){
-					System.out.println("This is a test if this method will really be overwritten!!!");
-					InventoryResult result = new InventoryResult();
-					
-					HashMap<String, Epc> unfilteredInventory = new HashMap();
-					for (int i = 0; i < param.getCycleCount(); i++){
-						List<byte[]> currentInventory = this.uhfreader.inventoryRealTime();
-						if ((currentInventory != null) && (!currentInventory.isEmpty())) {
-							for (byte[] epc : currentInventory) {
-								if ((epc != null) && (epc.length > 0)){
-									String epcStr = Tools.Bytes2HexString(epc, epc.length);
-									if (bSurvivesFilter(epcStr, param)){
-										Epc old = (Epc)unfilteredInventory.get(epcStr);
-										if (old == null) {
-											unfilteredInventory.put(epcStr, new Epc(epcStr));
-										} else {
-											old.incrementSeenCount();
-										}
-									}
-								}
-							}
-						}
-						try{
-							Thread.sleep(50L);
-						} catch (InterruptedException localInterruptedException1) {}
-					}
-					List<Epc> thresholdFilteredEpcList = new ArrayList();
-					for (Iterator i = unfilteredInventory.entrySet().iterator(); i.hasNext();){
-						Map.Entry currentEntry = (Map.Entry)i.next();
-						Epc currentEpc = (Epc)currentEntry.getValue();
-						if (currentEpc.getSeenCount() >= param.getCountThreshold()) {
-							thresholdFilteredEpcList.add(currentEpc);
-						}
-					}
-					Epc[] a = new Epc[thresholdFilteredEpcList.size()];
-					result.setInventory((Epc[])thresholdFilteredEpcList.toArray(a));
-					result.setOperationStatus(OperationStatus.STATUS_OK);
-					
-					return result;
-				}
-			};
+            this.reader = new RfidReader(cordova.getActivity());
         }
         if(!this.reader.isBusy() || !this.reader.isOpen()){
             Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -519,9 +451,37 @@ public class BT77RfidReader extends CordovaPlugin {
     */
 }
 
-/* class CustomRfidReader extends RfidReader{
-	Field field = RfidReader.class.getDeclaredField("reader");
-	field.setAccessible(true);
+ class CustomRfidReader extends RfidReader{
+	/* UhfReader uhfreader = accessReaderField();
+	public UhfReader accessReaderField(){
+		Field fReader = RfidReader.class.getDeclaredField("reader");
+		fReader.setAccessible(true);
+		return fReader.get(this);
+	} */
+	
+	CustomRfidReader(Activity c){
+		super(c);
+	}
+	
+/* 	Field fReader = RfidReader.class.getDeclaredField("reader");
+	fReader.setAccessible(true);
+	UhfReader uhfreader = (UhfReader) fReader.get(this);
+	
+	
+	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
+		Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
+		mSurvivesFilter.setAccessible(true);
+		return mSurvivesFilter.invoke(this, epcStr, param);
+	} */
+	
+	/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+		/project/src/org/apache/cordova/plugin/BT77RfidReader.java:151: error: incompatible types: Object cannot be converted to UhfReader
+			return fReader.get(this);
+							  ^
+		/project/src/org/apache/cordova/plugin/BT77RfidReader.java:160: error: incompatible types: Object cannot be converted to Boolean
+							return mSurvivesFilter.invoke(this, epcStr, param);
+														 ^
+	*/
 	
 	@Override
 	public InventoryResult getInventory(InventoryParameters param){
@@ -530,12 +490,12 @@ public class BT77RfidReader extends CordovaPlugin {
 		
 		HashMap<String, Epc> unfilteredInventory = new HashMap();
 		for (int i = 0; i < param.getCycleCount(); i++){
-			List<byte[]> currentInventory = this.reader.inventoryRealTime();
+			List<byte[]> currentInventory = this.uhfreader.inventoryRealTime();
 			if ((currentInventory != null) && (!currentInventory.isEmpty())) {
 				for (byte[] epc : currentInventory) {
 					if ((epc != null) && (epc.length > 0)){
 						String epcStr = Tools.Bytes2HexString(epc, epc.length);
-						if (survivesFilter(epcStr, param)){
+						if (bSurvivesFilter(epcStr, param)){
 							Epc old = (Epc)unfilteredInventory.get(epcStr);
 							if (old == null) {
 								unfilteredInventory.put(epcStr, new Epc(epcStr));
@@ -564,4 +524,4 @@ public class BT77RfidReader extends CordovaPlugin {
 		
 		return result;
 	}
-} */
+}
