@@ -41,7 +41,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
-    CustomRfidReader reader = null;
+    RfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
 	int inventoryCountThreshold = 0;
@@ -123,7 +123,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
 	private boolean startRFIDReader(){
 		if(reader == null){
-			this.reader = new CustomRfidReader(cordova.getActivity());
+			this.reader = new RfidReader(cordova.getActivity());
 		}
 		if(!this.reader.isBusy() || !this.reader.isOpen()){
 			Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -133,7 +133,7 @@ public class BT77RfidReader extends CordovaPlugin {
 	
     private boolean startRFIDReader2(){
         if(reader == null){
-            this.reader = new RfidReader(cordova.getActivity());
+            this.reader = new CustomRfidReader(cordova.getActivity());
         }
         if(!this.reader.isBusy() || !this.reader.isOpen()){
             Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
