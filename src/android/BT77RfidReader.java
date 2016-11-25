@@ -525,4 +525,17 @@ public class BT77RfidReader extends CordovaPlugin {
 		
 		return result;
 	}
+	
+	private boolean survivesFilter(String epc, InventoryParameters param){
+		if (epc != null){
+			if ((param.getEpcInclusionPrefix() != null) && (!param.getEpcInclusionPrefix().isEmpty()) && (epc.startsWith(param.getEpcInclusionPrefix()))) {
+				return true;
+			}
+			if ((param.getEpcExclusionPrefix() != null) && (!param.getEpcExclusionPrefix().isEmpty()) && (epc.startsWith(param.getEpcInclusionPrefix()))) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
 }
