@@ -463,12 +463,13 @@ public class BT77RfidReader extends CordovaPlugin {
 		super(c);
 	}
 	
-/* 	Field fReader = RfidReader.class.getDeclaredField("reader");
+	RfidReader reader = new RfidReader();
+ 	Field fReader = RfidReader.class.getDeclaredField("reader");
 	fReader.setAccessible(true);
-	UhfReader uhfreader = (UhfReader) fReader.get(this);
+	UhfReader uhfreader = (UhfReader) fReader.get(reader);
 	
 	
-	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
+/*	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
 		Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
 		mSurvivesFilter.setAccessible(true);
 		return mSurvivesFilter.invoke(this, epcStr, param);
