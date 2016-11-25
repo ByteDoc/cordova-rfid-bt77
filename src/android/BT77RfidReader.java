@@ -24,19 +24,9 @@ import java.lang.reflect.*;
 
 import com.sevenid.mobile.reader.bt77.*;
 import android.app.Activity;
-import android.util.Log;
 import com.android.hdhe.uhf.reader.Tools;
 import com.android.hdhe.uhf.reader.UhfReader;
-import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.api.IAbstractReader;
-import com.sevenid.mobile.reader.api.operationresult.InventoryResult;
-import com.sevenid.mobile.reader.api.operationresult.OperationStatus;
-import com.sevenid.mobile.reader.api.operationresult.ReadResult;
-import com.sevenid.mobile.reader.api.operationresult.WriteResult;
-import com.sevenid.mobile.reader.api.parameters.InventoryParameters;
-import com.sevenid.mobile.reader.api.parameters.ReadParameters;
-import com.sevenid.mobile.reader.api.parameters.TagMemoryBank;
-import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.core.LicenseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +41,7 @@ public class BT77RfidReader extends CordovaPlugin {
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
-    RfidReader reader = null;
+    CustomRfidReader reader = null;
     int retriesReadWrite = 0;
     int inventoryCycles = 0;
 	int inventoryCountThreshold = 0;
@@ -133,7 +123,7 @@ public class BT77RfidReader extends CordovaPlugin {
     
 	private boolean startRFIDReader(){
 		if(reader == null){
-			this.reader = new RfidReader(cordova.getActivity());
+			this.reader = new CustomRfidReader(cordova.getActivity());
 		}
 		if(!this.reader.isBusy() || !this.reader.isOpen()){
 			Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
@@ -451,42 +441,131 @@ public class BT77RfidReader extends CordovaPlugin {
     */
 }
 
- class CustomRfidReader extends RfidReader{
-	/* UhfReader uhfreader = accessReaderField();
-	public UhfReader accessReaderField(){
-		Field fReader = RfidReader.class.getDeclaredField("reader");
-		fReader.setAccessible(true);
-		return fReader.get(this);
-	} */
+ // class CustomRfidReader extends RfidReader{
+	// /* UhfReader uhfreader = accessReaderField();
+	// public UhfReader accessReaderField(){
+		// Field fReader = RfidReader.class.getDeclaredField("reader");
+		// fReader.setAccessible(true);
+		// return fReader.get(this);
+	// } */
 	
-	CustomRfidReader(Activity c){
-		super(c);
+	// CustomRfidReader(Activity c){
+		// super(c);
+	// }
+	
+	// /* RfidReader reader = new RfidReader();
+ 	// Field fReader = RfidReader.class.getDeclaredField("reader");
+	// fReader.setAccessible(true);
+	// UhfReader uhfreader = (UhfReader) fReader.get(reader); */
+	// private UhfReader reader;
+	
+// /*	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
+		// Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
+		// mSurvivesFilter.setAccessible(true);
+		// return mSurvivesFilter.invoke(this, epcStr, param);
+	// } */
+	
+	// /* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+		// /project/src/org/apache/cordova/plugin/BT77RfidReader.java:151: error: incompatible types: Object cannot be converted to UhfReader
+			// return fReader.get(this);
+							  // ^
+		// /project/src/org/apache/cordova/plugin/BT77RfidReader.java:160: error: incompatible types: Object cannot be converted to Boolean
+							// return mSurvivesFilter.invoke(this, epcStr, param);
+														 // ^
+	// */
+	
+	// @Override
+	// public InventoryResult getInventory(InventoryParameters param){
+		// Log.i("BT77RfidReader", "This is a test if this method will really be overwritten!!!");
+		// InventoryResult result = new InventoryResult();
+		
+		// HashMap<String, Epc> unfilteredInventory = new HashMap();
+		// for (int i = 0; i < param.getCycleCount(); i++){
+			// List<byte[]> currentInventory = this.reader.inventoryRealTime();
+			// if ((currentInventory != null) && (!currentInventory.isEmpty())) {
+				// for (byte[] epc : currentInventory) {
+					// if ((epc != null) && (epc.length > 0)){
+						// String epcStr = Tools.Bytes2HexString(epc, epc.length);
+						// if (survivesFilter(epcStr, param)){
+							// Epc old = (Epc)unfilteredInventory.get(epcStr);
+							// if (old == null) {
+								// unfilteredInventory.put(epcStr, new Epc(epcStr));
+							// } else {
+								// old.incrementSeenCount();
+							// }
+						// }
+					// }
+				// }
+			// }
+			// try{
+				// Thread.sleep(50L);
+			// } catch (InterruptedException localInterruptedException1) {}
+		// }
+		// List<Epc> thresholdFilteredEpcList = new ArrayList();
+		// for (Iterator i = unfilteredInventory.entrySet().iterator(); i.hasNext();){
+			// Map.Entry currentEntry = (Map.Entry)i.next();
+			// Epc currentEpc = (Epc)currentEntry.getValue();
+			// if (currentEpc.getSeenCount() >= param.getCountThreshold()) {
+				// thresholdFilteredEpcList.add(currentEpc);
+			// }
+		// }
+		// Epc[] a = new Epc[thresholdFilteredEpcList.size()];
+		// result.setInventory((Epc[])thresholdFilteredEpcList.toArray(a));
+		// result.setOperationStatus(OperationStatus.STATUS_OK);
+		
+		// return result;
+	// }
+	
+	// private boolean survivesFilter(String epc, InventoryParameters param){
+		// if (epc != null){
+			// if ((param.getEpcInclusionPrefix() != null) && (!param.getEpcInclusionPrefix().isEmpty()) && (epc.startsWith(param.getEpcInclusionPrefix()))) {
+				// return true;
+			// }
+			// if ((param.getEpcExclusionPrefix() != null) && (!param.getEpcExclusionPrefix().isEmpty()) && (epc.startsWith(param.getEpcInclusionPrefix()))) {
+				// return false;
+			// }
+			// return true;
+		// }
+		// return false;
+	// }
+// }
+class CustomRfidReader implements IAbstractReader{
+	private static volatile boolean isActive = false;
+	private volatile boolean isOpen = false;
+	private UhfReader reader;
+	private Activity context;
+	
+	private RfidReader() {}
+	
+	public RfidReader(Activity c){
+		this.context = c;
 	}
 	
-	/* RfidReader reader = new RfidReader();
- 	Field fReader = RfidReader.class.getDeclaredField("reader");
-	fReader.setAccessible(true);
-	UhfReader uhfreader = (UhfReader) fReader.get(reader); */
-	private UhfReader reader;
+	public boolean open(){
+		LicenseManager l = new LicenseManager(this.context);
+		if (l.validateLicense()) {
+			return waitForReaderInstance(20, 5);
+		}
+		return false;
+	}
 	
-/*	public Boolean bSurvivesFilter(String epcStr, InventoryParameters param){
-		Method mSurvivesFilter = RfidReader.class.getDeclaredMethod("survivesFilter", String.class, InventoryParameters.class);
-		mSurvivesFilter.setAccessible(true);
-		return mSurvivesFilter.invoke(this, epcStr, param);
-	} */
+	public boolean close(){
+		this.reader.close();
+		isActive = false;
+		this.isOpen = false;
+		return true;
+	}
 	
-	/* ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-		/project/src/org/apache/cordova/plugin/BT77RfidReader.java:151: error: incompatible types: Object cannot be converted to UhfReader
-			return fReader.get(this);
-							  ^
-		/project/src/org/apache/cordova/plugin/BT77RfidReader.java:160: error: incompatible types: Object cannot be converted to Boolean
-							return mSurvivesFilter.invoke(this, epcStr, param);
-														 ^
-	*/
+	public boolean isBusy(){
+		return (isActive) && (this.isOpen);
+	}
 	
-	@Override
+	public boolean isOpen(){
+		return this.isOpen;
+	}
+	
 	public InventoryResult getInventory(InventoryParameters param){
-		Log.i("BT77RfidReader", "This is a test if this method will really be overwritten!!!");
+		System.out.println("This is a test if this method will really be overwritten!!!")
 		InventoryResult result = new InventoryResult();
 		
 		HashMap<String, Epc> unfilteredInventory = new HashMap();
@@ -526,6 +605,71 @@ public class BT77RfidReader extends CordovaPlugin {
 		return result;
 	}
 	
+	public ReadResult readMemoryBank(ReadParameters param){
+		ReadResult result = new ReadResult();
+
+		this.reader.selectEPC(Tools.HexString2Bytes(param.getEpc()));
+		byte[] accessPassword = Tools.HexString2Bytes(param.getPassword());
+		for (int i = 0; i < param.getRetries(); i++){
+			byte[] oldData = this.reader.readFrom6C(membankToInt(param.getMemoryBank()), param.getOffset(), param.getLength(), accessPassword);
+			if ((oldData != null) && (oldData.length > 1)){
+				String oldReadResult = Tools.Bytes2HexString(oldData, oldData.length);
+				result.setOperationStatus(OperationStatus.STATUS_OK);
+				result.setReadData(oldReadResult);
+				result.setRawResult(i + 1);
+			
+				return result;
+			}
+			try{
+				Thread.sleep(50L);
+			}catch (InterruptedException localInterruptedException) {}
+		}
+		result.setOperationStatus(OperationStatus.STATUS_OPERATION_FAIL);
+		result.setReadData(null);
+
+		return result;
+	}
+	
+	public WriteResult writeMemoryBank(WriteParameters param){
+		WriteResult result = new WriteResult();
+
+		this.reader.selectEPC(Tools.HexString2Bytes(param.getEpc()));
+		byte[] accessPassword = Tools.HexString2Bytes(param.getPassword());
+		byte[] rawWriteData = Tools.HexString2Bytes(param.getWriteData());
+		for (int i = 0; i < param.getRetries(); i++){
+			boolean writeRetVal = this.reader.writeTo6C(accessPassword, membankToInt(param.getMemoryBank()), param.getOffset(), rawWriteData.length / 2, rawWriteData);
+			if (writeRetVal){
+				result.setOperationStatus(OperationStatus.STATUS_OK);
+				result.setRawResult(i + 1);
+
+				return result;
+			}
+			try{
+				Thread.sleep(50L);
+			} catch (InterruptedException localInterruptedException) {}
+		}
+		result.setOperationStatus(OperationStatus.STATUS_OPERATION_FAIL);
+
+		return result;
+	}
+	
+	public WriteResult overwriteEpc(String oldEpc, String newEpc){
+		if ((oldEpc != null) && (newEpc != null) && (oldEpc.length() == 24) && (newEpc.length() == 24)){
+			WriteParameters param = new WriteParameters();
+			param.setEpc(oldEpc);
+			param.setMemoryBank(TagMemoryBank.EPC);
+			param.setOffset(2);
+			param.setWriteData(newEpc);
+			param.setRetries(10);
+
+			return writeMemoryBank(param);
+		}
+		WriteResult errorResult = new WriteResult();
+		errorResult.setOperationStatus(OperationStatus.PARAMETER_PROBLEM);
+
+		return errorResult;
+	}
+	
 	private boolean survivesFilter(String epc, InventoryParameters param){
 		if (epc != null){
 			if ((param.getEpcInclusionPrefix() != null) && (!param.getEpcInclusionPrefix().isEmpty()) && (epc.startsWith(param.getEpcInclusionPrefix()))) {
@@ -537,5 +681,48 @@ public class BT77RfidReader extends CordovaPlugin {
 			return true;
 		}
 		return false;
+	}
+	
+	private int membankToInt(TagMemoryBank bank){
+		if (TagMemoryBank.RESERVE.equals(bank)) {
+			return 0;
+		}
+		if (TagMemoryBank.EPC.equals(bank)) {
+			return 1;
+		}
+		if (TagMemoryBank.TID.equals(bank)) {
+			return 2;
+		}
+		if (TagMemoryBank.USER.equals(bank)) {
+			return 3;
+		}
+		return -1;
+	}
+	
+	private boolean openReader(int powerValue, int sensitivity){
+		this.reader = UhfReader.getInstance();
+		if (this.reader != null){
+			this.reader.setOutputPower(powerValue);
+			this.reader.setSensitivity(sensitivity);
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean waitForReaderInstance(int delay, int count){
+		int currentCount = 0;
+		while (isActive) {
+			try{
+				Log.e("RfidReader", "Polling for reader instance...");
+				Thread.sleep(delay);
+				if (currentCount > count) {
+					return false;
+				}
+				currentCount++;
+			} catch (InterruptedException localInterruptedException) {}
+		}
+		isActive = true;
+		this.isOpen = true;
+		return openReader(26, 3);
 	}
 }
