@@ -14,7 +14,8 @@ var RfidReaderPlugin = (function () {
 			inventoryCycles: 30,
 			seenCountForFind: 5,
 			seenCountAdvantageForFind: 5,
-			retriesReadWrite: 20
+			retriesReadWrite: 20,
+			inventoryCountThreshold: 0
 		},
     // further attributes for args object
     //   epcToRead: epc
@@ -25,7 +26,8 @@ var RfidReaderPlugin = (function () {
 			maxInventoryCycles: 50,
 			maxSeenCountForFind: 5,
 			maxSeenCountAdvantageForFind: 5,
-			maxRetriesReadWrite: 35
+			maxRetriesReadWrite: 35,
+			inventoryCountThreshold: 5
 		},
 		argsObject = {},
 		argsArray = [],
@@ -84,6 +86,50 @@ var RfidReaderPlugin = (function () {
             seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
         }
     }
+	function checkArgsObject2() {
+        argsObject = argsArray[0];
+        argsObject.inventoryCycles = Math.min(
+            Math.max(1, parseInt(argsObject.inventoryCycles, 10)),
+			valueLimits.maxInventoryCycles
+		);
+        if (isNaN(argsObject.inventoryCycles)) {
+            argsObject.inventoryCycles = defaultValues.inventoryCycles;
+        }
+        argsObject.retriesReadWrite = Math.min(
+            Math.max(1, parseInt(argsObject.retriesReadWrite, 10)),
+            valueLimits.maxRetriesReadWrite
+		);
+        if (isNaN(argsObject.retriesReadWrite)) {
+            argsObject.retriesReadWrite = defaultValues.retriesReadWrite;
+        }
+		argsObject.inventoryCountThreshold = Math.min(
+            Math.max(1, parseInt(argsObject.inventoryCountThreshold, 10)),
+            valueLimits.inventoryCountThreshold
+		);
+		if (isNaN(argsObject.inventoryCountThreshold)) {
+            argsObject.inventoryCountThreshold = defaultValues.inventoryCountThreshold;
+        }
+        ["epcToRead", "epcToWrite", "dataToWrite"].forEach(function (ELEM) {
+            if (!isSet(argsObject[ELEM])) {
+                argsObject[ELEM] = "";
+            }
+        });
+
+        seenCountForFind = Math.min(
+            Math.max(1, parseInt(argsObject.seenCountForFind, 10)),
+            valueLimits.maxSeenCountForFind
+		);
+        if (isNaN(seenCountForFind)) {
+            seenCountForFind = defaultValues.seenCountForFind;
+        }
+        seenCountAdvantageForFind = Math.min(
+            Math.max(1, parseInt(argsObject.seenCountAdvantageForFind, 10)),
+            valueLimits.maxSeenCountAdvantageForFind
+		);
+        if (isNaN(seenCountAdvantageForFind)) {
+            seenCountAdvantageForFind = defaultValues.seenCountAdvantageForFind;
+        }
+    }
     function getArgsArray(args) {
         // args auf erlaubten typ/inhalt prüfen
         // nur ein Object erlaubt, kein Array!
@@ -96,6 +142,16 @@ var RfidReaderPlugin = (function () {
         debugLog("args before init: " + JSON.stringify(args));
         argsArray = getArgsArray(args);
         checkArgsObject();
+        successCallback = cbSuccess;
+        errorCallback = cbError;
+        cycleCount = 0;
+        retryCount = 0;
+        debugLog("argsObject at the end of init: " + JSON.stringify(argsObject));
+    }
+	function init2(args, cbSuccess, cbError) {
+        debugLog("args before init: " + JSON.stringify(args));
+        argsArray = getArgsArray(args);
+        checkArgsObject2();
         successCallback = cbSuccess;
         errorCallback = cbError;
         cycleCount = 0;
@@ -393,7 +449,7 @@ var RfidReaderPlugin = (function () {
 	function scanAndReadBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndReadBestTag");
         // init the plugin class
-        init(args, successCallback, errorCallback);
+        init2(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = readBestTagFromInventory;
         // ... before initiating the scan
@@ -411,7 +467,7 @@ var RfidReaderPlugin = (function () {
 	function scanAndWriteBestTag2(args, successCallback, errorCallback) {
         debugLog("starting scanAndWriteBestTag");
         // init the plugin class
-        init(args, successCallback, errorCallback);
+        init2(args, successCallback, errorCallback);
         // set the necessary follow-up action ... (because scan and read are separate API calls)
         inventoryProcessCallback = writeBestTagFromInventory;
         // ... before initiating the scan
