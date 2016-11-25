@@ -535,9 +535,9 @@ class CustomRfidReader implements IAbstractReader{
 	private UhfReader reader;
 	private Activity context;
 	
-	private RfidReader() {}
+	private CustomRfidReader() {}
 	
-	public RfidReader(Activity c){
+	public CustomRfidReader(Activity c){
 		this.context = c;
 	}
 	
@@ -565,7 +565,7 @@ class CustomRfidReader implements IAbstractReader{
 	}
 	
 	public InventoryResult getInventory(InventoryParameters param){
-		System.out.println("This is a test if this method will really be overwritten!!!")
+		Log.i("BT77RfidReader", "This is a test if this method will really be overwritten!!!");
 		InventoryResult result = new InventoryResult();
 		
 		HashMap<String, Epc> unfilteredInventory = new HashMap();
