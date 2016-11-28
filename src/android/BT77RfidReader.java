@@ -251,14 +251,11 @@ public class BT77RfidReader extends CordovaPlugin {
 
         Log.i("BT77RfidReader", "ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
         ReadResult readResult = reader.readMemoryBank(p);
+        
+        JSONObject result = new JSONObject();
 
         OperationStatus status = readResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
-        if (status != OperationStatus.STATUS_OK) {
-            // stop execution on any error?
-            callbackContext.error("Error in readTagWithMemoryBank(" + tagMemoryBank.name() + "): " + status.name());
-            return false;
-        }
         
         JSONObject result = new JSONObject();
         try{
@@ -266,6 +263,11 @@ public class BT77RfidReader extends CordovaPlugin {
             result.put("status", status.name());
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        
+        if (status != OperationStatus.STATUS_OK) {
+            // stop execution on any error?
+            callbackContext.error("Error in readTagWithMemoryBank(" + tagMemoryBank.name() + "): " + status.name());
         }
         
         return result;
