@@ -153,7 +153,7 @@ var RfidReaderPlugin = (function () {
         argsObject = argsArray[0];
 		
         if (bInventoryUseBestAlgorithm === true) {
-            if (inventoryAdvantageReached()) {
+            if (inventoryAdvantageReached() === true) {
                 debugLog("inventoryAdvantageReached ... we have a winner!");
                 inventoryProcessCallback();
             } else if (cycleCount < argsObject.inventoryCycles) {
@@ -220,7 +220,7 @@ var RfidReaderPlugin = (function () {
 			secondMostSeenCountValue = 0;
         Object.keys(argsObject.inventory).forEach(function (epc) {
             var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
+            debugLog("find max - Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
             if (seenCount > maxSeenCountValue) {
                 maxSeenCountEpc = epc;
                 maxSeenCountValue = seenCount;
@@ -231,8 +231,8 @@ var RfidReaderPlugin = (function () {
                 return;     // do not use the epc already in first place with highest seenCount
             }
             var seenCount = argsObject.inventory[epc];
-            debugLog("Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
-            if (seenCount > maxSeenCountValue) {
+            debugLog("find second most - Inventory-Entry: epc(" + epc + "), seenCount(" + seenCount + ")");
+            if (seenCount > secondMostSeenCountValue) {
                 secondMostSeenCountEpc = epc;
                 secondMostSeenCountValue = seenCount;
             }
