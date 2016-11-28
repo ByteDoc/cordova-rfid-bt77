@@ -252,8 +252,6 @@ public class BT77RfidReader extends CordovaPlugin {
         Log.i("BT77RfidReader", "ReadParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
         ReadResult readResult = reader.readMemoryBank(p);
         
-        JSONObject result = new JSONObject();
-
         OperationStatus status = readResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         
