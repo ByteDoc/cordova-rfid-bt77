@@ -37,7 +37,7 @@ import java.util.Set;
 
 public class BT77RfidReader extends CordovaPlugin {
     public enum CordovaAction {
-        SCAN_INVENTORY, SCAN_INVENTORY2, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
+        SCAN_INVENTORY, READ_TAG, WRITE_TAG, START_RFID_LISTENER, STOP_RFID_LISTENER
     }
     private static int EPC_OFFSET = 2;
     private static int EPC_LENGTH = 6;
@@ -96,9 +96,6 @@ public class BT77RfidReader extends CordovaPlugin {
             
             case SCAN_INVENTORY:
                 return scanInventory();
-				
-			case SCAN_INVENTORY2:
-				return scanInventory2();
             
             case READ_TAG:
                 return readTag();
@@ -131,16 +128,6 @@ public class BT77RfidReader extends CordovaPlugin {
 		return true;
     }
 	
-    private boolean startRFIDReader2(){
-        if(reader == null){
-            this.reader = new RfidReader(cordova.getActivity());
-        }
-        if(!this.reader.isBusy() || !this.reader.isOpen()){
-            Log.i("BT77RfidReader", "startRFIDReader: this.reader.open(): " + this.reader.open());
-        }
-        return true;
-    }
-    
     private boolean stopRFIDReader(){
         if(this.reader.isBusy() && this.reader.isOpen()){
             Log.i("BT77RfidReader", "stopRFIDReader: this.reader.close(): " + this.reader.close());
@@ -153,6 +140,7 @@ public class BT77RfidReader extends CordovaPlugin {
 		
         InventoryParameters p = new InventoryParameters();
         p.setCycleCount(inventoryCyclesForJava);
+        p.setCountThreshold(inventoryCountThreshold);
 
         // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
         InventoryResult inventoryResult = reader.getInventory(p);
@@ -200,77 +188,6 @@ public class BT77RfidReader extends CordovaPlugin {
                 epcCount = 0;
             }
             epcCount += currentEpc.getSeenCount();
-            try{
-                inventory.put(currentEpc.getEpc(), epcCount);
-            } catch (JSONException e) {
-                Log.e("BT77RfidReader", "Exception: " + e + "");
-            }
-            Log.i("BT77RfidReader", "count for epc (" + currentEpc.getEpc() + ") now at (" + epcCount + ")");
-        }
-        
-        
-        try{
-            argsObject.put("status", status.name());
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
-        callbackContext.success(argsArray);
-        return true;
-    }
-	
-	private boolean scanInventory2() {
-        startRFIDReader();
-
-        InventoryParameters p = new InventoryParameters();
-        p.setCycleCount(inventoryCyclesForJava);
-		p.setCountThreshold(inventoryCountThreshold);
-
-        // DO THE INVENTORY SCANNING ... using the reader, this is the hardware call
-        InventoryResult inventoryResult = reader.getInventory(p);
-                
-        OperationStatus status = inventoryResult.getOperationStatus();
-        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
-        if (status != OperationStatus.STATUS_OK) {
-            callbackContext.error("Error in scanInventory: " + status.name());
-            return false;
-        }  
-        
-        // results in attribute INVENTORY of argsObject, with the format:
-        /**
-        {
-            retriesReadWrite: x,
-            inventoryCyclesForJava: y,
-            inventory: {                    JSONObject
-                epc_id_123: epc_count       Int
-                epc_id_456: epc_count       Int
-            }
-        }
-        */
-        // read current inventory from argsObject, or create if not existent yet
-        JSONObject inventory;
-        try{
-            inventory = argsObject.getJSONObject("inventory");
-        } catch (JSONException e) {
-            Log.i("BT77RfidReader", "Creating JSONObject for inventory (" + e + ")");
-            inventory = new JSONObject();
-            try{
-                argsObject.put("inventory", inventory);
-            } catch (JSONException e2) {
-                Log.e("BT77RfidReader", "Exception: " + e2 + "");
-            }
-        }
-        
-        // update inventory with the scan results
-        for(int i = 0; i < inventoryResult.getInventory().length; i++){
-            Epc currentEpc = inventoryResult.getInventory()[i];
-            int epcCount;
-            try{
-                epcCount = inventory.getInt(currentEpc.getEpc());
-            } catch (JSONException e) {
-                Log.i("BT77RfidReader", "Creating Int for epcCount (" + e + ")");
-                epcCount = 0;
-            }
-            epcCount = currentEpc.getSeenCount();
             try{
                 inventory.put(currentEpc.getEpc(), epcCount);
             } catch (JSONException e) {
@@ -356,45 +273,5 @@ public class BT77RfidReader extends CordovaPlugin {
         callbackContext.success(argsArray);
         return true;
     }    
-    
-    /**
-    REMOVE IF NOT NEEDED
-    public static String generateString(Random rng, String characters, int length){
-        char[] text = new char[length];
-        for (int i = 0; i < length; i++){
-            text[i] = characters.charAt(rng.nextInt(characters.length()));
-        }
-        return new String(text);
-    }
-    
-    
-    private void getParameters(JSONArray args, CallbackContext callbackContext, int retriesReadWriteDefault, boolean bWriteData) throws JSONException {
-        if(bWriteData != true){
-            bWriteData = false;
-        }
 
-        for (int n = 0; n < args.length(); n++){
-            System.out.println("iteration " + n + " of JSONArray" +args);
-            JSONObject object = args.getJSONObject(n);
-            // JSONException wird geworfen, wenn .get("") nichts findet
-            try{
-                this.retriesReadWrite = object.getInt("retriesReadWrite");
-            }catch(JSONException e){
-                if(e.getMessage().contains("java.lang.String cannot be converted to int")){
-                    callbackContext.error(e.getMessage());
-                }
-                System.out.println("Error: JSONException " + e + " was thrown. Setting default values.");
-                this.retriesReadWrite = retriesReadWriteDefault;
-            }
-            try{
-                this.epcString = object.getString("epc");
-                if(bWriteData == true){
-                    this.dataString = object.getString("data");
-                }
-            }catch(JSONException e){
-                callbackContext.error(e.getMessage() + "" + args);
-            }
-        }
-    }
-    */
 }
