@@ -208,9 +208,42 @@ public class BT77RfidReader extends CordovaPlugin {
     
     private boolean readTag() {
         startRFIDReader();
-
+        
+        JSONObject results;
+        try{
+            results = argsObject.getJSONObject("results");
+        } catch (JSONException e) {
+            Log.i("BT77RfidReader", "Creating JSONObject for results (" + e + ")");
+            results = new JSONObject();
+            try{
+                argsObject.put("results", results);
+            } catch (JSONException e2) {
+                Log.e("BT77RfidReader", "Exception: " + e2 + "");
+            }
+        }
+        
+        JSONObject resultEpc, resultTid;
+        resultEpc = readTagWithMemoryBank(TagMemoryBank.EPC);
+        try{
+            results.put(TagMemoryBank.EPC, resultEpc);
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        
+        resultTid = readTagWithMemoryBank(TagMemoryBank.TID);
+        try{
+            results.put(TagMemoryBank.TID, resultTid);
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        
+        callbackContext.success(argsArray);
+        return true;
+    }
+    
+    private JSONObject readTagWithMemoryBank(TagMemoryBank tagMemoryBank) {
         ReadParameters p = new ReadParameters();
-        p.setMemoryBank(TagMemoryBank.EPC);
+        p.setMemoryBank(tagMemoryBank);
         p.setEpc(epcToRead);
         p.setOffset(EPC_OFFSET);
         p.setLength(EPC_LENGTH);
@@ -222,24 +255,20 @@ public class BT77RfidReader extends CordovaPlugin {
         OperationStatus status = readResult.getOperationStatus();
         Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
         if (status != OperationStatus.STATUS_OK) {
-            callbackContext.error("Error in readTag: " + status.name());
+            // stop execution on any error?
+            callbackContext.error("Error in readTagWithMemoryBank(" + tagMemoryBank.toString() + "): " + status.name());
             return false;
         }
-
+        
+        JSONObject result = new JSONObject();
         try{
-            argsObject.put("dataFromReadResult", readResult.getReadData());
+            result.put("value", readResult.getReadData());
+            result.put("status", status.name());
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
-        Log.i("BT77RfidReader", "readResult.getReadData(): "+readResult.getReadData());
-
-        try{
-            argsObject.put("status", status.name());
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
-        callbackContext.success(argsArray);
-        return true;
+        
+        return result;
     }
     
     private boolean writeTag() {
