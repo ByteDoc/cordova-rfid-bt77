@@ -312,7 +312,6 @@ public class BT77RfidReader extends CordovaPlugin {
         p.setMemoryBank(tagMemoryBank);
         p.setEpc(epcToWrite);
         p.setOffset(EPC_OFFSET);
-        p.setLength(EPC_LENGTH);
         p.setRetries(retriesReadWrite);
 
         Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
