@@ -288,17 +288,10 @@ public class BT77RfidReader extends CordovaPlugin {
             }
         }
         
-        JSONObject writeResultEpc, writeResultTid;
+        JSONObject writeResultEpc;
         writeResultEpc = writeTagWithMemoryBank(TagMemoryBank.EPC);
         try{
             writeResults.put(TagMemoryBank.EPC.name(), writeResultEpc);
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
-        
-        writeResultTid = writeTagWithMemoryBank(TagMemoryBank.TID);
-        try{
-            writeResults.put(TagMemoryBank.TID.name(), writeResultTid);
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
@@ -313,6 +306,7 @@ public class BT77RfidReader extends CordovaPlugin {
         p.setEpc(epcToWrite);
         p.setOffset(EPC_OFFSET);
         p.setRetries(retriesReadWrite);
+		p.setWriteData(dataToWrite);
 
         Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
         WriteResult writeResult = reader.writeMemoryBank(p);
