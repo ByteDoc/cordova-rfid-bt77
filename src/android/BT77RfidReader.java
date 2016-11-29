@@ -323,7 +323,7 @@ public class BT77RfidReader extends CordovaPlugin {
         JSONObject result = new JSONObject();
         try{
             if (status == OperationStatus.STATUS_OK){
-				result.put("value", epcToWrite);
+				result.put("value", p.getWriteData());
 			}
             result.put("status", status.name());
         } catch (JSONException e) {
