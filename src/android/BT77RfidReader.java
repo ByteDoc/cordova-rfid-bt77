@@ -209,30 +209,30 @@ public class BT77RfidReader extends CordovaPlugin {
     private boolean readTag() {
         startRFIDReader();
         
-        JSONObject results;
+        JSONObject readResults;
         try{
-            results = argsObject.getJSONObject("results");
+            readResults = argsObject.getJSONObject("readResults");
         } catch (JSONException e) {
             Log.i("BT77RfidReader", "Creating JSONObject for results (" + e + ")");
-            results = new JSONObject();
+            readResults = new JSONObject();
             try{
-                argsObject.put("results", results);
+                argsObject.put("readResults", readResults);
             } catch (JSONException e2) {
                 Log.e("BT77RfidReader", "Exception: " + e2 + "");
             }
         }
         
-        JSONObject resultEpc, resultTid;
-        resultEpc = readTagWithMemoryBank(TagMemoryBank.EPC);
+        JSONObject readResultEpc, readResultTid;
+        readResultEpc = readTagWithMemoryBank(TagMemoryBank.EPC);
         try{
-            results.put(TagMemoryBank.EPC.name(), resultEpc);
+            readResults.put(TagMemoryBank.EPC.name(), readResultEpc);
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
         
-        resultTid = readTagWithMemoryBank(TagMemoryBank.TID);
+        readResultTid = readTagWithMemoryBank(TagMemoryBank.TID);
         try{
-            results.put(TagMemoryBank.TID.name(), resultTid);
+            readResults.put(TagMemoryBank.TID.name(), readResultTid);
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
@@ -274,33 +274,69 @@ public class BT77RfidReader extends CordovaPlugin {
     private boolean writeTag() {
         
         startRFIDReader();
-
-        WriteParameters p = new WriteParameters();
-        
-        p.setMemoryBank(TagMemoryBank.EPC);
-        p.setEpc(epcToWrite);
-        p.setOffset(EPC_OFFSET);
-        p.setRetries(retriesReadWrite);
-        p.setWriteData(dataToWrite);
-
-        Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+"), WriteData("+p.getWriteData()+"), MemoryBank("+p.getMemoryBank()+")");
-        
-        WriteResult r = reader.writeMemoryBank(p);
-
-        OperationStatus status = r.getOperationStatus();
-        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
-        if (status != OperationStatus.STATUS_OK) {
-            callbackContext.error("Error in writeTag: " + status.name());
-            return false;
+		
+		JSONObject writeResults;
+        try{
+            writeResults = argsObject.getJSONObject("writeResults");
+        } catch (JSONException e) {
+            Log.i("BT77RfidReader", "Creating JSONObject for writeResults (" + e + ")");
+            writeResults = new JSONObject();
+            try{
+                argsObject.put("writeResults", writeResults);
+            } catch (JSONException e2) {
+                Log.e("BT77RfidReader", "Exception: " + e2 + "");
+            }
         }
         
+        JSONObject writeResultEpc, writeResultTid;
+        writeResultEpc = writeTagWithMemoryBank(TagMemoryBank.EPC);
         try{
-            argsObject.put("status", status.name());
+            writeResults.put(TagMemoryBank.EPC.name(), writeResultEpc);
         } catch (JSONException e) {
             Log.e("BT77RfidReader", "Exception: " + e + "");
         }
+        
+        writeResultTid = writeTagWithMemoryBank(TagMemoryBank.TID);
+        try{
+            writeResults.put(TagMemoryBank.TID.name(), writeResultTid);
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        
         callbackContext.success(argsArray);
         return true;
-    }    
+    }
+	
+	private JSONObject writeTagWithMemoryBank(TagMemoryBank tagMemoryBank) {
+        WriteParameters p = new WriteParameters();
+        p.setMemoryBank(tagMemoryBank);
+        p.setEpc(epcToWrite);
+        p.setOffset(EPC_OFFSET);
+        p.setLength(EPC_LENGTH);
+        p.setRetries(retriesReadWrite);
+
+        Log.i("BT77RfidReader", "WriteParameters: Epc("+p.getEpc()+"), Retries("+p.getRetries()+")");
+        WriteResult writeResult = reader.writeMemoryBank(p);
+        
+        OperationStatus status = writeResult.getOperationStatus();
+        Log.i("BT77RfidReader", "OperationStatus: " + status.toString());
+        
+        JSONObject result = new JSONObject();
+        try{
+            if (status == OperationStatus.STATUS_OK){
+				result.put("value", epcToWrite);
+			}
+            result.put("status", status.name());
+        } catch (JSONException e) {
+            Log.e("BT77RfidReader", "Exception: " + e + "");
+        }
+        
+        if (status != OperationStatus.STATUS_OK) {
+            // stop execution on any error?
+            callbackContext.error("Error in writeTagWithMemoryBank(" + tagMemoryBank.name() + "): " + status.name());
+        }
+        
+        return result;
+    }
 
 }
