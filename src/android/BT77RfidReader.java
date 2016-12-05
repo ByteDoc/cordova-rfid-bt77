@@ -210,7 +210,7 @@ public class BT77RfidReader extends CordovaPlugin {
         }
 		
 		Map<String, JSONObject> readResultMap = new HashMap<String, JSONObject>();
-		readResultMap.put(TagMemoryBank.RESERVE.toString(), readTagWithMemoryBank(TagMemoryBank.RESERVE));
+		//readResultMap.put(TagMemoryBank.RESERVE.toString(), readTagWithMemoryBank(TagMemoryBank.RESERVE));
 		readResultMap.put(TagMemoryBank.EPC.toString(), readTagWithMemoryBank(TagMemoryBank.EPC));
 		readResultMap.put(TagMemoryBank.TID.toString(), readTagWithMemoryBank(TagMemoryBank.TID));
 		readResultMap.put(TagMemoryBank.USER.toString(), readTagWithMemoryBank(TagMemoryBank.USER));
