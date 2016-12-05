@@ -353,7 +353,6 @@ var RfidReaderPlugin = (function () {
     return {
         scanAndReadBestTag: scanAndReadBestTag,
 		scanAndWriteBestTag: scanAndWriteBestTag,
-		scanInventory: scanInventory,
         readTag: readTag,
         writeTag: writeTag,
         startRfidListener: startRfidListener,
