@@ -325,6 +325,7 @@ var RfidReaderPlugin = (function () {
     }
     function scanInventory(args, successCallback, errorCallback) {
         debugLog("starting scanInventory");
+        bInventoryUseBestAlgorithm = false;
 		// init the plugin class
         init(args, successCallback, errorCallback);
         cordovaExecScanInventory();
