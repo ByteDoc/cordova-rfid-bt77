@@ -356,7 +356,8 @@ var RfidReaderPlugin = (function () {
         readTag: readTag,
         writeTag: writeTag,
         startRfidListener: startRfidListener,
-        endRfidListener: endRfidListener
+        endRfidListener: endRfidListener,
+        scanInventory: scanInventory
     };
 
 
