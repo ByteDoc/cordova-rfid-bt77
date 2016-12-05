@@ -18,10 +18,7 @@ import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import android.util.Log;
 import java.lang.reflect.*;
 
@@ -218,11 +215,14 @@ public class BT77RfidReader extends CordovaPlugin {
 		readResultMap.put(TagMemoryBank.TID.name(), readTagWithMemoryBank(TagMemoryBank.TID));
 		readResultMap.put(TagMemoryBank.USER.name(), readTagWithMemoryBank(TagMemoryBank.USER));
 		
-		Iterator readResultIt = readResultMap.entrySet().iterator();
+		Set<String> keys = hashtable.keySet();
+		Iterator<String> readResultIt = keys.iterator();
+		
+		Iterator<Map.Entry<String, JSONObject>>readResultIt = readResultMap.entrySet().iterator();
 		while (readResultIt.hasNext()) {
-			Map.Entry readResultPair = (Map.Entry)readResultIt.next();
+			Map.Entry<String, JSONObject> readResultPair = (Map.Entry)readResultIt.next();
 			try{
-				readResults.put(readResultPair.getKey(), readResultPair.getValue());
+				readResults.put(readResultPair.getKey().toString(), readResultPair.getValue());
 			} catch (JSONException e) {
 				Log.e("BT77RfidReader", "Exception: " + e + "");
 			}
