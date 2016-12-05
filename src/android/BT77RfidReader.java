@@ -18,22 +18,10 @@ import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
-import java.util.*;
+import java.util.Map.Entry;
+import java.util.HashMap;
 import android.util.Log;
 import java.lang.reflect.*;
-
-import com.sevenid.mobile.reader.bt77.*;
-import android.app.Activity;
-import com.android.hdhe.uhf.reader.Tools;
-import com.android.hdhe.uhf.reader.UhfReader;
-import com.sevenid.mobile.reader.api.IAbstractReader;
-import com.sevenid.mobile.reader.core.LicenseManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class BT77RfidReader extends CordovaPlugin {
     public enum CordovaAction {
@@ -221,21 +209,46 @@ public class BT77RfidReader extends CordovaPlugin {
                 Log.e("BT77RfidReader", "Exception: " + e2 + "");
             }
         }
+		
+		Map<String, JSONObject> readResultMap = new HashMap<String, JSONObject>();
+		readResultMap.put(TagMemoryBank.RESERVE.name(), readTagWithMemoryBank(TagMemoryBank.RESERVE));
+		readResultMap.put(TagMemoryBank.EPC.name(), readTagWithMemoryBank(TagMemoryBank.EPC));
+		readResultMap.put(TagMemoryBank.TID.name(), readTagWithMemoryBank(TagMemoryBank.TID));
+		readResultMap.put(TagMemoryBank.USER.name(), readTagWithMemoryBank(TagMemoryBank.USER));
+		
+		Iterator readResultIt = readResultMap.entrySet().iterator();
+		while (readResultIt.hasNext()) {
+			Map.Entry readResultPair = (Map.Entry)readResultIt.next();
+			try{
+				readResults.put(readResultPair.getKey(), readResultPair.getValue());
+			} catch (JSONException e) {
+				Log.e("BT77RfidReader", "Exception: " + e + "");
+			}
+			readResultIt.remove(); // avoids a ConcurrentModificationException
+		}
+		
+		
+        // JSONObject readResultEpc, readResultTid;
+        // readResultEpc = readTagWithMemoryBank(TagMemoryBank.EPC);
+        // try{
+            // readResults.put(TagMemoryBank.EPC.name(), readResultEpc);
+        // } catch (JSONException e) {
+            // Log.e("BT77RfidReader", "Exception: " + e + "");
+        // }
         
-        JSONObject readResultEpc, readResultTid;
-        readResultEpc = readTagWithMemoryBank(TagMemoryBank.EPC);
-        try{
-            readResults.put(TagMemoryBank.EPC.name(), readResultEpc);
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
-        
-        readResultTid = readTagWithMemoryBank(TagMemoryBank.TID);
-        try{
-            readResults.put(TagMemoryBank.TID.name(), readResultTid);
-        } catch (JSONException e) {
-            Log.e("BT77RfidReader", "Exception: " + e + "");
-        }
+        // readResultTid = readTagWithMemoryBank(TagMemoryBank.TID);
+        // try{
+            // readResults.put(TagMemoryBank.TID.name(), readResultTid);
+        // } catch (JSONException e) {
+            // Log.e("BT77RfidReader", "Exception: " + e + "");
+        // }
+		
+		// readResultTid = readTagWithMemoryBank(TagMemoryBank.TID);
+        // try{
+            // readResults.put(TagMemoryBank.TID.name(), readResultTid);
+        // } catch (JSONException e) {
+            // Log.e("BT77RfidReader", "Exception: " + e + "");
+        // }
         
         callbackContext.success(argsArray);
         return true;
