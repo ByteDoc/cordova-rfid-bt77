@@ -210,19 +210,16 @@ public class BT77RfidReader extends CordovaPlugin {
         }
 		
 		Map<String, JSONObject> readResultMap = new HashMap<String, JSONObject>();
-		readResultMap.put(TagMemoryBank.RESERVE.name(), readTagWithMemoryBank(TagMemoryBank.RESERVE));
-		readResultMap.put(TagMemoryBank.EPC.name(), readTagWithMemoryBank(TagMemoryBank.EPC));
-		readResultMap.put(TagMemoryBank.TID.name(), readTagWithMemoryBank(TagMemoryBank.TID));
-		readResultMap.put(TagMemoryBank.USER.name(), readTagWithMemoryBank(TagMemoryBank.USER));
-		
-		Set<String> keys = hashtable.keySet();
-		Iterator<String> readResultIt = keys.iterator();
+		readResultMap.put(TagMemoryBank.RESERVE.toString(), readTagWithMemoryBank(TagMemoryBank.RESERVE));
+		readResultMap.put(TagMemoryBank.EPC.toString(), readTagWithMemoryBank(TagMemoryBank.EPC));
+		readResultMap.put(TagMemoryBank.TID.toString(), readTagWithMemoryBank(TagMemoryBank.TID));
+		readResultMap.put(TagMemoryBank.USER.toString(), readTagWithMemoryBank(TagMemoryBank.USER));
 		
 		Iterator<Map.Entry<String, JSONObject>>readResultIt = readResultMap.entrySet().iterator();
 		while (readResultIt.hasNext()) {
 			Map.Entry<String, JSONObject> readResultPair = (Map.Entry)readResultIt.next();
 			try{
-				readResults.put(readResultPair.getKey().toString(), readResultPair.getValue());
+				readResults.put(readResultPair.getKey(), readResultPair.getValue());
 			} catch (JSONException e) {
 				Log.e("BT77RfidReader", "Exception: " + e + "");
 			}
