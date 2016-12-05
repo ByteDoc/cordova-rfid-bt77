@@ -170,7 +170,7 @@ var RfidReaderPlugin = (function () {
             }
         } else {        
             debugLog("inventoryCycleSuccessCallback ... finished");
-            successCallback();
+            successCallback(argsArray);
         }
     }
     function inventoryCycleErrorCallback(message) {
