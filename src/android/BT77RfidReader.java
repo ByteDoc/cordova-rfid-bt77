@@ -18,6 +18,7 @@ import com.sevenid.mobile.reader.api.parameters.WriteParameters;
 import com.sevenid.mobile.reader.api.Epc;
 import com.sevenid.mobile.reader.bt77.RfidReader;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
 import android.util.Log;
