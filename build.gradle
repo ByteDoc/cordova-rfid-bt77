@@ -1,0 +1,3 @@
+dexOptions {
+    preDexLibraries = false
+}
