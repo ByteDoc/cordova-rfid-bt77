@@ -1,3 +1,5 @@
-dexOptions {
-    preDexLibraries = false
-}
+android {
+	dexOptions {
+		preDexLibraries = false
+	}
+ }
